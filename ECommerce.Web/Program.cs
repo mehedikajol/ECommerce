@@ -1,11 +1,13 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using ECommerce.Infrastructure;
+using ECommerce.Infrastructure.Context;
 using ECommerce.Web;
-using ECommerce.Web.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 using Serilog.Events;
+using System.Diagnostics;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,12 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
     var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
     var migrationAssemblyName = Assembly.GetExecutingAssembly().FullName;
 
-    // Use DbContextPool for better performance
-    builder.Services.AddDbContextPool<ApplicationDbContext>(options =>
-        options.UseSqlite(connectionString)); // Use Sqlite for my Potato pc
+    builder.Services.AddDbContextPool<AppDbContext>(options =>
+        options.UseSqlite(connectionString));
 
     builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>();
+        .AddEntityFrameworkStores<AppDbContext>();
 
     // Using Autofac as dependency container
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -27,6 +28,7 @@ var builder = WebApplication.CreateBuilder(args);
     {
         // register modules here
         options.RegisterModule(new WebModule());
+        options.RegisterModule(new InfrastructureModule());
     });
 
     // Cookie configuration
@@ -52,11 +54,7 @@ var builder = WebApplication.CreateBuilder(args);
 
     // Recommended to use this logger
     builder.Host.UseSerilog((context, config) => config
-        .MinimumLevel.Debug()
-        .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-        .Enrich.FromLogContext()
-        .ReadFrom.Configuration(builder.Configuration));
-    builder.Logging.ClearProviders();
+        .ReadFrom.Configuration(context.Configuration));
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddControllersWithViews();
@@ -64,12 +62,13 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddRazorPages();
 }
 
-try{
+try
+{
     // Register Request pipelines
     var app = builder.Build();
 
     app.Services.GetAutofacRoot();
-    Log.Error("Application booting.");
+    Log.Information("Application booting.");
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
@@ -106,9 +105,12 @@ try{
 
     app.Run();
 }
-catch (Exception ex)
+catch (Exception ex) when (ex is not OperationCanceledException && ex.GetType().Name != "StopTheHostException")
 {
-    Log.Fatal(ex, "Application failed to boot!");
+    // when (ex is not OperationCanceledException && ex.GetType().Name != "StopTheHostException")
+    // is added cause it throws exception while creating miration using IdentityDbContext
+
+    Log.Fatal(ex, "Application failed to load.");
 }
 finally
 {

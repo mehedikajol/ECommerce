@@ -1,5 +1,6 @@
 ﻿using ECommerce.Web.Models;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using System.Diagnostics;
 
 namespace ECommerce.Web.Controllers
