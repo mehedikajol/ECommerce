@@ -6,8 +6,6 @@ using ECommerce.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Serilog.Events;
-using System.Diagnostics;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -50,7 +48,6 @@ var builder = WebApplication.CreateBuilder(args);
         options.Cookie.HttpOnly = true;
         options.Cookie.IsEssential = true;
     });
-
 
     // Recommended to use this logger
     builder.Host.UseSerilog((context, config) => config
