@@ -26,11 +26,4 @@
 		<ProjectReference Include="..\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="wwwroot\boutique\css\" />
-	  <Folder Include="wwwroot\boutique\js\" />
-	  <Folder Include="wwwroot\boutique\img\" />
-	  <Folder Include="wwwroot\boutique\vendor\" />
-	</ItemGroup>
-
 </Project>
