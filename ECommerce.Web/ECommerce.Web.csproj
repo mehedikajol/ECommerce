@@ -26,4 +26,8 @@
 		<ProjectReference Include="..\ECommerce.Infrastructure\ECommerce.Infrastructure.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="wwwroot\suruchi\img\" />
+	</ItemGroup>
+
 </Project>
