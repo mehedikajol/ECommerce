@@ -1,7 +1,7 @@
 ﻿using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
-
+using ECommerce.Core.Enums;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services
@@ -27,7 +27,8 @@ namespace ECommerce.Infrastructure.Services
                     Id = entity.Id,
                     Name = entity.Name,
                     Description = entity.Description,
-                    MainCategoryId = entity.MainCategoryId
+                    MainCategoryId = entity.MainCategoryId,
+                    MainCategory = Enum.GetName(typeof(MainCategory), entity.MainCategoryId)
                 });
             }
             return categories;
