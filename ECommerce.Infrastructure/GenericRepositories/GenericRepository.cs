@@ -2,7 +2,6 @@
 using ECommerce.Core.Entities.Base;
 using ECommerce.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System.Linq.Expressions;
 
 namespace ECommerce.Infrastructure.GenericRepositories
@@ -11,14 +10,12 @@ namespace ECommerce.Infrastructure.GenericRepositories
         : IGenericRepository<TEntity, TKey>
         where TEntity : class, IEntity<TKey>
     {
-        protected readonly AppDbContext _context;
+        protected AppDbContext _context;
         protected DbSet<TEntity> _dbSet;
-        protected readonly ILogger _logger;
-        public GenericRepository(AppDbContext context, ILogger logger)
+        public GenericRepository(AppDbContext context)
         {
             _context = context;
             _dbSet = _context.Set<TEntity>();
-            _logger = logger;
         }
 
         public virtual async Task<IEnumerable<TEntity>> GetAllEntities()
@@ -64,7 +61,6 @@ namespace ECommerce.Infrastructure.GenericRepositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Entity update failed!");
                 return false;
             }
         }
@@ -92,7 +88,6 @@ namespace ECommerce.Infrastructure.GenericRepositories
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Can't delete entity");
                 return false;
             }
         }

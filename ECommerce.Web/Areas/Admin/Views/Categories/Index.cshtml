@@ -1,0 +1,22 @@
+﻿@model CategoryListModel
+
+<div class="container">
+    <h2>Hello from admin category page</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var category in Model.Categories)
+            {
+                <tr>
+                    <td>@category.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
