@@ -2,6 +2,8 @@
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 
+using EO = ECommerce.Core.Entities;
+
 namespace ECommerce.Infrastructure.Services
 {
     internal class CategoryService : ICategoryService
@@ -28,8 +30,20 @@ namespace ECommerce.Infrastructure.Services
                     MainCategoryId = entity.MainCategoryId
                 });
             }
-
             return categories;
+        }
+
+        public async Task CreateCategory(Category category)
+        {
+            var categoryEntity = new EO.Category
+            {
+                Name = category.Name,
+                Description = category.Description,
+                MainCategoryId = category.MainCategoryId
+            };
+
+            await _unitOfWork.Categories.AddEntity(categoryEntity);
+            await _unitOfWork.CompleteAsync();
         }
     }
 }

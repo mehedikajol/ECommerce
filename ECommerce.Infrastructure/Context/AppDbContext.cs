@@ -25,9 +25,12 @@ namespace ECommerce.Infrastructure.Context
                 {
                     case EntityState.Added:
                         entry.Entity.InsertedDate = DateTime.UtcNow;
+                        entry.Entity.InsertedBy = "admin"; 
+                        entry.Entity.ModifiedBy = "";
                         break;
                     case EntityState.Modified:
                         entry.Entity.ModifiedDate = DateTime.UtcNow;
+                        entry.Entity.ModifiedBy = "admin";
                         break;
                     case EntityState.Detached:
                         break;

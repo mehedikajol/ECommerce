@@ -20,4 +20,24 @@ public class CategoriesController : Controller
         model.LoadModelData();
         return View(model);
     }
+
+    public IActionResult Create()
+    {
+        var model = new CategoryCreateModel();
+        model.ResolveDependency(_scope);
+        return View(model);
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(CategoryCreateModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            model.ResolveDependency(_scope);
+            await model.Create();
+            return RedirectToAction(nameof(Index));
+        }
+
+        return View(model);
+    }
 }
