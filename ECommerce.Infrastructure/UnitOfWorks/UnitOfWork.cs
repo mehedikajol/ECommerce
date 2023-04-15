@@ -1,6 +1,7 @@
 ﻿using ECommerce.Application.IRepositories;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Infrastructure.Context;
+using ECommerce.Infrastructure.Repositories;
 
 namespace ECommerce.Infrastructure.UnitOfWorks
 {
@@ -11,6 +12,8 @@ namespace ECommerce.Infrastructure.UnitOfWorks
         public UnitOfWork(AppDbContext context)
         {
             _context = context;
+
+            Categories = new CategoryRepository(_context);
         }
 
         public ICategoryRepository Categories { get; private set; }
