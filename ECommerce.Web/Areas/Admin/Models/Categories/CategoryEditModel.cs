@@ -5,17 +5,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Web.Areas.Admin.Models.Categories;
 
-public class CategoryCreateModel
+public class CategoryEditModel
 {
     private ICategoryService _categoryService;
     private ILifetimeScope _scope;
 
-    public CategoryCreateModel()
+    public CategoryEditModel()
     {
-        
+
     }
 
-    public CategoryCreateModel(ICategoryService categoryService)
+    public CategoryEditModel(ICategoryService categoryService)
     {
         _categoryService = categoryService;
     }
@@ -26,6 +26,8 @@ public class CategoryCreateModel
         _categoryService = _scope.Resolve<ICategoryService>();
     }
 
+    public Guid Id { get; set; }
+
     [Required, MaxLength(50, ErrorMessage = "Name can't be more than 50 characters!")]
     public string Name { get; set; }
 
@@ -35,14 +37,33 @@ public class CategoryCreateModel
     [Required]
     public int MainCategoryId { get; set; }
 
-    public async Task Create()
+    public bool IsValidItem { get; set; }
+
+    internal async Task LoadData(Guid id)
+    {
+        var category = await _categoryService.GetCategoryById(id);
+        if(category is not null)
+        {
+            Name = category.Name;
+            Description = category.Description;
+            MainCategoryId = category.MainCategoryId;
+            IsValidItem = true;
+        }
+        else
+        {
+            IsValidItem = false; 
+        }
+    }
+
+    internal async Task UpdateCategory()
     {
         var category = new Category
         {
+            Id = Id,
             Name = Name,
             Description = Description,
             MainCategoryId = MainCategoryId
         };
-        await _categoryService.CreateCategory(category);
+        await _categoryService.UpdateCategory(category);
     }
 }
