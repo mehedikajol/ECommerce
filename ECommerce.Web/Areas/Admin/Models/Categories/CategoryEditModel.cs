@@ -35,7 +35,7 @@ public class CategoryEditModel
     public string Description { get; set; }
 
     [Required]
-    public int MainCategoryId { get; set; }
+    public int MainCategory { get; set; }
 
     public bool IsValidItem { get; set; }
 
@@ -46,7 +46,7 @@ public class CategoryEditModel
         {
             Name = category.Name;
             Description = category.Description;
-            MainCategoryId = category.MainCategoryId;
+            MainCategory = category.MainCategory;
             IsValidItem = true;
         }
         else
@@ -62,7 +62,7 @@ public class CategoryEditModel
             Id = Id,
             Name = Name,
             Description = Description,
-            MainCategoryId = MainCategoryId
+            MainCategory = MainCategory
         };
         await _categoryService.UpdateCategory(category);
     }

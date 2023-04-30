@@ -10,6 +10,7 @@ namespace ECommerce.Infrastructure.EntityConfigurations
         {
             builder.Property(c => c.Name).IsRequired().HasMaxLength(50).HasDefaultValue("");
             builder.Property(c => c.Description).IsRequired().HasMaxLength(250).HasDefaultValue("");
+            builder.Property(c => c.MainCategory).IsRequired();
         }
     }
 }

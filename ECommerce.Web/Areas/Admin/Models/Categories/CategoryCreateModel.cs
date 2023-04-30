@@ -33,7 +33,7 @@ public class CategoryCreateModel
     public string Description { get; set; }
 
     [Required]
-    public int MainCategoryId { get; set; }
+    public int MainCategory { get; set; }
 
     public async Task Create()
     {
@@ -41,7 +41,7 @@ public class CategoryCreateModel
         {
             Name = Name,
             Description = Description,
-            MainCategoryId = MainCategoryId
+            MainCategory = MainCategory
         };
         await _categoryService.CreateCategory(category);
     }

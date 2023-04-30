@@ -28,8 +28,9 @@ namespace ECommerce.Infrastructure.Services
                     Id = entity.Id,
                     Name = entity.Name,
                     Description = entity.Description,
-                    MainCategoryId = entity.MainCategoryId,
-                    MainCategory = Enum.GetName(typeof(MainCategory), entity.MainCategoryId)
+                    MainCategory = (int)entity.MainCategory,
+                    MainCategoryName = Enum.GetName(typeof(MainCategory), entity.MainCategory)
+                    //MainCategory = Enum.GetName(typeof(MainCategory), entity.MainCategoryId)
                 });
             }
             return categories;
@@ -41,7 +42,7 @@ namespace ECommerce.Infrastructure.Services
             {
                 Name = category.Name,
                 Description = category.Description,
-                MainCategoryId = category.MainCategoryId
+                MainCategory = (MainCategory)category.MainCategory
             };
 
             await _unitOfWork.Categories.AddEntity(categoryEntity);
@@ -57,7 +58,7 @@ namespace ECommerce.Infrastructure.Services
                 Id = categoryEntity.Id,
                 Name = categoryEntity.Name,
                 Description = categoryEntity.Description,
-                MainCategoryId = categoryEntity.MainCategoryId
+                MainCategory = (int)categoryEntity.MainCategory
             };
             return category;
         }
@@ -68,7 +69,7 @@ namespace ECommerce.Infrastructure.Services
 
             categoryEntity.Name = category.Name;
             categoryEntity.Description = category.Description;
-            categoryEntity.MainCategoryId = category.MainCategoryId;
+            categoryEntity.MainCategory = (MainCategory)category.MainCategory;
 
             await _unitOfWork.Categories.UpdateEntity(categoryEntity);
             await _unitOfWork.CompleteAsync();
