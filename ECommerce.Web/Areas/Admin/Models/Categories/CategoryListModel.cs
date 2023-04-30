@@ -26,9 +26,14 @@ public class CategoryListModel
 
     public IEnumerable<Category> Categories { get; set; }
 
-    public async void LoadModelData()
+    public async Task LoadModelData()
     {
         Categories = await _categoryService.GetAllCategories();
+    }
+
+    public async Task DeleteCategory(Guid id)
+    {
+       await _categoryService.DeleteCategory(id);
     }
 
 }

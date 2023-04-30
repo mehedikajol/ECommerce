@@ -78,6 +78,9 @@ public class CategoriesController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(Guid id)
     {
-        return View();
+        var model = new CategoryListModel();
+        model.ResolveDependency(_scope);
+        await model.DeleteCategory(id);
+        return new JsonResult("Deleted");
     }
 }

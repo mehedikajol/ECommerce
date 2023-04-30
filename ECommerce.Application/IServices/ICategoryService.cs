@@ -8,5 +8,6 @@ namespace ECommerce.Application.IServices
         Task CreateCategory(Category category);
         Task<Category> GetCategoryById(Guid id);
         Task UpdateCategory(Category category);
+        Task DeleteCategory(Guid id);
     }
 }

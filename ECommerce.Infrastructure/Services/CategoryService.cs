@@ -73,5 +73,11 @@ namespace ECommerce.Infrastructure.Services
             await _unitOfWork.Categories.UpdateEntity(categoryEntity);
             await _unitOfWork.CompleteAsync();
         }
+
+        public async Task DeleteCategory(Guid id)
+        {
+            await _unitOfWork.Categories.DeleteEntityById(id);
+            await _unitOfWork.CompleteAsync();
+        }
     }
 }
