@@ -1,6 +1,4 @@
-﻿
-
-using ECommerce.Application.BusinessEntities;
+﻿using ECommerce.Application.BusinessEntities;
 
 namespace ECommerce.Application.IServices
 {
@@ -8,5 +6,8 @@ namespace ECommerce.Application.IServices
     {
         Task<IEnumerable<Category>> GetAllCategories();
         Task CreateCategory(Category category);
+        Task<Category> GetCategoryById(Guid id);
+        Task UpdateCategory(Category category);
+        Task DeleteCategory(Guid id);
     }
 }
