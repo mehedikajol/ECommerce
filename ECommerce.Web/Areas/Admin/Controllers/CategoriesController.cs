@@ -74,4 +74,10 @@ public class CategoriesController : BaseController
 
         return View(model);
     }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> Delete(Guid id)
+    {
+        return View();
+    }
 }

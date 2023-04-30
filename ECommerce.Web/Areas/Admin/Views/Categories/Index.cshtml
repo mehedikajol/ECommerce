@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Categories";
 }
-
+@Html.AntiForgeryToken()
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
@@ -50,7 +50,7 @@
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
                                             </a>
-                                            <a class="btn btn-danger btn-sm" asp-area="Admin" asp-controller="Categories" asp-action="Delete" asp-route-id="@category.Id">
+                                            <a class="btn btn-danger btn-sm" onclick="deleteCategory('@category.Id')">
                                                 <i class="fas fa-trash"></i>
                                                 Delete
                                             </a>
@@ -79,3 +79,24 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+
+@section Scripts{
+    <script>
+        function deleteCategory(id){
+            //alert(id);
+            $.ajax({
+                type: "POST",
+                dataType: 'json',
+                url: "@Url.Action("Delete", "Categories")",
+                headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                traditional: true,
+                data: {
+                    id: id
+                },
+                success: function (result) {
+                    
+                }
+            });
+        }
+    </script>
+}
