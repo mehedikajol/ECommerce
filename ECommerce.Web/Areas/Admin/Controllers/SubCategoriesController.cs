@@ -1,5 +1,4 @@
 ﻿using Autofac;
-using ECommerce.Web.Areas.Admin.Models.Categories;
 using ECommerce.Web.Areas.Admin.Models.SubCategories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;

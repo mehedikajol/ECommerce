@@ -1,6 +1,7 @@
 ﻿using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
+using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
 
@@ -39,9 +40,19 @@ internal class ProductService : IProductService
         throw new NotImplementedException();
     }
 
-    public Task CreateProduct(Product product)
+    public async Task CreateProduct(Product product)
     {
-        throw new NotImplementedException();
+        var productEntity = new EO.Product
+        {
+            Name = product.Name,
+            Description = product.Description,
+            ImageUrl = product.ImageUrl,
+            SKU = product.SKU,
+            Price = product.Price,
+            SubCategoryId = product.SubCategoryId
+        };
+        await _unitOfWork.Products.AddEntity(productEntity);
+        await _unitOfWork.CompleteAsync();
     }
 
     public Task UpdateProduct(Product product)
