@@ -4,9 +4,9 @@ namespace ECommerce.Application.IServices;
 
 public interface IProductService
 {
-    Task<IEnumerable<Product>> GetAllCategories();
-    Task<Category> GetCategoryById(Guid id);
-    Task CreateCategory(Category category);
-    Task UpdateCategory(Category category);
-    Task DeleteCategory(Guid id);
+    Task<IEnumerable<Product>> GetAllProducts();
+    Task<Product> GetProductById(Guid id);
+    Task CreateProduct(Product product);
+    Task UpdateProduct(Product product);
+    Task DeleteProduct(Guid id);
 }

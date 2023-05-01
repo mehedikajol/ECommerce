@@ -10,8 +10,7 @@ public class CategoryListModel
     private ILifetimeScope _scope;
 
     public CategoryListModel()
-    {
-        
+    {   
     }
     public CategoryListModel(ICategoryService categoryService)
     {
@@ -35,5 +34,4 @@ public class CategoryListModel
     {
        await _categoryService.DeleteCategory(id);
     }
-
 }
