@@ -24,11 +24,11 @@ public class SubCategoryListModel
         _subCategoryService = _scope.Resolve<ISubCategoryService>();
     }
 
-    public IEnumerable<SubCategory> Categories { get; set; }
+    public IEnumerable<SubCategory> SubCategories { get; set; }
 
     public async Task LoadModelData()
     {
-        Categories = await _subCategoryService.GetAllSubCategories();
+        SubCategories = await _subCategoryService.GetAllSubCategories();
     }
 
     public async Task DeleteSubCategory(Guid id)

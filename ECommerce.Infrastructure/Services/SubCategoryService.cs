@@ -16,9 +16,21 @@ internal class SubCategoryService : ISubCategoryService
     public async Task<IEnumerable<SubCategory>> GetAllSubCategories()
     {
         var subCategories = new List<SubCategory>();
-        //var subCategoryEntities = await _unitOfWork.sub
+        var subCategoryEntities = await _unitOfWork.SubCategories.GetAllEntities();
 
-        throw new NotImplementedException();
+        foreach (var entity in subCategoryEntities)
+        {
+            subCategories.Add(new SubCategory
+            {
+                Id = entity.Id,
+                Name = entity.Name,
+                Description = entity.Description,
+                CategoryId = entity.CategoryId,
+                CategoryName = entity.Category.Name
+            });
+        }
+
+        return subCategories;
     }
 
     public Task<SubCategory> GetSubCategoryById(Guid id)
