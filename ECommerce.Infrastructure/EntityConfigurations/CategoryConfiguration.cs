@@ -2,15 +2,14 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ECommerce.Infrastructure.EntityConfigurations
+namespace ECommerce.Infrastructure.EntityConfigurations;
+
+public class CategoryConfiguration : IEntityTypeConfiguration<Category>
 {
-    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    public void Configure(EntityTypeBuilder<Category> builder)
     {
-        public void Configure(EntityTypeBuilder<Category> builder)
-        {
-            builder.Property(c => c.Name).IsRequired().HasMaxLength(50).HasDefaultValue("");
-            builder.Property(c => c.Description).IsRequired().HasMaxLength(250).HasDefaultValue("");
-            builder.Property(c => c.MainCategory).IsRequired();
-        }
+        builder.Property(c => c.Name).IsRequired().HasMaxLength(50).HasDefaultValue("");
+        builder.Property(c => c.Description).IsRequired().HasMaxLength(250).HasDefaultValue("");
+        builder.Property(c => c.MainCategory).IsRequired();
     }
 }

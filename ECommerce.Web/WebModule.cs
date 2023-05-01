@@ -1,12 +1,11 @@
 ﻿using Autofac;
 
-namespace ECommerce.Web
+namespace ECommerce.Web;
+
+public class WebModule : Module
 {
-    public class WebModule : Module
+    protected override void Load(ContainerBuilder builder)
     {
-        protected override void Load(ContainerBuilder builder)
-        {
-            base.Load(builder);
-        }
+        base.Load(builder);
     }
 }
