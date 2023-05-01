@@ -2,6 +2,7 @@
 using ECommerce.Web.Areas.Admin.Models.Categories;
 using ECommerce.Web.Areas.Admin.Models.SubCategories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECommerce.Web.Areas.Admin.Controllers
 {
@@ -20,6 +21,28 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             var model = new SubCategoryListModel();
             model.ResolveDependency(_scope);
             await model.LoadModelData();
+            return View(model);
+        }
+
+        public async Task<IActionResult> CreateAsync()
+        {
+            var model = new SubCategoryCreateModel();
+            model.ResolveDependency(_scope);
+            var categories = await model.LoadCategories();
+            ViewData["Categories"] = new SelectList(categories, "Id", "Name");
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(SubCategoryCreateModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.ResolveDependency(_scope);
+                await model.Create();
+                return RedirectToAction(nameof(Index));
+            }
+
             return View(model);
         }
     }

@@ -1,6 +1,8 @@
 ﻿using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
+using ECommerce.Core.Enums;
+using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
 
@@ -38,9 +40,17 @@ internal class SubCategoryService : ISubCategoryService
         throw new NotImplementedException();
     }
 
-    public Task CreateSubCategory(SubCategory category)
+    public async Task CreateSubCategory(SubCategory subCategory)
     {
-        throw new NotImplementedException();
+        var subCategoryEntity = new EO.SubCategory
+        {
+            Name = subCategory.Name,
+            Description = subCategory.Description,
+            CategoryId = subCategory.CategoryId
+        };
+
+        await _unitOfWork.SubCategories.AddEntity(subCategoryEntity);
+        await _unitOfWork.CompleteAsync();
     }
 
     public Task DeleteSubCategory(Guid id)
