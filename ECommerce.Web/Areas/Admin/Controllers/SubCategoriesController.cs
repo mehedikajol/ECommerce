@@ -45,5 +45,35 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var model = new SubCategoryEditModel();
+            model.ResolveDependency(_scope);
+            var categories = await model.LoadCategories();
+            ViewData["Categories"] = new SelectList(categories, "Id", "Name");
+            await model.LoadData(id);
+            if (model.IsValidItem)
+            {
+                return View(model);
+            }
+            else
+            {
+                return Redirect(url: "/Home/NotFound");
+            }
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(SubCategoryEditModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                model.ResolveDependency(_scope);
+                await model.UpdateSubCategory();
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(model);
+        }
     }
 }

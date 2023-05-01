@@ -1,7 +1,6 @@
 ﻿using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
-using ECommerce.Core.Enums;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -35,9 +34,18 @@ internal class SubCategoryService : ISubCategoryService
         return subCategories;
     }
 
-    public Task<SubCategory> GetSubCategoryById(Guid id)
+    public async Task<SubCategory> GetSubCategoryById(Guid id)
     {
-        throw new NotImplementedException();
+        var subCategoryEntity = await _unitOfWork.SubCategories.GetEntityById(id);
+        if (subCategoryEntity is null) return null;
+        var subCategory = new SubCategory
+        {
+            Id = subCategoryEntity.Id,
+            Name = subCategoryEntity.Name,
+            Description = subCategoryEntity.Description,
+            CategoryId = subCategoryEntity.CategoryId
+        };
+        return subCategory;
     }
 
     public async Task CreateSubCategory(SubCategory subCategory)
@@ -58,8 +66,14 @@ internal class SubCategoryService : ISubCategoryService
         throw new NotImplementedException();
     }
 
-    public Task UpdateSubCategory(SubCategory category)
+    public async Task UpdateSubCategory(SubCategory category)
     {
-        throw new NotImplementedException();
+        var subCategoryEntity = await _unitOfWork.SubCategories.GetEntityById(category.Id);
+        subCategoryEntity.Name = category.Name;
+        subCategoryEntity.Description = category.Description;
+        subCategoryEntity.CategoryId = category.CategoryId;
+
+        await _unitOfWork.SubCategories.UpdateEntity(subCategoryEntity);
+        await _unitOfWork.CompleteAsync();
     }
 }

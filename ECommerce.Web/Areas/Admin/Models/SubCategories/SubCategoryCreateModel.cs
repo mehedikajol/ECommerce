@@ -1,8 +1,6 @@
 ﻿using Autofac;
 using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
-using ECommerce.Core.Enums;
-using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace ECommerce.Web.Areas.Admin.Models.SubCategories;

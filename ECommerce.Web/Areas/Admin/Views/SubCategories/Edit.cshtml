@@ -1,0 +1,70 @@
+﻿@model SubCategoryEditModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Create a new category</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/">Home</a></li>
+                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a></li>
+                    <li class="breadcrumb-item active">Create</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Create form</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form method="post" asp-controller="SubCategories" asp-action="Edit" asp-antiforgery="true">
+                        @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                        <input type="hidden" asp-for="Id" />
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="Name"></label>
+                                <input asp-for="Name" class="form-control" placeholder="Enter category title" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <input asp-for="Description" class="form-control" placeholder="Enter category description" />
+                                <span asp-validation-for="Description" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Category">Main Category</label>
+                                <select asp-for="Category" class="form-control select2" asp-items="ViewBag.Categories">
+                                    <option value="">--Select Main Category--</option>
+                                </select>
+                                <span asp-validation-for="Category" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</section>

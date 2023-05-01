@@ -1,6 +1,5 @@
 ﻿using ECommerce.Application.IRepositories;
 using ECommerce.Core.Entities;
-using ECommerce.Core.Entities.Base;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Infrastructure.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
