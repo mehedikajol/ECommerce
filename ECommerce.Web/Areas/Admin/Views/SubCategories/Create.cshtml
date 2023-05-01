@@ -1,4 +1,4 @@
-﻿@model CategoryEditModel
+﻿@model SubCategoryCreateModel
 @{
     ViewData["Title"] = "Create";
 }
@@ -19,12 +19,12 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Edit an existing category</h1>
+                <h1>Create a new sub category</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a></li>
+                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="SubCategories" asp-action="Index">SubCategories</a></li>
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
             </div>
@@ -40,39 +40,37 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Category edit form</h3>
+                        <h3 class="card-title">SubCategory create form</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" asp-controller="Categories" asp-action="Edit" asp-antiforgery="true">
+                    <form method="post" asp-controller="SubCategories" asp-action="Create" asp-antiforgery="true">
                         @*<div asp-validation-summary="All" class="text-danger"></div>*@
-                        <input type="hidden" asp-for="Id" />
                         <div class="card-body">
                             <div class="form-group">
                                 <label asp-for="Name"></label>
-                                <input asp-for="Name" class="form-control" placeholder="Enter category title" required />
+                                <input asp-for="Name" class="form-control" placeholder="Enter sub category title" required />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Description"></label>
-                                <input asp-for="Description" class="form-control" placeholder="Enter category description" />
+                                <input asp-for="Description" class="form-control" placeholder="Enter sub category description" />
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
 
                             <div class="form-group">
-                                <label asp-for="MainCategory">Main Category</label>
-                                <!-- <select asp-for="MainCategory" class="form-control select2" asp-items="Html.GetEnumSelectList<MainCategory>()"> -->
-                                <select asp-for="MainCategory" class="form-control select2" asp-items="@ViewBag.MainCategories" required>
-                                    <option value="">--Select Main Category--</option>
+                                <label asp-for="Category">Category</label>
+                                <select asp-for="Category" class="form-control select2" asp-items="ViewBag.Categories" required>
+                                    <option value="">--Select Category--</option>
                                 </select>
-                                <span asp-validation-for="MainCategory" class="text-danger"></span>
+                                <span asp-validation-for="Category" class="text-danger"></span>
                             </div>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Update</button>
-                            <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-default">Cancel</a>
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            <a asp-area="Admin" asp-controller="SubCategories" asp-action="Index" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>

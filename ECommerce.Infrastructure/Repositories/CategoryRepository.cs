@@ -3,13 +3,12 @@ using ECommerce.Core.Entities;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Infrastructure.GenericRepositories;
 
-namespace ECommerce.Infrastructure.Repositories
+namespace ECommerce.Infrastructure.Repositories;
+
+internal class CategoryRepository : GenericRepository<Category, Guid>, ICategoryRepository
 {
-    public class CategoryRepository : GenericRepository<Category, Guid>, ICategoryRepository
+    public CategoryRepository(AppDbContext context) 
+        : base(context)
     {
-        public CategoryRepository(AppDbContext context) 
-            : base(context)
-        {
-        }
     }
 }

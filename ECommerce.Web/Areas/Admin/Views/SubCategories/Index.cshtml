@@ -1,18 +1,18 @@
-﻿@model CategoryListModel
+﻿@model SubCategoryListModel
 @{
-    ViewData["Title"] = "Categories";
+    ViewData["Title"] = "SubCategories";
 }
 @Html.AntiForgeryToken()
 <section class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Categories</h1>
+                <h1>SubCategories</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item active">Categories</li>
+                    <li class="breadcrumb-item active">SubCategories</li>
                 </ol>
             </div>
         </div>
@@ -25,32 +25,32 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-header">
-                        <h3 class="card-title">All categories</h3>
+                        <h3 class="card-title">All sub categories</h3>
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="categoriesTable" class="table table-bordered table-hover">
+                        <table id="subCategoriesTable" class="table table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>Name</th>
                                     <th>Desccription</th>
-                                    <th>Main Category</th>
+                                    <th>Category</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var category in Model.Categories)
+                                @foreach (var category in Model.SubCategories)
                                 {
                                     <tr>
                                         <td>@category.Name</td>
                                         <td>@category.Description</td>
-                                        <td>@category.MainCategoryName</td>
+                                        <td>@category.CategoryName</td>
                                         <td>
-                                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Categories" asp-action="Edit" asp-route-id="@category.Id">
+                                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="SubCategories" asp-action="Edit" asp-route-id="@category.Id">
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
                                             </a>
-                                            <a class="btn btn-danger btn-sm" onclick="deleteCategory('@category.Id')">
+                                            <a class="btn btn-danger btn-sm" onclick="deleteSubCategory('@category.Id')">
                                                 <i class="fas fa-trash"></i>
                                                 Delete
                                             </a>
@@ -87,7 +87,7 @@
 @section Scripts{
     <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script>
-        function deleteCategory(id){
+        function deleteSubCategory(id) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -101,7 +101,7 @@
                     $.ajax({
                         type: "POST",
                         dataType: 'json',
-                        url: "@Url.Action("Delete", "Categories")",
+                        url: "@Url.Action("Delete", "SubCategories")",
                         headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
                         traditional: true,
                         data: {
@@ -119,7 +119,7 @@
                     });
                 }
             })
-            
+
         }
     </script>
 }

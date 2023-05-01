@@ -3,26 +3,30 @@ using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using System.ComponentModel.DataAnnotations;
 
-namespace ECommerce.Web.Areas.Admin.Models.Categories;
+namespace ECommerce.Web.Areas.Admin.Models.SubCategories;
 
-public class CategoryCreateModel
+public class SubCategoryCreateModel
 {
+    private ISubCategoryService _subCategoryService;
     private ICategoryService _categoryService;
     private ILifetimeScope _scope;
 
-    public CategoryCreateModel()
+    public SubCategoryCreateModel()
     {
-        
     }
 
-    public CategoryCreateModel(ICategoryService categoryService)
+    public SubCategoryCreateModel(
+        ISubCategoryService subCategoryService,
+        ICategoryService categoryService)
     {
+        _subCategoryService = subCategoryService;
         _categoryService = categoryService;
     }
 
     internal void ResolveDependency(ILifetimeScope scope)
     {
         _scope = scope;
+        _subCategoryService = _scope.Resolve<ISubCategoryService>();
         _categoryService = _scope.Resolve<ICategoryService>();
     }
 
@@ -33,16 +37,21 @@ public class CategoryCreateModel
     public string Description { get; set; }
 
     [Required]
-    public int MainCategory { get; set; }
+    public Guid Category { get; set; }
+
+    public async Task<IEnumerable<Category>> LoadCategories()
+    {
+        return await _categoryService.GetAllCategories();
+    }
 
     public async Task Create()
     {
-        var category = new Category
+        var subCategory = new SubCategory
         {
             Name = Name,
             Description = Description,
-            MainCategory = MainCategory
+            CategoryId = Category
         };
-        await _categoryService.CreateCategory(category);
+        await _subCategoryService.CreateSubCategory(subCategory);
     }
 }

@@ -1,11 +1,11 @@
 ﻿using ECommerce.Application.IRepositories;
 
-namespace ECommerce.Application.IUnitOfWorks
-{
-    public interface IUnitOfWork
-    {
-        ICategoryRepository Categories { get; }
+namespace ECommerce.Application.IUnitOfWorks;
 
-        Task CompleteAsync();
-    }
+public interface IUnitOfWork
+{
+    ICategoryRepository Categories { get; }
+    ISubCategoryRepository SubCategories { get; }
+
+    Task CompleteAsync();
 }
