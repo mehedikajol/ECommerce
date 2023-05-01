@@ -44,7 +44,6 @@ public class CategoriesController : BaseController
             await model.Create();
             return RedirectToAction(nameof(Index));
         }
-
         return View(model);
     }
 
@@ -76,7 +75,6 @@ public class CategoriesController : BaseController
             await model.UpdateCategory();
             return RedirectToAction(nameof(Index));
         }
-
         return View(model);
     }
 

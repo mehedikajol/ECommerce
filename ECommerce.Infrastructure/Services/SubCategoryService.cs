@@ -61,11 +61,6 @@ internal class SubCategoryService : ISubCategoryService
         await _unitOfWork.CompleteAsync();
     }
 
-    public Task DeleteSubCategory(Guid id)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task UpdateSubCategory(SubCategory category)
     {
         var subCategoryEntity = await _unitOfWork.SubCategories.GetEntityById(category.Id);
@@ -76,4 +71,12 @@ internal class SubCategoryService : ISubCategoryService
         await _unitOfWork.SubCategories.UpdateEntity(subCategoryEntity);
         await _unitOfWork.CompleteAsync();
     }
+
+    public async Task DeleteSubCategory(Guid id)
+    {
+        await _unitOfWork.SubCategories.DeleteEntityById(id);
+        await _unitOfWork.CompleteAsync();
+    }
+
+   
 }

@@ -50,7 +50,7 @@
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
                                             </a>
-                                            <a class="btn btn-danger btn-sm" onclick="deleteCategory('@category.Id')">
+                                            <a class="btn btn-danger btn-sm" onclick="deleteSubCategory('@category.Id')">
                                                 <i class="fas fa-trash"></i>
                                                 Delete
                                             </a>
@@ -79,3 +79,47 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+
+@section Styles{
+    <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+}
+
+@section Scripts{
+    <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
+    <script>
+        function deleteSubCategory(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url: "@Url.Action("Delete", "SubCategories")",
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        traditional: true,
+                        data: {
+                            id: id
+                        },
+                        success: function (result) {
+                            Swal.fire({
+                                title: '<strong>' + result + '</strong>',
+                                icon: 'success',
+                                html: '<strong>' + result + '</strong>',
+                            }).then((result) => {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+            })
+
+        }
+    </script>
+}
