@@ -1,6 +1,8 @@
 ﻿using Autofac;
+using ECommerce.Core.Enums;
 using ECommerce.Web.Areas.Admin.Models.Categories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECommerce.Web.Areas.Admin.Controllers;
 
@@ -9,7 +11,7 @@ public class CategoriesController : BaseController
     private readonly ILogger<CategoriesController> _logger;
 
     public CategoriesController(
-        ILifetimeScope scope, 
+        ILifetimeScope scope,
         ILogger<CategoriesController> logger) : base(scope)
     {
         _logger = logger;
@@ -27,6 +29,9 @@ public class CategoriesController : BaseController
     {
         var model = new CategoryCreateModel();
         model.ResolveDependency(_scope);
+        var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
+                              select new { Id = s.GetHashCode(), Name = s.ToString() };
+        ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
         return View(model);
     }
 
@@ -48,6 +53,9 @@ public class CategoriesController : BaseController
         var model = new CategoryEditModel();
         model.ResolveDependency(_scope);
         await model.LoadData(id);
+        var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
+                             select new { Id = s.GetHashCode(), Name = s.ToString() };
+        ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
         if (model.IsValidItem)
         {
             return View(model);
@@ -56,7 +64,7 @@ public class CategoriesController : BaseController
         {
             return Redirect(url: "/Home/NotFound");
         }
-        
+
     }
 
     [HttpPost, ValidateAntiForgeryToken]

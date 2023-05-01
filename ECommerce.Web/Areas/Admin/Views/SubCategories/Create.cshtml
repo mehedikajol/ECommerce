@@ -40,7 +40,7 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Create form</h3>
+                        <h3 class="card-title">SubCategory create form</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
@@ -49,7 +49,7 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label asp-for="Name"></label>
-                                <input asp-for="Name" class="form-control" placeholder="Enter sub category title" />
+                                <input asp-for="Name" class="form-control" placeholder="Enter sub category title" required />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group">
@@ -60,9 +60,8 @@
 
                             <div class="form-group">
                                 <label asp-for="Category">Category</label>
-                                <select asp-for="Category" class="form-control select2" asp-items="ViewBag.Categories">
+                                <select asp-for="Category" class="form-control select2" asp-items="ViewBag.Categories" required>
                                     <option value="">--Select Category--</option>
-                                    
                                 </select>
                                 <span asp-validation-for="Category" class="text-danger"></span>
                             </div>
@@ -71,7 +70,7 @@
 
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Create</button>
-                            <a asp-area="Admin" asp-controller="Categories" asp-action="Index" class="btn btn-default">Cancel</a>
+                            <a asp-area="Admin" asp-controller="SubCategories" asp-action="Index" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
                 </div>
