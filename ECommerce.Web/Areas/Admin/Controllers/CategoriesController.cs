@@ -5,15 +5,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Web.Areas.Admin.Controllers;
 
-[Area("Admin")]
 public class CategoriesController : BaseController
 {
     private readonly ILogger<CategoriesController> _logger;
 
     public CategoriesController(
         ILifetimeScope scope, 
-        ILogger<CategoriesController> logger) 
-            : base(scope)
+        ILogger<CategoriesController> logger) : base(scope)
     {
         _logger = logger;
     }
