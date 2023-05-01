@@ -6,6 +6,7 @@ public interface IUnitOfWork
 {
     ICategoryRepository Categories { get; }
     ISubCategoryRepository SubCategories { get; }
+    IProductRepository Products { get; }
 
     Task CompleteAsync();
 }
