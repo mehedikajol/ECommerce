@@ -5,9 +5,9 @@ using ECommerce.Infrastructure.GenericRepositories;
 
 namespace ECommerce.Infrastructure.Repositories;
 
-internal class CategoryRepository : GenericRepository<Category, Guid>, ICategoryRepository
+internal class SubCategoryRepository : GenericRepository<SubCategory, Guid>, ISubCategoryRepository
 {
-    public CategoryRepository(AppDbContext context) 
+    public SubCategoryRepository(AppDbContext context)
         : base(context)
     {
     }

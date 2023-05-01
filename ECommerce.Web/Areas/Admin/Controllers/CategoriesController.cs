@@ -16,11 +16,11 @@ public class CategoriesController : BaseController
         _logger = logger;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         var model = new CategoryListModel();
         model.ResolveDependency(_scope);
-        model.LoadModelData();
+        await model.LoadModelData();
         return View(model);
     }
 

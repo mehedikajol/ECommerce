@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using ECommerce.Web.Areas.Admin.Models.Categories;
+using ECommerce.Web.Areas.Admin.Models.SubCategories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Web.Areas.Admin.Controllers
@@ -13,9 +15,12 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> IndexAsync()
         {
-            return View();
+            var model = new SubCategoryListModel();
+            model.ResolveDependency(_scope);
+            await model.LoadModelData();
+            return View(model);
         }
     }
 }
