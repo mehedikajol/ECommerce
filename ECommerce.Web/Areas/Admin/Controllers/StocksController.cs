@@ -64,5 +64,49 @@ namespace ECommerce.Web.Areas.Admin.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            var model = new StockEditModel();
+            var entity = await _stockService.GetStockById(id);
+
+            model.Id = id;
+            model.StockAmout = entity.StockAmout;
+            model.ProductId = entity.ProductId;
+
+            var products = await _productService.GetAllProducts();
+            ViewData["Products"] = new SelectList(products, "Id", "Name");
+
+            return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(StockEditModel model)
+        {
+            var products = await _productService.GetAllProducts();
+            ViewData["Products"] = new SelectList(products, "Id", "Name");
+            if (ModelState.IsValid)
+            {
+                if (model.AddStock > 0 && model.RemoveStock > 0)
+                {
+                    ModelState.AddModelError("", "You can't add and remove from stock at a time.");
+                    return View(model);
+                }
+                if (model.RemoveStock > model.StockAmout)
+                {
+                    ModelState.AddModelError("", "You can't remove more than stock amout.");
+                    return View(model);
+                }
+                var stock = new Stock
+                {
+                    Id = model.Id,
+                    StockAmout = model.StockAmout + model.AddStock - model.RemoveStock,
+                    ProductId = model.ProductId,
+                };
+                await _stockService.UpdateStock(stock);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
     }
 }

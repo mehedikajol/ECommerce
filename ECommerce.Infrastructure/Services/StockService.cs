@@ -56,9 +56,13 @@ internal class StockService : IStockService
         await _unitOfWork.CompleteAsync();
     }
 
-    public Task UpdateStock(Stock stock)
+    public async Task UpdateStock(Stock stock)
     {
-        throw new NotImplementedException();
+        var stockEntity = await _unitOfWork.Stocks.GetEntityById(stock.Id);
+        stockEntity.StockAmout = stock.StockAmout;
+        stockEntity.ProductId = stock.ProductId;
+        await _unitOfWork.Stocks.UpdateEntity(stockEntity);
+        await _unitOfWork.CompleteAsync();
     }
 
     public async Task DeleteStock(Guid id)

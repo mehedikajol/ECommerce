@@ -1,6 +1,6 @@
-﻿@model StockCreateModel
+﻿@model StockEditModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 
@@ -20,7 +20,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Create a new stock</h1>
+                <h1>Edit an existing stock</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -30,7 +30,7 @@
                     <li class="breadcrumb-item">
                         <a asp-area="Admin" asp-controller="Stocks" asp-action="Index">Stocks</a>
                     </li>
-                    <li class="breadcrumb-item active">Create</li>
+                    <li class="breadcrumb-item active">Edit</li>
                 </ol>
             </div>
         </div>
@@ -46,13 +46,14 @@
                 <!-- general form elements -->
                 <div class="card card-primary">
                     <div class="card-header">
-                        <h3 class="card-title">Category stock form</h3>
+                        <h3 class="card-title">Stock edit form</h3>
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" asp-controller="Stocks" asp-action="Create" asp-antiforgery="true">
-                        @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                    <form method="post" asp-controller="Stocks" asp-action="Edit" asp-antiforgery="true">
+                        <div asp-validation-summary="All" class="text-danger"></div>
                         <div class="card-body">
+                            <input type="hidden" asp-for="Id" />
                             <div class="form-group">
                                 <label asp-for="StockAmout"></label>
                                 <input asp-for="StockAmout" class="form-control" placeholder="Enter category description" />
@@ -67,11 +68,27 @@
                                 </select>
                                 <span asp-validation-for="ProductId" class="text-danger"></span>
                             </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="AddStock"></label>
+                                        <input asp-for="AddStock" min="0" class="form-control" placeholder="Enter category description" />
+                                        <span asp-validation-for="AddStock" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label asp-for="RemoveStock"></label>
+                                        <input asp-for="RemoveStock" min="0" class="form-control" placeholder="Enter category description" />
+                                        <span asp-validation-for="RemoveStock" class="text-danger"></span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                         <!-- /.card-body -->
 
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Create</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
                             <a asp-area="Admin" asp-controller="Stocks" asp-action="Index" class="btn btn-default">Cancel</a>
                         </div>
                     </form>
