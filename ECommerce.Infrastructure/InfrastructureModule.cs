@@ -21,10 +21,12 @@ public class InfrastructureModule : Module
         builder.RegisterType<CategoryRepository>().As<ICategoryRepository>().InstancePerLifetimeScope();
         builder.RegisterType<SubCategoryRepository>().As<ISubCategoryRepository>().InstancePerLifetimeScope();
         builder.RegisterType<ProductRepository>().As<IProductRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<StockRepository>().As<IStockRepository>().InstancePerLifetimeScope();
 
         builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();
         builder.RegisterType<SubCategoryService>().As<ISubCategoryService>().InstancePerLifetimeScope();
         builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
+        builder.RegisterType<StockService>().As<IStockService>().InstancePerLifetimeScope();
 
         base.Load(builder);
     }

@@ -1,0 +1,70 @@
+﻿@model StockCreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Create a new stock</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-area="Admin" asp-controller="Stocks" asp-action="Index">Stocks</a>
+                    </li>
+                    <li class="breadcrumb-item active">Create</li>
+                </ol>
+            </div>
+        </div>
+    </div><!-- /.container-fluid -->
+</section>
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <!-- left column -->
+            <div class="col-12">
+                <!-- general form elements -->
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Category stock form</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <!-- form start -->
+                    <form method="post" asp-controller="Stocks" asp-action="Create" asp-antiforgery="true">
+                        @*<div asp-validation-summary="All" class="text-danger"></div>*@
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label asp-for="StockAmout"></label>
+                                <input asp-for="StockAmout" class="form-control" placeholder="Enter category description" />
+                                <span asp-validation-for="StockAmout" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="ProductId">Main Category</label>
+                                <!-- <select asp-for="MainCategory" class="form-control select2" asp-items="Html.GetEnumSelectList<MainCategory>()"> -->
+                                <select asp-for="ProductId" class="form-control select2" asp-items="@ViewBag.Products" required>
+                                    <option value="">--Select Main Category--</option>
+                                </select>
+                                <span asp-validation-for="ProductId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <!-- /.card-body -->
+
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary">Create</button>
+                            <a asp-area="Admin" asp-controller="Stocks" asp-action="Index" class="btn btn-default">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+                <!-- /.card -->
+            </div>
+        </div>
+    </div>
+</section>
