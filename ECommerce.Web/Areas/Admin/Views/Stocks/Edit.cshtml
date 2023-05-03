@@ -51,7 +51,7 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form method="post" asp-controller="Stocks" asp-action="Edit" asp-antiforgery="true">
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                        @*<div asp-validation-summary="All" class="text-danger"></div>*@
                         <div class="card-body">
                             <input type="hidden" asp-for="Id" />
                             <div class="form-group">
