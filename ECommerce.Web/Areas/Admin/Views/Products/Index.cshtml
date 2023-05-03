@@ -1,0 +1,136 @@
+﻿@model ProductListModel
+@{
+    ViewData["Title"] = "Products";
+}
+@Html.AntiForgeryToken()
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Products</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">Products</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All products</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="productsTable" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>SKU</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var product in Model.Products)
+                                {
+                                    <tr>
+                                        <td>@product.Name</td>
+                                        <td><img src="@product.ImageUrl" alt="@product.Name" style="width: 150px; height: 150px;" /></td>
+                                        <td>@product.SubCategoryName</td>
+                                        <td>@product.Description</td>
+                                        <td>@product.SKU</td>
+                                        <td>@product.Price</td>
+                                        <td>
+                                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit
+                                            </a>
+                                            <a class="btn btn-danger btn-sm" onclick="deleteProduct('@product.Id')">
+                                                <i class="fas fa-trash"></i>
+                                                Delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Image</th>
+                                    <th>Category</th>
+                                    <th>Description</th>
+                                    <th>SKU</th>
+                                    <th>Price</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+@section Styles{
+    <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+}
+
+@section Scripts{
+    <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
+    <script>
+        function deleteProduct(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url: "@Url.Action("Delete", "Products")",
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        traditional: true,
+                        data: {
+                            id: id
+                        },
+                        success: function (result) {
+                            Swal.fire({
+                                title: '<strong>' + result + '</strong>',
+                                icon: 'success',
+                                html: '<strong>' + result + '</strong>',
+                            }).then((result) => {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+            })
+
+        }
+    </script>
+}

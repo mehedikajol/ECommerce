@@ -15,10 +15,14 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
         Categories = new CategoryRepository(_context);
         SubCategories = new SubCategoryRepository(_context);
+        Products = new ProductRepository(_context);
+        Stocks = new StockRepository(_context);
     }
 
     public ICategoryRepository Categories { get; private set; }
     public ISubCategoryRepository SubCategories { get; private set; }
+    public IProductRepository Products { get; private set; }
+    public IStockRepository Stocks { get; private set; }
 
     public async Task CompleteAsync()
     {
@@ -27,6 +31,6 @@ public class UnitOfWork : IUnitOfWork, IDisposable
 
     public void Dispose()
     {
-         _context.Dispose();
+        _context.Dispose();
     }
 }

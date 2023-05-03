@@ -1,6 +1,6 @@
 ﻿@model SubCategoryEditModel
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
 @section Styles
@@ -23,8 +23,12 @@
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    <li class="breadcrumb-item"><a href="/">Home</a></li>
-                    <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Categories" asp-action="Index">Categories</a></li>
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a asp-area="Admin" asp-controller="SubCategories" asp-action="Index">SubCategories</a>
+                    </li>
                     <li class="breadcrumb-item active">Create</li>
                 </ol>
             </div>
@@ -50,12 +54,12 @@
                         <div class="card-body">
                             <div class="form-group">
                                 <label asp-for="Name"></label>
-                                <input asp-for="Name" class="form-control" placeholder="Enter category title" required />
+                                <input asp-for="Name" class="form-control" placeholder="Enter sub category title" required />
                                 <span asp-validation-for="Name" class="text-danger"></span>
                             </div>
                             <div class="form-group">
                                 <label asp-for="Description"></label>
-                                <input asp-for="Description" class="form-control" placeholder="Enter category description" />
+                                <input asp-for="Description" class="form-control" placeholder="Enter sub category description" />
                                 <span asp-validation-for="Description" class="text-danger"></span>
                             </div>
 
