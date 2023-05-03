@@ -48,7 +48,7 @@
                                 {
                                     <tr>
                                         <td>@product.Name</td>
-                                        <td><img src="@product.ImageUrl" alt="@product.Name" /></td>
+                                        <td><img src="@product.ImageUrl" alt="@product.Name" style="width: 150px; height: 150px;" /></td>
                                         <td>@product.SubCategoryName</td>
                                         <td>@product.Description</td>
                                         <td>@product.SKU</td>
@@ -90,3 +90,47 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
+
+@section Styles{
+    <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+}
+
+@section Scripts{
+    <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
+    <script>
+        function deleteProduct(id) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        type: "POST",
+                        dataType: 'json',
+                        url: "@Url.Action("Delete", "Products")",
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        traditional: true,
+                        data: {
+                            id: id
+                        },
+                        success: function (result) {
+                            Swal.fire({
+                                title: '<strong>' + result + '</strong>',
+                                icon: 'success',
+                                html: '<strong>' + result + '</strong>',
+                            }).then((result) => {
+                                window.location.reload();
+                            });
+                        }
+                    });
+                }
+            })
+
+        }
+    </script>
+}

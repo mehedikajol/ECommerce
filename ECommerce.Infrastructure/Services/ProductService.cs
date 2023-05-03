@@ -23,7 +23,7 @@ internal class ProductService : IProductService
             products.Add(new Product
             {
                 Id = product.Id,
-                Name= product.Name,
+                Name = product.Name,
                 Description = product.Description,
                 SKU = product.SKU,
                 Price = product.Price,
@@ -35,9 +35,20 @@ internal class ProductService : IProductService
         return products;
     }
 
-    public Task<Product> GetProductById(Guid id)
+    public async Task<Product> GetProductById(Guid id)
     {
-        throw new NotImplementedException();
+        var productEntity = await _unitOfWork.Products.GetEntityById(id);
+        var product = new Product { 
+            Id = productEntity.Id, 
+            Name = productEntity.Name, 
+            Description = productEntity.Description, 
+            SKU = productEntity.SKU, 
+            Price = productEntity.Price, 
+            ImageUrl = productEntity.ImageUrl, 
+            SubCategoryId= productEntity.SubCategoryId,
+            SubCategoryName = productEntity.SubCategory.Name
+        };
+        return product;
     }
 
     public async Task CreateProduct(Product product)
@@ -55,14 +66,22 @@ internal class ProductService : IProductService
         await _unitOfWork.CompleteAsync();
     }
 
-    public Task UpdateProduct(Product product)
+    public async Task UpdateProduct(Product product)
     {
-        throw new NotImplementedException();
+        var productEntity = await _unitOfWork.Products.GetEntityById(product.Id);
+        productEntity.Name = product.Name;
+        productEntity.Description = product.Description;
+        productEntity.Price = product.Price;
+        productEntity.SubCategoryId = product.SubCategoryId;
+
+        await _unitOfWork.Products.UpdateEntity(productEntity);
+        await _unitOfWork.CompleteAsync();
     }
 
-    public Task DeleteProduct(Guid id)
+    public async Task DeleteProduct(Guid id)
     {
-        throw new NotImplementedException();
+        await _unitOfWork.Products.DeleteEntityById(id);
+        await _unitOfWork.CompleteAsync();
     }
 
 }
