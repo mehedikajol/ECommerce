@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using ECommerce.Core.Common;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Web;
@@ -19,6 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<AppDbContext>();
+
+    builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
 
     // Using Autofac as dependency container
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
