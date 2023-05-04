@@ -7,9 +7,9 @@ namespace ECommerce.Infrastructure.Services;
 
 internal class FileHandlerService : IFileHandlerService
 {
-    private readonly ApplicationSettings _settings;
+    private readonly FileStorageSettings _settings;
 
-    public FileHandlerService(IOptions<ApplicationSettings> options)
+    public FileHandlerService(IOptions<FileStorageSettings> options)
     {
         _settings = options.Value;
     }

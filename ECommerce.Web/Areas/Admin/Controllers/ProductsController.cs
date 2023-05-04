@@ -18,7 +18,7 @@ public class ProductsController : BaseController
     private readonly IProductService _productService;
     private readonly ISubCategoryService _subCategoryService;
     private readonly IFileHandlerService _fileHandlerService;
-    private readonly ApplicationSettings _settings;
+    private readonly FileStorageSettings _settings;
 
     public ProductsController(
         ILifetimeScope scope,
@@ -26,7 +26,7 @@ public class ProductsController : BaseController
         IProductService productService,
         ISubCategoryService subCategoryService,
         IFileHandlerService fileHandlerService,
-        IOptions<ApplicationSettings> options) : base(scope)
+        IOptions<FileStorageSettings> options) : base(scope)
     {
         _logger = logger;
         _productService = productService;
@@ -40,13 +40,8 @@ public class ProductsController : BaseController
         var model = new ProductListModel();
         var entities = await _productService.GetAllProducts();
         foreach (var entity in entities)
-        {
-            if (entity.ImageUrl.StartsWith("P"))
-            {
-                var path = Path.Combine(Request.Path);
-                entity.ImageUrl = Request.Scheme + "://" + Request.Host + "/" + entity.ImageUrl?.Replace('\\', '/');
-            }
-        }
+            entity.ImageUrl = Request.Scheme + "://" + Request.Host + "/" + _settings.DirectoryName 
+                + "/" + entity.ImageUrl?.Replace('\\', '/');
 
         model.Products = entities;
         return View(model);

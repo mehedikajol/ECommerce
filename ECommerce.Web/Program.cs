@@ -22,7 +22,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<AppDbContext>();
 
-    builder.Services.Configure<ApplicationSettings>(builder.Configuration.GetSection("ApplicationSettings"));
+    builder.Services.Configure<FileStorageSettings>(builder.Configuration.GetSection("FileStorageSettings"));
 
     // Using Autofac as dependency container
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -82,13 +82,16 @@ try
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
-    var filepath = builder.Configuration.GetValue<string>("ApplicationSettings:FileDirectory");
+
+    var mainDirectory = builder.Configuration.GetSection("FileStorageSettings:FileDirectory");
+    var directoryName = builder.Configuration.GetSection("FileStorageSettings:DirectoryName");
 
     app.UseHttpsRedirection();
-    app.UseStaticFiles( new StaticFileOptions
+    app.UseStaticFiles();
+    app.UseStaticFiles(new StaticFileOptions
     {
-        FileProvider = new PhysicalFileProvider(Path.Combine(filepath, "")),
-        RequestPath = "/"+filepath
+        FileProvider = new PhysicalFileProvider(mainDirectory.Value),
+        RequestPath = "/" + directoryName.Value
     });
 
     app.UseRouting();
