@@ -6,6 +6,7 @@ using ECommerce.Infrastructure.Context;
 using ECommerce.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 using System.Reflection;
 
@@ -81,9 +82,14 @@ try
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
+    var filepath = builder.Configuration.GetValue<string>("ApplicationSettings:FileDirectory");
 
     app.UseHttpsRedirection();
-    app.UseStaticFiles();
+    app.UseStaticFiles( new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(Path.Combine(filepath, "")),
+        RequestPath = "/"+filepath
+    });
 
     app.UseRouting();
 

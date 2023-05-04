@@ -9,6 +9,9 @@
     <link href="~/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
 }
 @section Scripts{
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
     <script src="~/adminlte/plugins/select2/js/select2.full.min.js"></script>
     <script>
         $('.select2').select2();
@@ -48,7 +51,7 @@
                     </div>
                     <!-- /.card-header -->
                     <!-- form start -->
-                    <form method="post" asp-controller="Products" asp-action="Create" asp-antiforgery="true">
+                    <form method="post" enctype="multipart/form-data" asp-controller="Products" asp-action="Create" asp-antiforgery="true">
                         @*<div asp-validation-summary="All" class="text-danger"></div>*@
                         <div class="card-body">
                             <div class="form-group">
@@ -64,6 +67,11 @@
                             <div class="form-group">
                                 <label asp-for="Price"></label>
                                 <input asp-for="Price" class="form-control" placeholder="Enter product description" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ImageFile"></label>
+                                <input asp-for="ImageFile" accept=".jpg, .jpeg, .png" class="form-control" />
                                 <span asp-validation-for="Price" class="text-danger"></span>
                             </div>
                             <div class="form-group">
