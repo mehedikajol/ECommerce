@@ -40,7 +40,7 @@ public class ProductsController : BaseController
         var model = new ProductListModel();
         var entities = await _productService.GetAllProducts();
         foreach (var entity in entities)
-            entity.ImageUrl = Request.Scheme + "://" + Request.Host + "/" + _settings.DirectoryName 
+            entity.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName 
                 + "/" + entity.ImageUrl?.Replace('\\', '/');
 
         model.Products = entities;

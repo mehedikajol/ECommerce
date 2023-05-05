@@ -83,15 +83,12 @@ try
         app.UseHsts();
     }
 
-    var mainDirectory = builder.Configuration.GetSection("FileStorageSettings:FileDirectory");
-    var directoryName = builder.Configuration.GetSection("FileStorageSettings:DirectoryName");
-
     app.UseHttpsRedirection();
     app.UseStaticFiles();
     app.UseStaticFiles(new StaticFileOptions
     {
-        FileProvider = new PhysicalFileProvider(mainDirectory.Value),
-        RequestPath = "/" + directoryName.Value
+        FileProvider = new PhysicalFileProvider(builder.Configuration.GetSection("FileStorageSettings:FileDirectory").Value),
+        RequestPath = builder.Configuration.GetSection("FileStorageSettings:DirectoryName").Value
     });
 
     app.UseRouting();
