@@ -27,6 +27,7 @@ public class InfrastructureModule : Module
         builder.RegisterType<SubCategoryService>().As<ISubCategoryService>().InstancePerLifetimeScope();
         builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
         builder.RegisterType<StockService>().As<IStockService>().InstancePerLifetimeScope();
+        builder.RegisterType<FileHandlerService>().As<IFileHandlerService>().InstancePerLifetimeScope();
 
         base.Load(builder);
     }

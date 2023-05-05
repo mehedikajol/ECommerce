@@ -1,10 +1,12 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
+using ECommerce.Core.Common;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Web;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 using Serilog;
 using System.Reflection;
 
@@ -19,6 +21,8 @@ var builder = WebApplication.CreateBuilder(args);
 
     builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
         .AddEntityFrameworkStores<AppDbContext>();
+
+    builder.Services.Configure<FileStorageSettings>(builder.Configuration.GetSection("FileStorageSettings"));
 
     // Using Autofac as dependency container
     builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
@@ -81,6 +85,11 @@ try
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
+    app.UseStaticFiles(new StaticFileOptions
+    {
+        FileProvider = new PhysicalFileProvider(builder.Configuration.GetSection("FileStorageSettings:FileDirectory").Value),
+        RequestPath = builder.Configuration.GetSection("FileStorageSettings:DirectoryName").Value
+    });
 
     app.UseRouting();
 
