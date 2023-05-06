@@ -1,4 +1,6 @@
-﻿namespace ECommerce.Web.Helpers;
+﻿using ECommerce.Web.Helpers;
+
+namespace ECommerce.Web.Extensions;
 
 internal static class FileHanlderExtensions
 {
