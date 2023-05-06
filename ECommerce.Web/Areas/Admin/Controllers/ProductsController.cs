@@ -4,11 +4,11 @@ using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
 using ECommerce.Core.Enums;
 using ECommerce.Web.Areas.Admin.Models.Products;
+using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
-using System.Text;
 
 namespace ECommerce.Web.Areas.Admin.Controllers;
 
@@ -71,8 +71,8 @@ public class ProductsController : BaseController
                 Name = model.Name,
                 Description = model.Description,
                 SubCategoryId = model.Category,
-                ImageUrl = model.ImageUrl, // https:/picsum.photos/200/300", // TODO: File will be uploaded and link saved
-                SKU = "5BLP4EWUCQ59ZTD", // TODO: Random string generator needed to generate SKU (15 Chars)
+                ImageUrl = model.ImageUrl,
+                SKU = RandomStringGenerator.GenerateUppercaseRandomString(15),
                 Price = model.Price,
             };
             await _productService.CreateProduct(product);
