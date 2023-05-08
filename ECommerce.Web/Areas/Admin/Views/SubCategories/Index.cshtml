@@ -41,6 +41,7 @@
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>Category</th>
+                                    <th>Main Category</th>
                                     <th>Actions</th>
                                 </tr>
                             </thead>
@@ -51,6 +52,7 @@
                                         <td>@category.Name</td>
                                         <td>@category.Description</td>
                                         <td>@category.CategoryName</td>
+                                        <td>@category.MainCategoryName</td>
                                         <td>
                                             <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="SubCategories" asp-action="Edit" asp-route-id="@category.Id">
                                                 <i class="fas fa-pencil-alt"></i>
@@ -68,6 +70,7 @@
                                 <tr>
                                     <th>Name</th>
                                     <th>Description</th>
+                                    <th>Category</th>
                                     <th>Main Category</th>
                                     <th>Actions</th>
                                 </tr>
