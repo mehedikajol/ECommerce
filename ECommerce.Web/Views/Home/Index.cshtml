@@ -55,8 +55,8 @@
             <h2 class="h5 text-uppercase mb-4">Top trending products</h2>
         </header>
         <div class="row">
-            
-            @foreach(var product in Model.TrendingProducts)
+
+            @foreach (var product in Model.TrendingProducts)
             {
                 <!-- PRODUCT-->
                 <div class="col-xl-3 col-lg-4 col-sm-6">
@@ -77,7 +77,7 @@
                                         <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
                                     </li>
                                     <li class="list-inline-item me-0">
-                                        <a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal">
+                                        <a class="btn btn-sm btn-outline-dark" onclick="updateModalValues('@product.Id')" href="#productView" data-bs-toggle="modal">
                                             <i class="fas fa-expand"></i>
                                         </a>
                                     </li>
@@ -91,7 +91,7 @@
                     </div>
                 </div>
             }
-            
+
         </div>
     </section>
 
@@ -102,7 +102,7 @@
             <h2 class="h5 text-uppercase mb-4">New Arrivals</h2>
         </header>
         <div class="row">
-            
+
             @foreach (var product in Model.LatestProducts)
             {
                 <!-- PRODUCT-->
@@ -124,7 +124,7 @@
                                         <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
                                     </li>
                                     <li class="list-inline-item me-0">
-                                        <a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal">
+                                        <a class="btn btn-sm btn-outline-dark" onclick="updateModalValues('@product.Id')" href="#productView" data-bs-toggle="modal">
                                             <i class="fas fa-expand"></i>
                                         </a>
                                     </li>
@@ -170,7 +170,7 @@
                                         <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
                                     </li>
                                     <li class="list-inline-item me-0">
-                                        <a class="btn btn-sm btn-outline-dark" href="#productView" data-bs-toggle="modal">
+                                        <a class="btn btn-sm btn-outline-dark" onclick="updateModalValues('@product.Id')" href="#productView" data-bs-toggle="modal">
                                             <i class="fas fa-expand"></i>
                                         </a>
                                     </li>
@@ -192,3 +192,8 @@
     <partial name="Partials/_ShopFeaturesPartial" />
     <partial name="Partials/_ShopNewsletterSubscribePartial" />
 </div>
+
+@section Scripts{
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/boutique/js/populateproductviewmodal.js"></script>
+}

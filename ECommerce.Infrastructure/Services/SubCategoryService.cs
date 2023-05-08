@@ -27,7 +27,8 @@ internal class SubCategoryService : ISubCategoryService
                 Name = entity.Name,
                 Description = entity.Description,
                 CategoryId = entity.CategoryId,
-                CategoryName = entity.Category.Name
+                CategoryName = entity.Category.Name,
+                MainCategoryName = entity.Category.MainCategory.ToString(),
             });
         }
 

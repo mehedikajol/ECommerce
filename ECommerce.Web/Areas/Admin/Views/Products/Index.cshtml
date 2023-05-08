@@ -41,7 +41,6 @@
                                     <th>Name</th>
                                     <th>Image</th>
                                     <th>Category</th>
-                                    <th>Description</th>
                                     <th>SKU</th>
                                     <th>Price</th>
                                     <th>Actions</th>
@@ -54,10 +53,13 @@
                                         <td>@product.Name</td>
                                         <td><img src="@product.ImageUrl" alt="@product.Name" style="width: 150px; height: 150px;" /></td>
                                         <td>@product.SubCategoryName</td>
-                                        <td>@product.Description</td>
                                         <td>@product.SKU</td>
                                         <td>@product.Price</td>
                                         <td>
+                                            <a class="btn btn-primary btn-sm" asp-area="Admin" asp-controller="Products" asp-action="View" asp-route-id="@product.Id">
+                                                <i class="far fa-eye"></i>
+                                                View
+                                            </a>
                                             <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Products" asp-action="Edit" asp-route-id="@product.Id">
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
@@ -75,7 +77,6 @@
                                     <th>Name</th>
                                     <th>Image</th>
                                     <th>Category</th>
-                                    <th>Description</th>
                                     <th>SKU</th>
                                     <th>Price</th>
                                     <th>Actions</th>

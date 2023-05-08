@@ -2,8 +2,8 @@
 
 public enum UploadImageTypes
 {
-    CategoryImage = 1,
+    Others = 1,
+    CategoryImage,
     ProductImage,
     ProfileImage,
-    others
 }
