@@ -23,7 +23,7 @@ internal class FileHandlerService : IFileHandlerService
         return (bytes, extension);
     }
 
-    public async Task<string> SaveFileAsync(byte[] fileBytes, string fileName, UploadImageTypes imageTypes = UploadImageTypes.others)
+    public async Task<string> SaveFileAsync(byte[] fileBytes, string fileName, UploadImageTypes imageTypes = UploadImageTypes.Others)
     {
         var baseDirectory = _settings.FileDirectory;
         var fileDirectory = Path.Combine(baseDirectory, imageTypes.ToString());

@@ -2,6 +2,7 @@
 using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
+using ECommerce.Core.Entities.Base;
 using ECommerce.Core.Enums;
 using ECommerce.Web.Areas.Admin.Models.Products;
 using ECommerce.Web.Extensions;
@@ -40,7 +41,7 @@ public class ProductsController : BaseController
         var model = new ProductListModel();
         var entities = await _productService.GetAllProducts();
         foreach (var entity in entities)
-            entity.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName 
+            entity.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
                 + "/" + entity.ImageUrl?.Replace('\\', '/');
 
         model.Products = entities;
@@ -80,6 +81,22 @@ public class ProductsController : BaseController
         }
         var subCategories = await _subCategoryService.GetAllSubCategories();
         ViewData["SubCategories"] = new SelectList(subCategories, "Id", "Name");
+        return View(model);
+    }
+
+    public async Task<IActionResult> View(Guid id)
+    {
+        var product = await _productService.GetProductById(id);
+        var model = new ProductViewModel
+        {
+            Name = product.Name,
+            Description = product.Description,
+            SKU = product.SKU,
+            Category = product.SubCategoryName,
+            ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName + "/" + product.ImageUrl?.Replace('\\', '/'),
+            Price = product.Price,
+
+        };
         return View(model);
     }
 

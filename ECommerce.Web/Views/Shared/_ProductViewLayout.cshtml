@@ -1,0 +1,53 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>@ViewData["Title"] - ECommerce</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="all,follow">
+
+    <!-- Favicon-->
+    <link rel="shortcut icon" href="~/boutique/img/favicon.png">
+
+    <!-- gLightbox gallery-->
+    <link href="~/boutique/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
+    <!-- Range slider-->
+    <link href="~/boutique/vendor/nouislider/nouislider.min.css" rel="stylesheet" />
+    <!-- Choices CSS-->
+    <link href="~/boutique/vendor/choices.js/css/choices.min.css" rel="stylesheet" />
+    <!-- Swiper slider-->
+    <link href="~/boutique/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <!-- Google fonts-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&amp;display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
+    <!-- Font Awesome -->
+    <link href="~/boutique/vendor/fontawesome/css/all.min.css" rel="stylesheet" />
+    <!-- theme stylesheet-->
+    <link href="~/boutique/vendor/bootstrap/css/style.default.min.css" rel="stylesheet" />
+    <!-- Custom stylesheet - for your changes-->
+    <link href="~/boutique/css/custom.css" rel="stylesheet" />
+
+    @await RenderSectionAsync("Styles", required: false)
+</head>
+<body>
+    <div class="page-holder">
+        <!-- navbar-->
+
+        @RenderBody()
+
+        <!-- JavaScript files-->
+        <script src="~/boutique/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+        <script src="~/boutique/vendor/glightbox/js/glightbox.min.js"></script>
+        <script src="~/boutique/vendor/nouislider/nouislider.min.js"></script>
+        <script src="~/boutique/vendor/swiper/swiper-bundle.min.js"></script>
+        <script src="~/boutique/vendor/choices.js/js/choices.min.js"></script>
+
+        <script src="~/boutique/js/front.js"></script>
+        <script src="~/boutique/js/custom.js"></script>
+        <script src="~/js/site.js"></script>
+        @await RenderSectionAsync("Scripts", required: false)
+    </div>
+</body>
+</html>
