@@ -16,4 +16,9 @@ internal class ProductRepository : GenericRepository<Product, Guid>, IProductRep
     {
         return await _dbSet.Include(p => p.SubCategory).ToListAsync();
     }
+
+    public override async Task<Product> GetEntityById(Guid id)
+    {
+        return await _dbSet.Include(p => p.SubCategory).FirstOrDefaultAsync(p => p.Id == id);
+    }
 }

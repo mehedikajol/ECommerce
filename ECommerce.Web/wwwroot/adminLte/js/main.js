@@ -1,3 +1,4 @@
+// Add active class to menu
 let urlLink = window.location.pathname;
 
 if (urlLink.includes("Create")) {
@@ -13,3 +14,5 @@ let test = document.querySelector(`[href="${urlLink}"]`);
 if (test.classList.contains("nav-link")) {
     test.classList.add("active");
 }
+
+// Update product modal values

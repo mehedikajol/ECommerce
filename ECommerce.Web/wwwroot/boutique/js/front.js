@@ -25,34 +25,34 @@ document.addEventListener('DOMContentLoaded', function () {
 	/* ===============================================================
     	 COUNTRY SELECT BOX FILLING
   	=============================================================== */
-	const request = new XMLHttpRequest();
-	request.open('GET', 'js/countries.json');
-	request.onload = function () {
-		if (request.status >= 200 && request.status < 400) {
-			const response = JSON.parse(request.responseText);
+	//const request = new XMLHttpRequest();
+	//request.open('GET', 'countries.json');
+	//request.onload = function () {
+	//	if (request.status >= 200 && request.status < 400) {
+	//		const response = JSON.parse(request.responseText);
 
-			var selectOption = '';
-			response.forEach((country) => {
-				selectOption += "<option value='" + country.name + "' data-dial-code='" + country.dial_code + "'>" + country.name + '</option>';
-			});
-			document.querySelectorAll('select.country').forEach((el) => {
-				el.insertAdjacentHTML('beforeend', selectOption);
-			});
+	//		var selectOption = '';
+	//		response.forEach((country) => {
+	//			selectOption += "<option value='" + country.name + "' data-dial-code='" + country.dial_code + "'>" + country.name + '</option>';
+	//		});
+	//		document.querySelectorAll('select.country').forEach((el) => {
+	//			el.insertAdjacentHTML('beforeend', selectOption);
+	//		});
 
-			const countryChoices = document.querySelectorAll('.country');
-			if (countryChoices.length) {
-				countryChoices.forEach((el) => {
-					const choices = new Choices(el, {
-						placeholder: true,
-						searchEnabled: false,
-						itemSelectText: '',
-						callbackOnInit: () => injectClassess(el),
-					});
-				});
-			}
-		}
-	};
-	request.send();
+	//		const countryChoices = document.querySelectorAll('.country');
+	//		if (countryChoices.length) {
+	//			countryChoices.forEach((el) => {
+	//				const choices = new Choices(el, {
+	//					placeholder: true,
+	//					searchEnabled: false,
+	//					itemSelectText: '',
+	//					callbackOnInit: () => injectClassess(el),
+	//				});
+	//			});
+	//		}
+	//	}
+	//};
+	//request.send();
 
 	/* ===============================================================
 		GLIGHTBOX

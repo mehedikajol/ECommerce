@@ -16,4 +16,5 @@ public class ProductEditModel
     public decimal Price { get; set; }
     [Required]
     public Guid Category { get; set; }
+    public IFormFile? ImageFile { get; set; }
 }
