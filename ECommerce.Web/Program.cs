@@ -19,8 +19,14 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDbContextPool<AppDbContext>(options =>
         options.UseSqlite(connectionString));
 
-    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<AppDbContext>();
+    builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    {
+        options.User.RequireUniqueEmail = true;
+        //options.SignIn.RequireConfirmedAccount = true;
+    })
+        .AddDefaultUI()
+        .AddEntityFrameworkStores<AppDbContext>()
+        .AddDefaultTokenProviders();
 
     builder.Services.Configure<FileStorageSettings>(builder.Configuration.GetSection("FileStorageSettings"));
 
