@@ -1,9 +1,12 @@
-﻿using ECommerce.Web.Models.Account;
+﻿using ECommerce.Application.IServices;
+using ECommerce.Web.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.Win32.SafeHandles;
 using System.Text;
+using System.Text.Encodings.Web;
 
 namespace ECommerce.Web.Controllers;
 
@@ -12,13 +15,16 @@ public class AccountController : Controller
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IEmailService _emailService;
 
     public AccountController(
         SignInManager<IdentityUser> signInManager,
-        UserManager<IdentityUser> userManager)
+        UserManager<IdentityUser> userManager,
+        IEmailService emailService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        _emailService = emailService;
     }
 
     public IActionResult SignIn(string returnUrl = null)
@@ -127,8 +133,10 @@ public class AccountController : Controller
                 "Reset Password",
                 $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
             */
-
-            // TODO: Create an emailsender to send email 
+            var result = await _emailService.SendEmailAsync(
+                model.Email, 
+                "Reset Password", 
+                $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
 
             return RedirectToAction(nameof(ForgotPasswordConfirmation));
         }
