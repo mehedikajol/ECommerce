@@ -8,6 +8,7 @@ public interface IUnitOfWork
     ISubCategoryRepository SubCategories { get; }
     IProductRepository Products { get; }
     IStockRepository Stocks { get; }
+    IUserProfileRepository UserProfiles { get; }
 
     Task CompleteAsync();
 }

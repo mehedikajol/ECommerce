@@ -1,6 +1,5 @@
 ﻿using ECommerce.Core.Entities.Base;
 using ECommerce.Core.Enums;
-using Microsoft.AspNetCore.Identity;
 
 namespace ECommerce.Core.Entities;
 
@@ -12,5 +11,5 @@ public class UserProfile : AuditableEntity
     public Gender Gender { get; set; }
     public string Address { get; set; }
 
-    public IdentityUser User { get; set; }
+    public Guid UserId { get; set; }
 }
