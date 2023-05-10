@@ -111,12 +111,16 @@ public class AccountController : Controller
             // visit https://go.microsoft.com/fwlink/?LinkID=532713
             var code = await _userManager.GeneratePasswordResetTokenAsync(user);
             code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+            var callbackUrl = Url.Action("ResetPassword", "Account", new { code = code }, protocol: Request.Scheme);
+
+            /*
             var callbackUrl = Url.Page(
                 "/Account/ResetPassword",
             pageHandler: null,
-                values: new { area = "Identity", code },
+                values: new { area = "", code },
                 protocol: Request.Scheme);
-
+            */
             /*
             await _emailSender.SendEmailAsync(
                 Input.Email,
@@ -133,6 +137,56 @@ public class AccountController : Controller
     }
 
     public IActionResult ForgotPasswordConfirmation()
+    {
+        return View();
+    }
+
+    public IActionResult ResetPassword(string code = null)
+    {
+        if (code == null)
+        {
+            return BadRequest("A code must be supplied for reset password");
+        }
+        else
+        {
+            var model = new ResetPasswordModel { Code = code };
+            return View(model);
+        }
+    }
+
+    [HttpPost, ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetPasswordAsync(ResetPasswordModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        var user = await _userManager.FindByEmailAsync(model.EmailAddress);
+        if (user == null)
+        {
+            // Don't reveal that the user does not exist
+            return RedirectToAction(nameof(ResetPasswordConfirmation));
+        }
+
+        string decodedText = Encoding.UTF8.GetString(Convert.FromBase64String(model.Code));
+
+        var result = await _userManager.ResetPasswordAsync(user, decodedText, model.Password);
+        if (result.Succeeded)
+        {
+            return RedirectToAction(nameof(ResetPasswordConfirmation));
+        }
+        else
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View(model);
+        }
+    }
+
+    public IActionResult ResetPasswordConfirmation()
     {
         return View();
     }
