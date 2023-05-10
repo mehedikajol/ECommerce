@@ -8,49 +8,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="robots" content="all,follow">
 
-    <!-- Favicon-->
-    <link rel="shortcut icon" href="~/boutique/img/favicon.png">
+    <!-- theme meta -->
+    <meta name="theme-name" content="aviato" />
 
-    <!-- gLightbox gallery-->
-    <link href="~/boutique/vendor/glightbox/css/glightbox.min.css" rel="stylesheet" />
-    <!-- Range slider-->
-    <link href="~/boutique/vendor/nouislider/nouislider.min.css" rel="stylesheet" />
-    <!-- Choices CSS-->
-    <link href="~/boutique/vendor/choices.js/css/choices.min.css" rel="stylesheet" />
-    <!-- Swiper slider-->
-    <link href="~/boutique/vendor/swiper/swiper-bundle.min.css" rel="stylesheet" />
-    <!-- Google fonts-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@300;400;700&amp;display=swap">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Martel+Sans:wght@300;400;800&amp;display=swap">
-    <!-- Font Awesome -->
-    <link href="~/boutique/vendor/fontawesome/css/all.min.css" rel="stylesheet" />
-    <!-- theme stylesheet-->
-    <link href="~/boutique/vendor/bootstrap/css/style.default.min.css" rel="stylesheet" />
-    <!-- Custom stylesheet - for your changes-->
-    <link href="~/boutique/css/custom.css" rel="stylesheet" />
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="~/avito/images/favicon.png" />
+
+    <!-- Themefisher Icon font -->
+    <link href="~/avito/plugins/themefisher-font/style.css" rel="stylesheet" />
+    <!-- bootstrap.min css -->
+    <link href="~/avito/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+
+    <!-- Animate css -->
+    <link href="~/avito/plugins/animate/animate.css" rel="stylesheet" />
+    <!-- Slick Carousel -->
+    <link href="~/avito/plugins/slick/slick.css" rel="stylesheet" />
+    <link href="~/avito/plugins/slick/slick-theme.css" rel="stylesheet" />
+
+    <!-- Main Stylesheet -->
+    <link href="~/avito/css/style.css" rel="stylesheet" />
 
     @await RenderSectionAsync("Styles", required: false)
     <link href="~/css/site.css" rel="stylesheet" />
+
 </head>
-<body>
-    <div class="page-holder">
-        <!-- navbar-->
-        <partial name="Partials/_ShopMainMenuPartial" />
+<body id="body">
+    <partial name="Partials/_AvitoHeaderTopPartial" />
+    <partial name="Partials/_AvitoMainMenuPartial" />
+    <partial name="Partials/_AvitoSliderPartial" />
+    <partial name="Partials/_AvitoCategoryPartial" />
 
-        @RenderBody()
+    @RenderBody()
 
-        <partial name="Partials/_ShopFooterPartial" />
-        <!-- JavaScript files-->
-        <script src="~/boutique/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-        <script src="~/boutique/vendor/glightbox/js/glightbox.min.js"></script>
-        <script src="~/boutique/vendor/nouislider/nouislider.min.js"></script>
-        <script src="~/boutique/vendor/swiper/swiper-bundle.min.js"></script>
-        <script src="~/boutique/vendor/choices.js/js/choices.min.js"></script>
+    <partial name="Partials/_AvitoCTAPartial" />
+    <partial name="Partials/_AvitoFooterPartial" />
 
-        <script src="~/boutique/js/front.js"></script>
-        <script src="~/boutique/js/custom.js"></script>
-        <script src="~/js/site.js"></script>
-        @await RenderSectionAsync("Scripts", required: false)
-    </div>
+    <!-- Main jQuery -->
+    <script src="~/avito/plugins/jquery/dist/jquery.min.js"></script>
+    <!-- Bootstrap 3.1 -->
+    <script src="~/avito/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Bootstrap Touchpin -->
+    <script src="~/avito/plugins/bootstrap-touchspin/dist/jquery.bootstrap-touchspin.min.js"></script>
+    <!-- Instagram Feed Js -->
+    <script src="~/avito/plugins/instafeed/instafeed.min.js"></script>
+    <!-- Video Lightbox Plugin -->
+    <script src="~/avito/plugins/ekko-lightbox/dist/ekko-lightbox.min.js"></script>
+    <!-- Count Down Js -->
+    <script src="~/avito/plugins/syo-timer/build/jquery.syotimer.min.js"></script>
+
+    <!-- slick Carousel -->
+    <script src="~/avito/plugins/slick/slick.min.js"></script>
+    <script src="~/avito/plugins/slick/slick-animation.min.js"></script>
+
+    <!-- Google Mapl -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCC72vZw-6tGqFyRhhg5CkF2fqfILn2Tsw"></script>
+    <script src="~/avito/plugins/google-map/gmap.js"></script>
+
+    <!-- Main Js File -->
+    <script src="~/avito/js/script.js"></script>
+
+    <script src="~/js/site.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

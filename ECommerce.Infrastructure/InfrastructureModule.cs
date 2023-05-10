@@ -18,16 +18,23 @@ public class InfrastructureModule : Module
         builder.RegisterType<AppDbContext>().As<IdentityDbContext>().InstancePerLifetimeScope();
         builder.RegisterType<UnitOfWork>().As<IUnitOfWork>().InstancePerLifetimeScope();
 
+        // Repositories
         builder.RegisterType<CategoryRepository>().As<ICategoryRepository>().InstancePerLifetimeScope();
         builder.RegisterType<SubCategoryRepository>().As<ISubCategoryRepository>().InstancePerLifetimeScope();
         builder.RegisterType<ProductRepository>().As<IProductRepository>().InstancePerLifetimeScope();
         builder.RegisterType<StockRepository>().As<IStockRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<UserProfileRepository>().As<IUserProfileRepository>().InstancePerLifetimeScope();
 
+        // Repository services
         builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();
         builder.RegisterType<SubCategoryService>().As<ISubCategoryService>().InstancePerLifetimeScope();
         builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
         builder.RegisterType<StockService>().As<IStockService>().InstancePerLifetimeScope();
+        builder.RegisterType<UserProfileService>().As<IUserProfileService>().InstancePerLifetimeScope();
+
+        // Other services
         builder.RegisterType<FileHandlerService>().As<IFileHandlerService>().InstancePerLifetimeScope();
+        builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
 
         base.Load(builder);
     }
