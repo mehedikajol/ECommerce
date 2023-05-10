@@ -2,198 +2,123 @@
 @{
     ViewData["Title"] = "Home Page";
 }
-
-<partial name="Partials/_ShopProductPopupModalPartial" />
-<!-- HERO SECTION-->
-<div class="container">
-    <section class="hero pb-3 bg-cover bg-center d-flex align-items-center homepage-hero">
-        <div class="container py-5">
-            <div class="row px-4 px-lg-5">
-                <div class="col-lg-6">
-                    <p class="text-muted small text-uppercase mb-2">New Inspiration 2020</p>
-                    <h1 class="h2 text-uppercase mb-3">20% off on new season</h1>
-                    <a class="btn btn-dark" href="shop.html">Browse collections</a>
-                </div>
+<section class="products section bg-gray">
+    <div class="container">
+        <div class="row">
+            <div class="title text-center">
+                <h2>Trendy Products</h2>
             </div>
         </div>
-    </section>
-    <!-- CATEGORIES SECTION-->
-    <section class="pt-5">
-        <header class="text-center">
-            <p class="small text-muted small text-uppercase mb-1">Carefully created collections</p>
-            <h2 class="h5 text-uppercase mb-4">Browse our categories</h2>
-        </header>
         <div class="row">
-            <div class="col-md-4">
-                <a class="category-item" href="shop.html">
-                    <img class="img-fluid" src="~/boutique/img/cat-img-1.jpg" alt="" />
-                    <strong class="category-item-title">Clothes</strong>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="category-item mb-4" href="shop.html">
-                    <img class="img-fluid" src="~/boutique/img/cat-img-2.jpg" alt="" />
-                    <strong class="category-item-title">Shoes</strong>
-                </a>
-                <a class="category-item" href="shop.html">
-                    <img class="img-fluid" src="~/boutique/img/cat-img-3.jpg" alt="" />
-                    <strong class="category-item-title">Watches</strong>
-                </a>
-            </div>
-            <div class="col-md-4">
-                <a class="category-item" href="shop.html">
-                    <img class="img-fluid" src="~/boutique/img/cat-img-4.jpg" alt="" />
-                    <strong class="category-item-title">Electronics</strong>
-                </a>
-            </div>
-        </div>
-    </section>
-    <!-- TRENDING PRODUCTS-->
-    <section class="pt-5">
-        <header>
-            <p class="small text-muted small text-uppercase mb-1">Made the hard way</p>
-            <h2 class="h5 text-uppercase mb-4">Top trending products</h2>
-        </header>
-        <div class="row">
-
-            @foreach (var product in Model.TrendingProducts)
-            {
-                <!-- PRODUCT-->
-                <div class="col-xl-3 col-lg-4 col-sm-6">
-                    <div class="product text-center">
-                        <div class="position-relative mb-3">
-                            <div class="badge text-white bg-"></div>
-                            <a class="d-block" href="detail.html">
-                                <img class="img-fluid w-100" src="@product.ImageUrl" alt="@product.Name" style="height: 285px;">
-                            </a>
-                            <div class="product-overlay">
-                                <ul class="mb-0 list-inline">
-                                    <li class="list-inline-item m-0 p-0">
-                                        <a class="btn btn-sm btn-outline-dark" href="#!">
-                                            <i class="far fa-heart"></i>
-                                        </a>
-                                    </li>
-                                    <li class="list-inline-item m-0 p-0">
-                                        <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
-                                    </li>
-                                    <li class="list-inline-item me-0">
-                                        <a class="btn btn-sm btn-outline-dark" onclick="updateModalValues('@product.Id')" href="#productView" data-bs-toggle="modal">
-                                            <i class="fas fa-expand"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <h6>
-                            <a class="reset-anchor" href="detail.html">@product.Name</a>
-                        </h6>
-                        <p class="small text-muted">$@Convert.ToInt32(product.Price)</p>
-                    </div>
-                </div>
-            }
-
-        </div>
-    </section>
-
-    <!-- NEW PRODUCTS -->
-    <section class="pt-5">
-        <header>
-            <p class="small text-muted small text-uppercase mb-1">Latest from our collections</p>
-            <h2 class="h5 text-uppercase mb-4">New Arrivals</h2>
-        </header>
-        <div class="row">
-
             @foreach (var product in Model.LatestProducts)
             {
-                <!-- PRODUCT-->
-                <div class="col-xl-3 col-lg-4 col-sm-6">
-                    <div class="product text-center">
-                        <div class="position-relative mb-3">
-                            <div class="badge text-white bg-"></div>
-                            <a class="d-block" href="detail.html">
-                                <img class="img-fluid w-100" src="@product.ImageUrl" alt="@product.Name" style="height: 285px;">
-                            </a>
-                            <div class="product-overlay">
-                                <ul class="mb-0 list-inline">
-                                    <li class="list-inline-item m-0 p-0">
-                                        <a class="btn btn-sm btn-outline-dark" href="#!">
-                                            <i class="far fa-heart"></i>
+                <div class="col-md-4">
+                    <div class="product-item">
+                        <div class="product-thumb">
+                            <span class="bage">New</span>
+                            <img class="img-responsive object-cover" src="@product.ImageUrl" style="height: 400px;" alt="product-img" />
+                            <div class="preview-meta">
+                                <ul>
+                                    <li>
+                                        <span data-toggle="modal" data-target="#product-modal">
+                                            <i class="tf-ion-ios-search-strong"></i>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <a href="#!">
+                                            <i class="tf-ion-ios-heart"></i>
                                         </a>
                                     </li>
-                                    <li class="list-inline-item m-0 p-0">
-                                        <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
-                                    </li>
-                                    <li class="list-inline-item me-0">
-                                        <a class="btn btn-sm btn-outline-dark" onclick="updateModalValues('@product.Id')" href="#productView" data-bs-toggle="modal">
-                                            <i class="fas fa-expand"></i>
+                                    <li>
+                                        <a href="#!">
+                                            <i class="tf-ion-android-cart"></i>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <h6>
-                            <a class="reset-anchor" href="detail.html">@product.Name</a>
-                        </h6>
-                        <p class="small text-muted">$@Convert.ToInt32(product.Price)</p>
+                        <div class="product-content">
+                            <h4><a href="product-single.html">@product.Name</a></h4>
+                            <p class="price">$@product.Price</p>
+                        </div>
                     </div>
                 </div>
             }
-
         </div>
-    </section>
-
-    <!-- POPULAR PRODUCTS -->
-    <section class="pt-5 pb-5">
-        <header>
-            <p class="small text-muted small text-uppercase mb-1">Customers choises</p>
-            <h2 class="h5 text-uppercase mb-4">Most Popular</h2>
-        </header>
         <div class="row">
             @foreach (var product in Model.PopularProducts)
             {
-                <!-- PRODUCT-->
-                <div class="col-xl-3 col-lg-4 col-sm-6">
-                    <div class="product text-center">
-                        <div class="position-relative mb-3">
-                            <div class="badge text-white bg-"></div>
-                            <a class="d-block" href="detail.html">
-                                <img class="img-fluid w-100" src="@product.ImageUrl" alt="@product.Name" style="height: 285px;">
-                            </a>
-                            <div class="product-overlay">
-                                <ul class="mb-0 list-inline">
-                                    <li class="list-inline-item m-0 p-0">
-                                        <a class="btn btn-sm btn-outline-dark" href="#!">
-                                            <i class="far fa-heart"></i>
+                <div class="col-md-4">
+                    <div class="product-item">
+                        <div class="product-thumb">
+                            <span class="bage">Popular</span>
+                            <img class="img-responsive object-cover" src="@product.ImageUrl" style="height: 400px;" alt="product-img" />
+                            <div class="preview-meta">
+                                <ul>
+                                    <li>
+                                        <span data-toggle="modal" data-target="#product-modal">
+                                            <i class="tf-ion-ios-search-strong"></i>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <a href="#!">
+                                            <i class="tf-ion-ios-heart"></i>
                                         </a>
                                     </li>
-                                    <li class="list-inline-item m-0 p-0">
-                                        <a class="btn btn-sm btn-dark" href="cart.html">Add to cart</a>
-                                    </li>
-                                    <li class="list-inline-item me-0">
-                                        <a class="btn btn-sm btn-outline-dark" onclick="updateModalValues('@product.Id')" href="#productView" data-bs-toggle="modal">
-                                            <i class="fas fa-expand"></i>
+                                    <li>
+                                        <a href="#!">
+                                            <i class="tf-ion-android-cart"></i>
                                         </a>
                                     </li>
                                 </ul>
                             </div>
                         </div>
-                        <h6>
-                            <a class="reset-anchor" href="detail.html">@product.Name</a>
-                        </h6>
-                        <p class="small text-muted">$@Convert.ToInt32(product.Price)</p>
+                        <div class="product-content">
+                            <h4><a href="product-single.html">@product.Name</a></h4>
+                            <p class="price">$@product.Price</p>
+                        </div>
                     </div>
                 </div>
             }
-
         </div>
-    </section>
-
-    <!-- SERVICES-->
-    <partial name="Partials/_ShopFeaturesPartial" />
-    <partial name="Partials/_ShopNewsletterSubscribePartial" />
-</div>
-
-@section Scripts{
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/boutique/js/populateproductviewmodal.js"></script>
-}
+        <div class="row">
+            @foreach (var product in Model.TrendingProducts)
+            {
+                <div class="col-md-4">
+                    <div class="product-item">
+                        <div class="product-thumb">
+                            <span class="bage">Trending</span>
+                            <img class="img-responsive object-cover" src="@product.ImageUrl" style="height: 400px;" alt="product-img" />
+                            <div class="preview-meta">
+                                <ul>
+                                    <li>
+                                        <span data-toggle="modal" data-target="#product-modal">
+                                            <i class="tf-ion-ios-search-strong"></i>
+                                        </span>
+                                    </li>
+                                    <li>
+                                        <a href="#!">
+                                            <i class="tf-ion-ios-heart"></i>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#!">
+                                            <i class="tf-ion-android-cart"></i>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="product-content">
+                            <h4><a href="product-single.html">@product.Name</a></h4>
+                            <p class="price">$@product.Price</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="row">
+            <partial name="Partials/_AvitoProductModal" />
+        </div>
+    </div>
+</section>
