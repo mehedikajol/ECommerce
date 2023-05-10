@@ -49,4 +49,5 @@ public class AppDbContext : IdentityDbContext
     public DbSet<SubCategory> SubCategories { get; set; }
     public DbSet<Product> Products { get; set; }
     public DbSet<Stock> Stocks { get; set; }
+    public DbSet<UserProfile> UserProfiles { get; set; }
 }

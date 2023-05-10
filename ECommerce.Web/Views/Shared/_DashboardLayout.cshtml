@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -173,7 +177,7 @@
                         <img src="~/adminlte/img/user2-160x160.jpg" class="img-circle elevation-2" alt="User Image">
                     </div>
                     <div class="info">
-                        <a href="#" class="d-block">Super Admin</a>
+                        <a href="#" class="d-block">@(User.Identity.IsAuthenticated ? User.Identity.Name : "Super User")</a>
                     </div>
                 </div>
 

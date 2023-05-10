@@ -64,7 +64,7 @@ public class ProductsController : BaseController
             if (model.ImageFile is not null)
             {
                 var bytes = await model.ImageFile.ToByteArray();
-                var imageUrl = await _fileHandlerService.SaveFileAsync(bytes, model.ImageFile.FileName, UploadImageTypes.ProductImage);
+                var imageUrl = await _fileHandlerService.SaveFileAsync(bytes, model.ImageFile.FileName, UploadImageType.ProductImage);
                 model.ImageUrl = imageUrl;
             }
             var product = new Product
