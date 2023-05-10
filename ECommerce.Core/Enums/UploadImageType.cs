@@ -1,6 +1,6 @@
 ﻿namespace ECommerce.Core.Enums;
 
-public enum UploadImageTypes
+public enum UploadImageType
 {
     Others = 1,
     CategoryImage,

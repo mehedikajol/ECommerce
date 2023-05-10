@@ -3,7 +3,6 @@ using ECommerce.Core.Entities;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Infrastructure.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Cryptography.X509Certificates;
 
 namespace ECommerce.Infrastructure.Repositories;
 

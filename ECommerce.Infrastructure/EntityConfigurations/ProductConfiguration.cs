@@ -12,5 +12,6 @@ internal class ProductConfiguration : IEntityTypeConfiguration<Product>
         builder.Property(p => p.Description).HasMaxLength(1000).HasDefaultValue("");
         builder.Property(p => p.SKU).IsRequired().HasMaxLength(15).HasDefaultValue("");
         builder.Property(p => p.Price).IsRequired();
+        builder.Property(p => p.ImageUrl).HasMaxLength(200).HasDefaultValue("");
     }
 }
