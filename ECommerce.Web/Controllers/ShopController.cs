@@ -19,16 +19,23 @@ namespace ECommerce.Web.Controllers
             _settings = options.Value;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new ProductListModel();
+            model.Products = await _productService.GetAllProducts();
+            foreach(var product in model.Products)
+            {
+                product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
+                                + "/" + product.ImageUrl?.Replace('\\', '/');
+            }
+            return View(model);
         }
 
         public async Task<IActionResult> ViewProduct(Guid id)
         {
             var product = await _productService.GetProductById(id);
             product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-                + "/" + product.ImageUrl?.Replace('\\', '/');
+                                + "/" + product.ImageUrl?.Replace('\\', '/');
             var model = new ProductViewModel
             {
                 Name = product.Name,

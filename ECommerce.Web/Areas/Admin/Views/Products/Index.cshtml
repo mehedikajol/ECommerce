@@ -51,12 +51,14 @@
                                 {
                                     <tr>
                                         <td>@product.Name</td>
-                                        <td><img src="@product.ImageUrl" alt="@product.Name" style="width: 150px; height: 150px;" /></td>
+                                        <td>
+                                            <img src="@product.ImageUrl" alt="@product.Name" style="width: 150px; height: 150px;" />
+                                        </td>
                                         <td>@product.SubCategoryName</td>
                                         <td>@product.SKU</td>
                                         <td>@product.Price</td>
                                         <td>
-                                            <a class="btn btn-primary btn-sm" asp-area="Admin" asp-controller="Products" asp-action="View" asp-route-id="@product.Id">
+                                            <a class="btn btn-primary btn-sm" target="_blank" asp-area="Admin" asp-controller="Products" asp-action="View" asp-route-id="@product.Id">
                                                 <i class="far fa-eye"></i>
                                                 View
                                             </a>
@@ -95,7 +97,6 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
 @section Styles{
     <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
 }

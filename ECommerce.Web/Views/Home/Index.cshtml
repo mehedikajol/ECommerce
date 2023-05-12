@@ -16,7 +16,7 @@
         <div class="row">
             @foreach (var product in Model.LatestProducts)
             {
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @{
                         await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
                     }
@@ -31,7 +31,7 @@
         <div class="row">
             @foreach (var product in Model.PopularProducts)
             {
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @{
                         await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
                     }
@@ -46,7 +46,7 @@
         <div class="row">
             @foreach (var product in Model.TrendingProducts)
             {
-                <div class="col-md-4">
+                <div class="col-md-3">
                     @{
                         await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
                     }

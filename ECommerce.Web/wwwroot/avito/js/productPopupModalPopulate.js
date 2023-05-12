@@ -22,7 +22,4 @@ function populateProductPopupModal(productId) {
             productViewLink.href = `/Shop/ViewProduct/${result.id}`
         }
     });
-
-
-    //console.log(productNameTag);
 }
