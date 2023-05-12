@@ -1,11 +1,36 @@
 ﻿@model ProductViewModel
 @{
-    Layout = "_ProductViewLayout";
-    ViewData["Title"] = "View";
+    ViewData["Title"] = "View Product";
 }
+
 
 <section class="single-product">
     <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <ol class="breadcrumb">
+                    <li>
+                        <a asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    <li>
+                        <a href="shop.html">Shop</a>
+                    </li>
+                    <li class="active">Single Product</li>
+                </ol>
+            </div>
+            <div class="col-md-6">
+                <ol class="product-pagination text-right">
+                    <li>
+                        <a href="blog-left-sidebar.html">
+                            <i class="tf-ion-ios-arrow-left"></i> Next
+                        </a>
+                    </li>
+                    <li>
+                        <a href="blog-left-sidebar.html">Preview <i class="tf-ion-ios-arrow-right"></i></a>
+                    </li>
+                </ol>
+            </div>
+        </div>
         <div class="row mt-20">
             <div class="col-md-5">
                 <div class="single-product-slider">
@@ -14,23 +39,23 @@
                             <!-- me art lab slider -->
                             <div class='carousel-inner '>
                                 <div class='item active'>
-                                    <img src='~/avito/images/shop/single-products/product-1.jpg' alt='' data-zoom-image="~/avito/images/shop/single-products/product-1.jpg" />
+                                    <img src='~/avito/images/shop/single-products/product-1.jpg' alt='' data-zoom-image="images/shop/single-products/product-1.jpg" />
                                 </div>
                                 <div class='item'>
-                                    <img src='~/avito/images/shop/single-products/product-2.jpg' alt='' data-zoom-image="~/avito/images/shop/single-products/product-2.jpg" />
+                                    <img src='~/avito/images/shop/single-products/product-2.jpg' alt='' data-zoom-image="images/shop/single-products/product-2.jpg" />
                                 </div>
 
                                 <div class='item'>
-                                    <img src='~/avito/images/shop/single-products/product-3.jpg' alt='' data-zoom-image="~/avito/images/shop/single-products/product-3.jpg" />
+                                    <img src='~/avito/images/shop/single-products/product-3.jpg' alt='' data-zoom-image="images/shop/single-products/product-3.jpg" />
                                 </div>
                                 <div class='item'>
-                                    <img src='~/avito/images/shop/single-products/product-4.jpg' alt='' data-zoom-image="~/avito/images/shop/single-products/product-4.jpg" />
+                                    <img src='~/avito/images/shop/single-products/product-4.jpg' alt='' data-zoom-image="images/shop/single-products/product-4.jpg" />
                                 </div>
                                 <div class='item'>
-                                    <img src='~/avito/images/shop/single-products/product-5.jpg' alt='' data-zoom-image="~/avito/images/shop/single-products/product-5.jpg" />
+                                    <img src='~/avito/images/shop/single-products/product-5.jpg' alt='' data-zoom-image="images/shop/single-products/product-5.jpg" />
                                 </div>
                                 <div class='item'>
-                                    <img src='~/avito/images/shop/single-products/product-6.jpg' alt='' data-zoom-image="~/avito/images/shop/single-products/product-6.jpg" />
+                                    <img src='~/avito/images/shop/single-products/product-6.jpg' alt='' data-zoom-image="images/shop/single-products/product-6.jpg" />
                                 </div>
 
                             </div>
@@ -114,6 +139,14 @@
                             </li>
                         </ul>
                     </div>
+                    <div class="product-category">
+                        <span>SKU:</span>
+                        <ul>
+                            <li>
+                                <p>@Model.SKU</p>
+                            </li>
+                        </ul>
+                    </div>
                     <a href="cart.html" class="btn btn-main mt-20">Add To Cart</a>
                 </div>
             </div>
@@ -148,6 +181,7 @@
                                             <div class="comment-info">
                                                 <h4 class="comment-author">
                                                     <a href="#!">Jonathon Andrew</a>
+
                                                 </h4>
                                                 <time datetime="2013-04-06T13:53">July 02, 2015, at 11:34</time>
                                                 <a class="comment-button" href="#!">
@@ -224,3 +258,139 @@
         </div>
     </div>
 </section>
+
+<section class="products related-products section">
+    <div class="container">
+        <div class="row">
+            <div class="title text-center">
+                <h2>Related Products</h2>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="product-item">
+                    <div class="product-thumb">
+                        <span class="bage">Sale</span>
+                        <img class="img-responsive" src="~/avito/images/shop/products/product-5.jpg" alt="product-img" />
+                        <div class="preview-meta">
+                            <ul>
+                                <li>
+                                    <span data-toggle="modal" data-target="#product-modal">
+                                        <i class="tf-ion-ios-search"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="tf-ion-ios-heart"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#!">
+                                        <i class="tf-ion-android-cart"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h4>
+                            <a href="product-single.html">Reef Boardsport</a>
+                        </h4>
+                        <p class="price">$200</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="product-item">
+                    <div class="product-thumb">
+                        <img class="img-responsive" src="~/avito/images/shop/products/product-1.jpg" alt="product-img" />
+                        <div class="preview-meta">
+                            <ul>
+                                <li>
+                                    <span data-toggle="modal" data-target="#product-modal">
+                                        <i class="tf-ion-ios-search-strong"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="tf-ion-ios-heart"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#!">
+                                        <i class="tf-ion-android-cart"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h4><a href="product-single.html">Rainbow Shoes</a></h4>
+                        <p class="price">$200</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="product-item">
+                    <div class="product-thumb">
+                        <img class="img-responsive" src="~/avito/images/shop/products/product-2.jpg" alt="product-img" />
+                        <div class="preview-meta">
+                            <ul>
+                                <li>
+                                    <span data-toggle="modal" data-target="#product-modal">
+                                        <i class="tf-ion-ios-search"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="tf-ion-ios-heart"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#!">
+                                        <i class="tf-ion-android-cart"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h4><a href="product-single.html">Strayhorn SP</a></h4>
+                        <p class="price">$230</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="product-item">
+                    <div class="product-thumb">
+                        <img class="img-responsive" src="~/avito/images/shop/products/product-3.jpg" alt="product-img" />
+                        <div class="preview-meta">
+                            <ul>
+                                <li>
+                                    <span data-toggle="modal" data-target="#product-modal">
+                                        <i class="tf-ion-ios-search"></i>
+                                    </span>
+                                </li>
+                                <li>
+                                    <a href="#">
+                                        <i class="tf-ion-ios-heart"></i>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#!">
+                                        <i class="tf-ion-android-cart"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="product-content">
+                        <h4><a href="product-single.html">Bradley Mid</a></h4>
+                        <p class="price">$200</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

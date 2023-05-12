@@ -1,9 +1,8 @@
 ﻿using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
-using ECommerce.Core.Entities.Base;
+using ECommerce.Web.Models.Products;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using System.Runtime;
 
 namespace ECommerce.Web.Controllers
 {
@@ -31,6 +30,23 @@ namespace ECommerce.Web.Controllers
             product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
                 + "/" + product.ImageUrl?.Replace('\\', '/');
             return new JsonResult(product);
+        }
+
+        public async Task<IActionResult> ViewProduct(Guid id)
+        {
+            var product = await _productService.GetProductById(id);
+            product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
+                + "/" + product.ImageUrl?.Replace('\\', '/');
+            var model = new ProductViewModel
+            {
+                Name = product.Name,
+                Description = product.Description,
+                Price = product.Price,
+                SKU = product.SKU,
+                ImageUrl = product.ImageUrl
+            };
+
+            return View(model);
         }
     }
 }

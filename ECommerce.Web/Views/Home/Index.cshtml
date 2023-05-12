@@ -2,11 +2,15 @@
 @{
     ViewData["Title"] = "Home Page";
 }
+
+<partial name="Partials/_AvitoSliderPartial" />
+<partial name="Partials/_AvitoCategoryPartial" />
+
 <section class="products section bg-gray">
     <div class="container">
         <div class="row">
             <div class="title text-center">
-                <h2>Trendy Products</h2>
+                <h2>Latest Products</h2>
             </div>
         </div>
         <div class="row">
@@ -38,12 +42,19 @@
                             </div>
                         </div>
                         <div class="product-content">
-                            <h4><a href="product-single.html">@product.Name</a></h4>
+                            <h4>
+                                <a asp-controller="Products" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
+                            </h4>
                             <p class="price">$@product.Price</p>
                         </div>
                     </div>
                 </div>
             }
+        </div>
+        <div class="row">
+            <div class="title text-center">
+                <h2>Popular Products</h2>
+            </div>
         </div>
         <div class="row">
             @foreach (var product in Model.PopularProducts)
@@ -74,12 +85,19 @@
                             </div>
                         </div>
                         <div class="product-content">
-                            <h4><a href="product-single.html">@product.Name</a></h4>
+                            <h4>
+                                <a asp-controller="Products" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
+                            </h4>
                             <p class="price">$@product.Price</p>
                         </div>
                     </div>
                 </div>
             }
+        </div>
+        <div class="row">
+            <div class="title text-center">
+                <h2>Trendy Products</h2>
+            </div>
         </div>
         <div class="row">
             @foreach (var product in Model.TrendingProducts)
@@ -110,9 +128,12 @@
                             </div>
                         </div>
                         <div class="product-content">
-                            <h4><a href="product-single.html">@product.Name</a></h4>
+                            <h4>
+                                <a asp-controller="Products" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
+                            </h4>
                             <p class="price">$@product.Price</p>
                         </div>
+                        
                     </div>
                 </div>
             }
@@ -122,3 +143,5 @@
         </div>
     </div>
 </section>
+
+<partial name="Partials/_AvitoCTAPartial" />
