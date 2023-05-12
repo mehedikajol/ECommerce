@@ -40,5 +40,13 @@ namespace ECommerce.Web.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> GetProductJson(Guid id)
+        {
+            var product = await _productService.GetProductById(id);
+            product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
+               + "/" + product.ImageUrl?.Replace('\\', '/');
+            return new JsonResult(product);
+        }
     }
 }

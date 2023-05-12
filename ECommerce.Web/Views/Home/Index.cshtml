@@ -17,37 +17,9 @@
             @foreach (var product in Model.LatestProducts)
             {
                 <div class="col-md-4">
-                    <div class="product-item">
-                        <div class="product-thumb">
-                            <span class="bage">New</span>
-                            <img class="img-responsive object-cover" src="@product.ImageUrl" style="height: 400px;" alt="product-img" />
-                            <div class="preview-meta">
-                                <ul>
-                                    <li>
-                                        <span data-toggle="modal" data-target="#product-modal">
-                                            <i class="tf-ion-ios-search-strong"></i>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <a href="#!">
-                                            <i class="tf-ion-ios-heart"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#!">
-                                            <i class="tf-ion-android-cart"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
-                            </h4>
-                            <p class="price">$@product.Price</p>
-                        </div>
-                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
+                    }
                 </div>
             }
         </div>
@@ -60,37 +32,9 @@
             @foreach (var product in Model.PopularProducts)
             {
                 <div class="col-md-4">
-                    <div class="product-item">
-                        <div class="product-thumb">
-                            <span class="bage">Popular</span>
-                            <img class="img-responsive object-cover" src="@product.ImageUrl" style="height: 400px;" alt="product-img" />
-                            <div class="preview-meta">
-                                <ul>
-                                    <li>
-                                        <span data-toggle="modal" data-target="#product-modal">
-                                            <i class="tf-ion-ios-search-strong"></i>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <a href="#!">
-                                            <i class="tf-ion-ios-heart"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#!">
-                                            <i class="tf-ion-android-cart"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
-                            </h4>
-                            <p class="price">$@product.Price</p>
-                        </div>
-                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
+                    }
                 </div>
             }
         </div>
@@ -103,45 +47,20 @@
             @foreach (var product in Model.TrendingProducts)
             {
                 <div class="col-md-4">
-                    <div class="product-item">
-                        <div class="product-thumb">
-                            <span class="bage">Trending</span>
-                            <img class="img-responsive object-cover" src="@product.ImageUrl" style="height: 400px;" alt="product-img" />
-                            <div class="preview-meta">
-                                <ul>
-                                    <li>
-                                        <span data-toggle="modal" data-target="#product-modal">
-                                            <i class="tf-ion-ios-search-strong"></i>
-                                        </span>
-                                    </li>
-                                    <li>
-                                        <a href="#!">
-                                            <i class="tf-ion-ios-heart"></i>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#!">
-                                            <i class="tf-ion-android-cart"></i>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="product-content">
-                            <h4>
-                                <a asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
-                            </h4>
-                            <p class="price">$@product.Price</p>
-                        </div>
-                        
-                    </div>
+                    @{
+                        await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
+                    }
                 </div>
             }
         </div>
         <div class="row">
-            <partial name="Partials/_AvitoProductModal" />
+            <partial name="Partials/Products/_ProductPopupModal" />
         </div>
     </div>
 </section>
 
 <partial name="Partials/_AvitoCTAPartial" />
+
+@section Scripts{
+    <script src="~/avito/js/productpopupmodalpopulate.js"></script>
+}
