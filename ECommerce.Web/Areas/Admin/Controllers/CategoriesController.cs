@@ -1,13 +1,11 @@
 ﻿using Autofac;
 using ECommerce.Core.Enums;
 using ECommerce.Web.Areas.Admin.Models.Categories;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace ECommerce.Web.Areas.Admin.Controllers;
 
-[Authorize]
 public class CategoriesController : BaseController
 {
     private readonly ILogger<CategoriesController> _logger;

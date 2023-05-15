@@ -1,4 +1,5 @@
 using Autofac;
+using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using ECommerce.Core.Common;
 using ECommerce.Infrastructure;
