@@ -1,10 +1,10 @@
 using Autofac;
-using Autofac.Core;
 using Autofac.Extensions.DependencyInjection;
 using ECommerce.Core.Common;
 using ECommerce.Infrastructure;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Web;
+using ECommerce.Web.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -20,7 +20,7 @@ var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddDbContextPool<AppDbContext>(options =>
         options.UseSqlite(connectionString));
 
-    builder.Services.AddDefaultIdentity<IdentityUser>(options =>
+    builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
     {
         options.User.RequireUniqueEmail = true;
         //options.SignIn.RequireConfirmedAccount = true;
@@ -89,6 +89,8 @@ try
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
+
+    AdminDataSeeder.LoadAdminDataAndRole(app.Services).Wait();
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();

@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ECommerce.Web.Areas.Admin.Controllers;
 
-[Authorize, Area("Admin")]
+[Authorize(Roles = "SuperAdmin"), Area("Admin")]
 public class BaseController : Controller
 {
     protected ILifetimeScope _scope;
