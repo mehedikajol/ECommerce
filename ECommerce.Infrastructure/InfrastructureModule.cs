@@ -36,6 +36,7 @@ public class InfrastructureModule : Module
         builder.RegisterType<CurrentUserService>().As<ICurrentUserService>().InstancePerLifetimeScope();
         builder.RegisterType<FileHandlerService>().As<IFileHandlerService>().InstancePerLifetimeScope();
         builder.RegisterType<EmailService>().As<IEmailService>().InstancePerLifetimeScope();
+        builder.RegisterType<DateTimeService>().As<IDateTimeService>().InstancePerLifetimeScope();
 
         base.Load(builder);
     }
