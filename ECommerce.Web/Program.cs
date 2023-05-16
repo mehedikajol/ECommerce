@@ -60,7 +60,7 @@ var builder = WebApplication.CreateBuilder(args);
         options.Cookie.IsEssential = true;
     });
 
-    // Recommended to use this logger
+    // Logger
     builder.Host.UseSerilog((context, config) => config
         .ReadFrom.Configuration(context.Configuration));
 
@@ -76,7 +76,7 @@ try
     var app = builder.Build();
 
     app.Services.GetAutofacRoot();
-    Log.Information("\n\nApplication booting.");
+    Log.Information("----------Application booting.----------");
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
