@@ -2,6 +2,7 @@
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Core.Enums;
+using ECommerce.Core.Exceptions;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -39,7 +40,8 @@ internal class CategoryService : ICategoryService
     {
         var categoryEntity = await _unitOfWork.Categories.GetEntityById(id);
         if (categoryEntity is null) 
-            throw new Exception("Category not found.");
+            throw new NotFoundException("Category not found.");
+
         var category = new Category
         {
             Id = categoryEntity.Id,
@@ -54,7 +56,7 @@ internal class CategoryService : ICategoryService
     {
         var alreadyUsedName = await IsNameAlreadyUsed(category.Name);
         if (alreadyUsedName)
-            throw new Exception("Category name is already in use.");
+            throw new DuplicateNameException("Category name is already in use.");
 
         var categoryEntity = new EO.Category
         {
@@ -71,11 +73,11 @@ internal class CategoryService : ICategoryService
     {
         var alreadyUsedName = await IsNameAlreadyUsed(category.Name, category.Id);
         if(alreadyUsedName)
-            throw new Exception("Category name is already in use.");
+            throw new DuplicateNameException("Category name is already in use.");
 
         var categoryEntity = await _unitOfWork.Categories.GetEntityById(category.Id);
         if (categoryEntity is null)
-            throw new Exception("Category not found.");
+            throw new NotFoundException("Category not found.");
 
         categoryEntity.Name = category.Name.Trim();
         categoryEntity.Description = category.Description;
@@ -89,7 +91,7 @@ internal class CategoryService : ICategoryService
     {
         var categoryEntity = await _unitOfWork.Categories.GetEntityById(id);
         if (categoryEntity is null)
-            throw new Exception("Category not found.");
+            throw new NotFoundException("Category not found.");
 
         await _unitOfWork.Categories.DeleteEntityById(id);
         await _unitOfWork.CompleteAsync();
