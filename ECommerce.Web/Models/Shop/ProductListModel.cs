@@ -1,5 +1,6 @@
-﻿
-using ECommerce.Application.BusinessEntities;
+﻿using ECommerce.Application.BusinessEntities;
+
+namespace ECommerce.Web.Models.Shop;
 
 public class ProductListModel
 {

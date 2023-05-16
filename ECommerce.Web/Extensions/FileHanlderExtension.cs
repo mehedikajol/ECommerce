@@ -1,8 +1,6 @@
-﻿using ECommerce.Web.Helpers;
+﻿namespace ECommerce.Web.Extensions;
 
-namespace ECommerce.Web.Extensions;
-
-internal static class FileHanlderExtensions
+internal static class FileHanlderExtension
 {
     internal static async Task<byte[]> ToByteArray(this IFormFile file)
     {
