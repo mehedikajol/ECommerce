@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Serilog;
 
 namespace ECommerce.Web.Helpers;
 
@@ -27,6 +28,8 @@ public static class AdminDataSeeder
             IdentityResult userResult = userManager.CreateAsync(user, password).Result;
             if (userResult.Succeeded)
                 userManager.AddToRoleAsync(user, roleName).Wait();
+
+            Log.Information("Admin data seeding complete.");
         }
     }
 }

@@ -76,7 +76,7 @@ try
     var app = builder.Build();
 
     app.Services.GetAutofacRoot();
-    Log.Information("Application booting.");
+    Log.Information("\n\nApplication booting.");
 
     // Configure the HTTP request pipeline.
     if (app.Environment.IsDevelopment())
