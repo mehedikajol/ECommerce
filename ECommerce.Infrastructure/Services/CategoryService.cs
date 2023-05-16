@@ -38,7 +38,8 @@ internal class CategoryService : ICategoryService
     public async Task<Category> GetCategoryById(Guid id)
     {
         var categoryEntity = await _unitOfWork.Categories.GetEntityById(id);
-        if (categoryEntity is null) return null;
+        if (categoryEntity is null) 
+            throw new Exception("Category not found.");
         var category = new Category
         {
             Id = categoryEntity.Id,
@@ -51,9 +52,13 @@ internal class CategoryService : ICategoryService
 
     public async Task CreateCategory(Category category)
     {
+        var alreadyUsedName = await IsNameAlreadyUsed(category.Name);
+        if (alreadyUsedName)
+            throw new Exception("Category name is already in use.");
+
         var categoryEntity = new EO.Category
         {
-            Name = category.Name,
+            Name = category.Name.Trim(),
             Description = category.Description,
             MainCategory = (MainCategory)category.MainCategory
         };
@@ -64,9 +69,15 @@ internal class CategoryService : ICategoryService
 
     public async Task UpdateCategory(Category category)
     {
-        var categoryEntity = await _unitOfWork.Categories.GetEntityById(category.Id);
+        var alreadyUsedName = await IsNameAlreadyUsed(category.Name, category.Id);
+        if(alreadyUsedName)
+            throw new Exception("Category name is already in use.");
 
-        categoryEntity.Name = category.Name;
+        var categoryEntity = await _unitOfWork.Categories.GetEntityById(category.Id);
+        if (categoryEntity is null)
+            throw new Exception("Category not found.");
+
+        categoryEntity.Name = category.Name.Trim();
         categoryEntity.Description = category.Description;
         categoryEntity.MainCategory = (MainCategory)category.MainCategory;
 
@@ -76,7 +87,17 @@ internal class CategoryService : ICategoryService
 
     public async Task DeleteCategory(Guid id)
     {
+        var categoryEntity = await _unitOfWork.Categories.GetEntityById(id);
+        if (categoryEntity is null)
+            throw new Exception("Category not found.");
+
         await _unitOfWork.Categories.DeleteEntityById(id);
         await _unitOfWork.CompleteAsync();
     }
+
+    private async Task<bool> IsNameAlreadyUsed(string name) =>
+        await _unitOfWork.Categories.GetCount(c => c.Name == name.Trim()) > 0;
+
+    private async Task<bool> IsNameAlreadyUsed(string name, Guid categoryId) =>
+        await _unitOfWork.Categories.GetCount(c => c.Name == name.Trim() && c.Id != categoryId) > 0;
 }

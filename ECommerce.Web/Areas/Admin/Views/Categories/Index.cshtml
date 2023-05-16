@@ -83,7 +83,6 @@
     <!-- /.container-fluid -->
 </section>
 <!-- /.content -->
-
 @section Styles{
     <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
 }
@@ -91,7 +90,7 @@
 @section Scripts{
     <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script>
-        function deleteCategory(id){
+        function deleteCategory(id) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -112,18 +111,27 @@
                             id: id
                         },
                         success: function (result) {
-                            Swal.fire({
-                                title: '<strong>' + result + '</strong>',
-                                icon: 'success',
-                                html: '<strong>' + result + '</strong>',
-                            }).then((result) => {
-                                window.location.reload();
-                            });
+                            if (result == "Deleted") {
+                                Swal.fire({
+                                    title: '<strong>Success</strong>',
+                                    icon: 'success',
+                                    html: '<strong>' + result + '</strong>',
+                                }).then((result) => {
+                                    window.location.reload();
+                                });
+                            }
+                            else{
+                                Swal.fire({
+                                    title: '<strong>Error</strong>',
+                                    icon: 'error',
+                                    html: '<strong>' + result + '</strong>',
+                                })
+                            }
                         }
                     });
                 }
             })
-            
+
         }
     </script>
 }

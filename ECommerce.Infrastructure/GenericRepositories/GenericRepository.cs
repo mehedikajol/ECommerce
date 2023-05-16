@@ -104,4 +104,18 @@ public abstract class GenericRepository<TEntity, TKey>
         _dbSet.RemoveRange(entities);
         return true;
     }
+
+    public virtual async Task<int> GetCount(Expression<Func<TEntity, bool>> filter = null)
+    {
+        IQueryable<TEntity> query = _dbSet;
+        var count = 0;
+
+        if (filter != null)
+        {
+            query = query.Where(filter);
+        }
+
+        count = await query.CountAsync();
+        return count;
+    }
 }

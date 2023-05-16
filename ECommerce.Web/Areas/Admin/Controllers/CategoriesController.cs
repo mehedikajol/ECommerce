@@ -38,11 +38,23 @@ public class CategoriesController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CategoryCreateModel model)
     {
+        var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
+                             select new { Id = s.GetHashCode(), Name = s.ToString() };
+        ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
+
         if (ModelState.IsValid)
         {
             model.ResolveDependency(_scope);
-            await model.Create();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await model.Create();
+                return RedirectToAction(nameof(Index));
+            }
+            catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
         }
         return View(model);
     }
@@ -69,11 +81,22 @@ public class CategoriesController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(CategoryEditModel model)
     {
+        var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
+                             select new { Id = s.GetHashCode(), Name = s.ToString() };
+        ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
+
         if (ModelState.IsValid)
         {
             model.ResolveDependency(_scope);
-            await model.UpdateCategory();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await model.UpdateCategory();
+                return RedirectToAction(nameof(Index));
+            }catch(Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
         }
         return View(model);
     }
@@ -83,7 +106,14 @@ public class CategoriesController : BaseController
     {
         var model = new CategoryListModel();
         model.ResolveDependency(_scope);
-        await model.DeleteCategory(id);
-        return new JsonResult("Deleted");
+        try
+        {
+            await model.DeleteCategory(id);
+            return new JsonResult("Deleted");
+        }
+        catch(Exception ex)
+        {
+            return new JsonResult(ex.Message);
+        }
     }
 }
