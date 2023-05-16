@@ -1,68 +1,19 @@
-using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using ECommerce.Core.Common;
-using ECommerce.Infrastructure;
-using ECommerce.Infrastructure.Context;
-using ECommerce.Web;
+using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
 using Serilog;
-using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 {
-    // Add services to the container.
-    var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-    var migrationAssemblyName = Assembly.GetExecutingAssembly().FullName;
-
-    builder.Services.AddDbContextPool<AppDbContext>(options =>
-        options.UseSqlite(connectionString));
-
-    builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
-    {
-        options.User.RequireUniqueEmail = true;
-        //options.SignIn.RequireConfirmedAccount = true;
-    })
-        .AddDefaultUI()
-        .AddEntityFrameworkStores<AppDbContext>()
-        .AddDefaultTokenProviders();
-
-    builder.Services.Configure<FileStorageSettings>(builder.Configuration.GetSection("FileStorageSettings"));
-
-    // Using Autofac as dependency container
-    builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
-    builder.Host.ConfigureContainer<ContainerBuilder>(options =>
-    {
-        // register modules here
-        options.RegisterModule(new WebModule());
-        options.RegisterModule(new InfrastructureModule());
-    });
-
-    // Cookie configuration
-    builder.Services.ConfigureApplicationCookie(options =>
-    {
-        // cookie settings
-        options.Cookie.HttpOnly = true;
-        options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
-
-        options.LoginPath = "/Account/Signin";
-        options.AccessDeniedPath = "/Account/AccessDenied";
-        options.SlidingExpiration = true;
-    });
-
-    // Session Configuration
-    builder.Services.AddSession(options =>
-    {
-        options.IdleTimeout = TimeSpan.FromSeconds(100);
-        options.Cookie.HttpOnly = true;
-        options.Cookie.IsEssential = true;
-    });
-
-    // Logger
-    builder.Host.UseSerilog((context, config) => config
-        .ReadFrom.Configuration(context.Configuration));
+    // Load settings via extensions
+    builder.Services.ConfigureDbContext(builder); // AppDbContext configuration
+    builder.Services.ConfigureIdentity(); // Identity configuration
+    builder.Services.ConfigureCommonClasses(builder); // Common classes configuration
+    builder.Host.ConfigureAutofac(); // Using Autofac as dependency container
+    builder.Host.ConfigureLogger(); // Logger
+    builder.Services.ConfigureCookie(); // Cookie configuration
+    builder.Services.ConfigureSession(); // Session Configuration
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddControllersWithViews();
