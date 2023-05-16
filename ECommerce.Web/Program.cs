@@ -1,7 +1,7 @@
 using Autofac.Extensions.DependencyInjection;
 using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
-using Microsoft.Extensions.FileProviders;
+using ECommerce.Web.Middlewares;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -36,38 +36,14 @@ try
     }
     else
     {
-        app.UseExceptionHandler("/Home/Error");
+        app.UseExceptionHandler("/Error"); // /Home/Error
         // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
         app.UseHsts();
     }
 
     AdminDataSeeder.LoadAdminDataAndRole(app.Services).Wait();
 
-    app.UseHttpsRedirection();
-    app.UseStaticFiles();
-    app.UseStaticFiles(new StaticFileOptions
-    {
-        FileProvider = new PhysicalFileProvider(builder.Configuration.GetSection("FileStorageSettings:FileDirectory").Value),
-        RequestPath = builder.Configuration.GetSection("FileStorageSettings:DirectoryName").Value
-    });
-
-    app.UseRouting();
-
-    app.UseAuthentication();
-    app.UseAuthorization();
-
-    app.UseSession();
-
-    app.UseEndpoints(endpoints =>
-    {
-        endpoints.MapControllerRoute(
-            name: "areas",
-            pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
-        endpoints.MapControllerRoute(
-            name: "default",
-            pattern: "{controller=Home}/{action=Index}/{id?}");
-        endpoints.MapRazorPages();
-    });
+    app.ConfigureMiddlewares(builder);
 
     app.Run();
 }

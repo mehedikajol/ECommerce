@@ -2,9 +2,9 @@
 
 namespace ECommerce.Web.Extensions;
 
-public static class ConfigureCommonClassesExtension
+internal static class ConfigureCommonClassesExtension
 {
-    public static void ConfigureCommonClasses(this IServiceCollection services, WebApplicationBuilder builder)
+    internal static void ConfigureCommonClasses(this IServiceCollection services, WebApplicationBuilder builder)
     {
         services.Configure<FileStorageSettings>(builder.Configuration.GetSection("FileStorageSettings"));
     }

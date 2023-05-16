@@ -1,8 +1,8 @@
 ﻿namespace ECommerce.Web.Extensions;
 
-public static class ConfigureCookieExtension
+internal static class ConfigureCookieExtension
 {
-    public static void ConfigureCookie(this IServiceCollection services)
+    internal static void ConfigureCookie(this IServiceCollection services)
     {
         services.ConfigureApplicationCookie(options =>
         {

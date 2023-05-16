@@ -4,9 +4,9 @@ using ECommerce.Infrastructure;
 
 namespace ECommerce.Web.Extensions;
 
-public static class ConfigureAutofacExtension
+internal static class ConfigureAutofacExtension
 {
-    public static void ConfigureAutofac(this IHostBuilder host)
+    internal static void ConfigureAutofac(this IHostBuilder host)
     {
         host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
         host.ConfigureContainer<ContainerBuilder>(options =>
