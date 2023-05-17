@@ -111,7 +111,11 @@ public class CategoriesController : BaseController
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
-            catch(Exception)
+            catch (NotFoundException)
+            {
+                return Redirect(url: "/Errors/Notfound");
+            }
+            catch (Exception)
             {
                 return Redirect(url: "/Errors/InternalServerError");
             }
