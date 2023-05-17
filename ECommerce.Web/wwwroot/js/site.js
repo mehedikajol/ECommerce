@@ -2,3 +2,18 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+
+// Product add to cart
+function addThisProductToCart(id) {
+    if ($.cookie('CartProducts') == undefined) {
+        $.cookie('CartProducts', id);
+    } else {
+        $.cookie('CartProducts', $.cookie('CartProducts') + "---" + id);
+    }
+    var myCookie = $.cookie('CartProducts');
+    Swal.fire({
+        title: '<strong>Succes</strong>',
+        icon: 'success',
+        html: '<strong>Product added to cart.</strong>',
+    });
+}

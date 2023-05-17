@@ -1,10 +1,12 @@
-function populateProductPopupModal(productId) {
+function populateProductPopupModal(id) {
 
     var productName = document.getElementById('productPopupModalName');
     var productPrice = document.getElementById('productPopupModalPrice');
     var productDescription = document.getElementById('productPopupModalDescription');
     var productImage = document.getElementById("productPopupBackgroudImage");
     var productViewLink = document.getElementById("productPopupModalLink");
+    var productButton = document.getElementById("productPopupModalButton");
+    // productPopupModalButton
 
     $.ajax({
         type: "GET",
@@ -12,7 +14,7 @@ function populateProductPopupModal(productId) {
         url: "/Shop/GetProductJson",
         traditional: true,
         data: {
-            id: productId
+            id: id
         },
         success: function (result) {
             productName.innerText = result.name;
@@ -21,5 +23,9 @@ function populateProductPopupModal(productId) {
             productImage.src = result.imageUrl;
             productViewLink.href = `/Shop/ViewProduct/${result.id}`
         }
+    });
+
+    $(productButton).click(function () {
+        addThisProductToCart(`${id}`);
     });
 }

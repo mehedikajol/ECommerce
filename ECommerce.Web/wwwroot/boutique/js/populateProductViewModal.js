@@ -1,24 +1,26 @@
-function updateModalValues(productId) {
+function populateProductPopupModal(id) {
 
     var productName = document.getElementById('productViewModalName');
     var productPrice = document.getElementById('productViewModalPrice');
     var productDescription = document.getElementById('productViewModalDescription');
+    var productId = document.getElementById('productPopupModalId');
 
     // productViewModalPrice //productViewModalDescription
 
     $.ajax({
         type: "GET",
         dataType: 'json',
-        url: "/Products/GetProductById",
+        url: "/Shop/GetProductJson",
         traditional: true,
         data: {
-            id: productId
+            id: id
         },
         success: function (result) {
-            console.log(result.imageUrl);
+            console.log(result);
             productName.innerText = result.name;
-            productPrice.innerText = '$' + result.price;
+            productPrice.innerText = '$' + result.id;
             productDescription.innerText = result.description;
+            //productPrice.innerHTML = result.Id;
             document.getElementById("productModalViewBackgroudImage").style.backgroundImage = 'url("' + result.imageUrl + '")';
         }
     });

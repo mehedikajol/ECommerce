@@ -37,6 +37,7 @@ namespace ECommerce.Web.Controllers
             product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
             var model = new ProductViewModel
             {
+                Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
