@@ -25,7 +25,7 @@ try
 {
     // Register Request pipelines
     var app = builder.Build();
-
+    app.UseMiddleware<GlobalExceptionHandlingMiddleware>();
     app.Services.GetAutofacRoot();
     Log.Information("----------Application booting.----------");
 
