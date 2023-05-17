@@ -2,8 +2,8 @@
 using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
-using ECommerce.Core.Entities.Base;
 using ECommerce.Core.Enums;
+using ECommerce.Core.Exceptions;
 using ECommerce.Web.Areas.Admin.Models.Products;
 using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
@@ -59,45 +59,69 @@ public class ProductsController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(ProductCreateModel model)
     {
-        if (ModelState.IsValid)
-        {
-            if (model.ImageFile is not null)
-            {
-                var bytes = await model.ImageFile.ToByteArray();
-                var imageUrl = await _fileHandlerService.SaveFileAsync(bytes, model.ImageFile.FileName, UploadImageType.ProductImage);
-                model.ImageUrl = imageUrl;
-            }
-            var product = new Product
-            {
-                Name = model.Name,
-                Description = model.Description,
-                SubCategoryId = model.Category,
-                ImageUrl = model.ImageUrl,
-                SKU = RandomStringGenerator.GenerateUppercaseRandomString(15),
-                Price = model.Price,
-            };
-            await _productService.CreateProduct(product);
-            return RedirectToAction(nameof(Index));
-        }
         var subCategories = await _subCategoryService.GetAllSubCategories();
         ViewData["SubCategories"] = new SelectList(subCategories, "Id", "Name");
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                if (model.ImageFile is not null)
+                {
+                    var bytes = await model.ImageFile.ToByteArray();
+                    var imageUrl = await _fileHandlerService.SaveFileAsync(bytes, model.ImageFile.FileName, UploadImageType.ProductImage);
+                    model.ImageUrl = imageUrl;
+                }
+                var product = new Product
+                {
+                    Name = model.Name,
+                    Description = model.Description,
+                    SubCategoryId = model.Category,
+                    ImageUrl = model.ImageUrl,
+                    SKU = RandomStringGenerator.GenerateUppercaseRandomString(15),
+                    Price = model.Price,
+                };
+                await _productService.CreateProduct(product);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DuplicateNameException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return Redirect(url: "/Errors/InternalServerError");
+            }
+        }
+
         return View(model);
     }
 
     public async Task<IActionResult> View(Guid id)
     {
-        var product = await _productService.GetProductById(id);
-        var model = new ProductViewModel
+        try
         {
-            Name = product.Name,
-            Description = product.Description,
-            SKU = product.SKU,
-            Category = product.SubCategoryName,
-            ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName + "/" + product.ImageUrl?.Replace('\\', '/'),
-            Price = product.Price,
-
-        };
-        return View(model);
+            var product = await _productService.GetProductById(id);
+            var model = new ProductViewModel
+            {
+                Name = product.Name,
+                Description = product.Description,
+                SKU = product.SKU,
+                Category = product.SubCategoryName,
+                ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName + "/" + product.ImageUrl?.Replace('\\', '/'),
+                Price = product.Price,
+            };
+            return View(model);
+        }
+        catch (NotFoundException)
+        {
+            return Redirect(url: "/Errors/Notfound");
+        }
+        catch (Exception)
+        {
+            return Redirect(url: "/Errors/InternalServerError");
+        }
     }
 
     public async Task<IActionResult> Edit(Guid id)
@@ -105,43 +129,79 @@ public class ProductsController : BaseController
         var subCategories = await _subCategoryService.GetAllSubCategories();
         ViewData["SubCategories"] = new SelectList(subCategories, "Id", "Name");
 
-        var entity = await _productService.GetProductById(id);
-        var model = new ProductEditModel();
+        try
+        {
+            var entity = await _productService.GetProductById(id);
+            var model = new ProductEditModel();
 
-        model.Id = entity.Id;
-        model.Name = entity.Name;
-        model.Description = entity.Description;
-        model.Price = entity.Price;
-        model.Category = entity.SubCategoryId;
+            model.Id = entity.Id;
+            model.Name = entity.Name;
+            model.Description = entity.Description;
+            model.Price = entity.Price;
+            model.Category = entity.SubCategoryId;
 
-        return View(model);
+            return View(model);
+        }
+        catch (NotFoundException)
+        {
+            return Redirect(url: "/Errors/Notfound");
+        }
+        catch (Exception)
+        {
+            return Redirect(url: "/Errors/InternalServerError");
+        }
     }
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(ProductEditModel model)
     {
-        if (ModelState.IsValid)
-        {
-            var product = new Product
-            {
-                Id = model.Id,
-                Name = model.Name,
-                Description = model.Description,
-                Price = model.Price,
-                SubCategoryId = model.Category
-            };
-            await _productService.UpdateProduct(product);
-            return RedirectToAction(nameof(Index));
-        }
         var subCategories = await _subCategoryService.GetAllSubCategories();
         ViewData["SubCategories"] = new SelectList(subCategories, "Id", "Name");
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                var product = new Product
+                {
+                    Id = model.Id,
+                    Name = model.Name,
+                    Description = model.Description,
+                    Price = model.Price,
+                    SubCategoryId = model.Category
+                };
+                await _productService.UpdateProduct(product);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (NotFoundException)
+            {
+                return Redirect(url: "/Errors/Notfound");
+            }
+            catch(DuplicateNameException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return Redirect(url: "/Errors/InternalServerError");
+            }
+        }
+        
         return View(model);
     }
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Delete(Guid id)
     {
-        await _productService.DeleteProduct(id);
-        return new JsonResult("Deleted");
+        try
+        {
+            await _productService.DeleteProduct(id);
+            return new JsonResult("Deleted");
+        }
+        catch (Exception ex)
+        {
+            return new JsonResult(ex.Message);
+        }
     }
 }

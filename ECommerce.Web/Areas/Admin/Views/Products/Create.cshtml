@@ -52,8 +52,8 @@
                     <!-- /.card-header -->
                     <!-- form start -->
                     <form method="post" enctype="multipart/form-data" asp-controller="Products" asp-action="Create" asp-antiforgery="true">
-                        @*<div asp-validation-summary="All" class="text-danger"></div>*@
                         <div class="card-body">
+                            <div asp-validation-summary="All" class="text-danger"></div>
                             <div class="form-group">
                                 <label asp-for="Name"></label>
                                 <input asp-for="Name" class="form-control" placeholder="Enter product title" required />
