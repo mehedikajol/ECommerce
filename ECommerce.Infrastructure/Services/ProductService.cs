@@ -60,7 +60,7 @@ internal class ProductService : IProductService
     {
         var alreadyUsedName = await IsNameAlreadyUsed(product.Name);
         if (alreadyUsedName)
-            throw new DuplicateNameException("Product name is already in use.");
+            throw new DuplicatePropertyException("Product name is already in use.");
 
         var productEntity = new EO.Product
         {
@@ -83,7 +83,7 @@ internal class ProductService : IProductService
 
         var alreadyUsedName = await IsNameAlreadyUsed(product.Name, product.Id);
         if (alreadyUsedName)
-            throw new DuplicateNameException("Product name is already in use.");
+            throw new DuplicatePropertyException("Product name is already in use.");
 
         productEntity.Name = product.Name;
         productEntity.Description = product.Description;

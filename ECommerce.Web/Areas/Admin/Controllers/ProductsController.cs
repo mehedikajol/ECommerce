@@ -84,7 +84,7 @@ public class ProductsController : BaseController
                 await _productService.CreateProduct(product);
                 return RedirectToAction(nameof(Index));
             }
-            catch (DuplicateNameException ex)
+            catch (DuplicatePropertyException ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
@@ -177,7 +177,7 @@ public class ProductsController : BaseController
             {
                 return Redirect(url: "/Errors/Notfound");
             }
-            catch(DuplicateNameException ex)
+            catch(DuplicatePropertyException ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(model);

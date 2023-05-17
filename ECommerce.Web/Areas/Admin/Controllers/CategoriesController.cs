@@ -51,7 +51,7 @@ public class CategoriesController : BaseController
                 await model.Create();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DuplicateNameException ex)
+            catch (DuplicatePropertyException ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
@@ -106,7 +106,7 @@ public class CategoriesController : BaseController
                 await model.UpdateCategory();
                 return RedirectToAction(nameof(Index));
             }
-            catch (DuplicateNameException ex)
+            catch (DuplicatePropertyException ex)
             {
                 ModelState.AddModelError("", ex.Message);
                 return View(model);

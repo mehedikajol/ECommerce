@@ -56,7 +56,7 @@ internal class CategoryService : ICategoryService
     {
         var alreadyUsedName = await IsNameAlreadyUsed(category.Name);
         if (alreadyUsedName)
-            throw new DuplicateNameException("Category name is already in use.");
+            throw new DuplicatePropertyException("Category name is already in use.");
 
         var categoryEntity = new EO.Category
         {
@@ -73,7 +73,7 @@ internal class CategoryService : ICategoryService
     {
         var alreadyUsedName = await IsNameAlreadyUsed(category.Name, category.Id);
         if(alreadyUsedName)
-            throw new DuplicateNameException("Category name is already in use.");
+            throw new DuplicatePropertyException("Category name is already in use.");
 
         var categoryEntity = await _unitOfWork.Categories.GetEntityById(category.Id);
         if (categoryEntity is null)

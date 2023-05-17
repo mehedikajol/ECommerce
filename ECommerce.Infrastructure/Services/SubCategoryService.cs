@@ -56,7 +56,7 @@ internal class SubCategoryService : ISubCategoryService
     {
         var alreadyUsedName = await IsNameAlreadyUsed(subCategory.Name);
         if (alreadyUsedName)
-            throw new DuplicateNameException("SubCategory name is already in use.");
+            throw new DuplicatePropertyException("SubCategory name is already in use.");
 
         var subCategoryEntity = new EO.SubCategory
         {
@@ -73,7 +73,7 @@ internal class SubCategoryService : ISubCategoryService
     {
         var alreadyUsedName = await IsNameAlreadyUsed(category.Name, category.Id);
         if (alreadyUsedName)
-            throw new DuplicateNameException("Category name is already in use.");
+            throw new DuplicatePropertyException("Category name is already in use.");
 
         var subCategoryEntity = await _unitOfWork.SubCategories.GetEntityById(category.Id);
         if (subCategoryEntity is null)
