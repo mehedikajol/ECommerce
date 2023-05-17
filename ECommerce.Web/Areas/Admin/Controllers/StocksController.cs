@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
+using ECommerce.Core.Exceptions;
 using ECommerce.Web.Areas.Admin.Models.Stocks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -56,28 +57,64 @@ namespace ECommerce.Web.Areas.Admin.Controllers
         [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(StockCreateModel model)
         {
-            var stock = new Stock();
-            stock.ProductId = model.ProductId;
-            stock.StockAmout = model.StockAmout;
+            var products = await _productService.GetAllProducts();
+            ViewData["Products"] = new SelectList(products, "Id", "Name");
 
-            await _stockService.CreateStock(stock);
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var stock = new Stock();
+                    stock.ProductId = model.ProductId;
+                    stock.StockAmout = model.StockAmout;
 
-            return RedirectToAction(nameof(Index));
+                    await _stockService.CreateStock(stock);
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(InvalidInputException ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                    return View(model);
+                }
+                catch (DuplicatePropertyException ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                    return View(model);
+                }
+            }
+            return View(model);
         }
 
         public async Task<IActionResult> Edit(Guid id)
         {
-            var model = new StockEditModel();
-            var entity = await _stockService.GetStockById(id);
+            try
+            {
+                var model = new StockEditModel();
+                var entity = await _stockService.GetStockById(id);
 
-            model.Id = id;
-            model.StockAmout = entity.StockAmout;
-            model.ProductId = entity.ProductId;
+                model.Id = id;
+                model.StockAmout = entity.StockAmout;
+                model.ProductId = entity.ProductId;
 
-            var products = await _productService.GetAllProducts();
-            ViewData["Products"] = new SelectList(products, "Id", "Name");
+                var products = await _productService.GetAllProducts();
+                ViewData["Products"] = new SelectList(products, "Id", "Name");
 
-            return View(model);
+                return View(model);
+            }
+            catch (NotFoundException)
+            {
+                return Redirect(url: "/Errors/Notfound");
+            }
+            catch (Exception)
+            {
+                return Redirect(url: "/Errors/InternalServerError");
+            }
         }
 
         [HttpPost, ValidateAntiForgeryToken]
@@ -97,14 +134,35 @@ namespace ECommerce.Web.Areas.Admin.Controllers
                     ModelState.AddModelError("", "You can't remove more than stock amout.");
                     return View(model);
                 }
-                var stock = new Stock
+                try
                 {
-                    Id = model.Id,
-                    StockAmout = model.StockAmout + model.AddStock - model.RemoveStock,
-                    ProductId = model.ProductId,
-                };
-                await _stockService.UpdateStock(stock);
-                return RedirectToAction(nameof(Index));
+                    var stock = new Stock
+                    {
+                        Id = model.Id,
+                        StockAmout = model.StockAmout + model.AddStock - model.RemoveStock,
+                        ProductId = model.ProductId,
+                    };
+                    await _stockService.UpdateStock(stock);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch(InvalidInputException ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                    return View(model);
+                }
+                catch(DuplicatePropertyException ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                    return View(model);
+                }
+                catch (NotFoundException)
+                {
+                    return Redirect(url: "/Errors/Notfound");
+                }
+                catch (Exception)
+                {
+                    return Redirect(url: "/Errors/InternalServerError");
+                }
             }
             return View(model);
         }

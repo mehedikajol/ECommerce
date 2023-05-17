@@ -19,4 +19,6 @@ public interface IGenericRepository<TEntity, TKey>
     Task<bool> DeleteEntity(TEntity entity);
     Task<bool> DeleteEntities(IEnumerable<TEntity> entities);
     Task<bool> DeleteEntities(Expression<Func<TEntity, bool>> expression);
+
+    Task<int> GetCount(Expression<Func<TEntity, bool>> filter = null);
 }

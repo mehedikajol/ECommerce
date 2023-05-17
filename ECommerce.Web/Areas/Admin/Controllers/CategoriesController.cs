@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using ECommerce.Core.Enums;
+using ECommerce.Core.Exceptions;
 using ECommerce.Web.Areas.Admin.Models.Categories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -30,7 +31,7 @@ public class CategoriesController : BaseController
         var model = new CategoryCreateModel();
         model.ResolveDependency(_scope);
         var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
-                              select new { Id = s.GetHashCode(), Name = s.ToString() };
+                             select new { Id = s.GetHashCode(), Name = s.ToString() };
         ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
         return View(model);
     }
@@ -38,11 +39,27 @@ public class CategoriesController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(CategoryCreateModel model)
     {
+        var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
+                             select new { Id = s.GetHashCode(), Name = s.ToString() };
+        ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
+
         if (ModelState.IsValid)
         {
             model.ResolveDependency(_scope);
-            await model.Create();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await model.Create();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DuplicatePropertyException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return Redirect(url: "/Errors/InternalServerError");
+            }
         }
         return View(model);
     }
@@ -51,29 +68,57 @@ public class CategoriesController : BaseController
     {
         var model = new CategoryEditModel();
         model.ResolveDependency(_scope);
-        await model.LoadData(id);
-        var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
-                             select new { Id = s.GetHashCode(), Name = s.ToString() };
-        ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
-        if (model.IsValidItem)
+        try
         {
-            return View(model);
+            await model.LoadData(id);
+            var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
+                                 select new { Id = s.GetHashCode(), Name = s.ToString() };
+            ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
+            if (model.IsValidItem)
+            {
+                return View(model);
+            }
         }
-        else
+        catch (NotFoundException)
         {
-            return Redirect(url: "/Home/NotFound");
+            return Redirect(url: "/Errors/Notfound");
+        }
+        catch (Exception)
+        {
+            return Redirect(url: "/Errors/InternalServerError");
         }
 
+        return View(model);
     }
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(CategoryEditModel model)
     {
+        var mainCategories = from MainCategory s in Enum.GetValues(typeof(MainCategory))
+                             select new { Id = s.GetHashCode(), Name = s.ToString() };
+        ViewData["MainCategories"] = new SelectList(mainCategories, "Id", "Name");
+
         if (ModelState.IsValid)
         {
             model.ResolveDependency(_scope);
-            await model.UpdateCategory();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await model.UpdateCategory();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DuplicatePropertyException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+            catch (NotFoundException)
+            {
+                return Redirect(url: "/Errors/Notfound");
+            }
+            catch (Exception)
+            {
+                return Redirect(url: "/Errors/InternalServerError");
+            }
         }
         return View(model);
     }
@@ -83,7 +128,14 @@ public class CategoriesController : BaseController
     {
         var model = new CategoryListModel();
         model.ResolveDependency(_scope);
-        await model.DeleteCategory(id);
-        return new JsonResult("Deleted");
+        try
+        {
+            await model.DeleteCategory(id);
+            return new JsonResult("Deleted");
+        }
+        catch (Exception ex)
+        {
+            return new JsonResult(ex.Message);
+        }
     }
 }

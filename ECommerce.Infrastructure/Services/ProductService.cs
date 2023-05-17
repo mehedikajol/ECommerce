@@ -1,6 +1,7 @@
 ﻿using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
+using ECommerce.Core.Exceptions;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -38,14 +39,18 @@ internal class ProductService : IProductService
     public async Task<Product> GetProductById(Guid id)
     {
         var productEntity = await _unitOfWork.Products.GetEntityById(id);
-        var product = new Product { 
-            Id = productEntity.Id, 
-            Name = productEntity.Name, 
-            Description = productEntity.Description, 
-            SKU = productEntity.SKU, 
-            Price = productEntity.Price, 
-            ImageUrl = productEntity.ImageUrl, 
-            SubCategoryId= productEntity.SubCategoryId,
+        if (productEntity is null)
+            throw new NotFoundException("Product not found.");
+
+        var product = new Product
+        {
+            Id = productEntity.Id,
+            Name = productEntity.Name,
+            Description = productEntity.Description,
+            SKU = productEntity.SKU,
+            Price = productEntity.Price,
+            ImageUrl = productEntity.ImageUrl,
+            SubCategoryId = productEntity.SubCategoryId,
             SubCategoryName = productEntity.SubCategory.Name
         };
         return product;
@@ -53,6 +58,10 @@ internal class ProductService : IProductService
 
     public async Task CreateProduct(Product product)
     {
+        var alreadyUsedName = await IsNameAlreadyUsed(product.Name);
+        if (alreadyUsedName)
+            throw new DuplicatePropertyException("Product name is already in use.");
+
         var productEntity = new EO.Product
         {
             Name = product.Name,
@@ -69,6 +78,13 @@ internal class ProductService : IProductService
     public async Task UpdateProduct(Product product)
     {
         var productEntity = await _unitOfWork.Products.GetEntityById(product.Id);
+        if (productEntity is null)
+            throw new NotFoundException("Product not found.");
+
+        var alreadyUsedName = await IsNameAlreadyUsed(product.Name, product.Id);
+        if (alreadyUsedName)
+            throw new DuplicatePropertyException("Product name is already in use.");
+
         productEntity.Name = product.Name;
         productEntity.Description = product.Description;
         productEntity.Price = product.Price;
@@ -80,8 +96,17 @@ internal class ProductService : IProductService
 
     public async Task DeleteProduct(Guid id)
     {
+        var productEntity = await _unitOfWork.Products.GetEntityById(id);
+        if (productEntity is null)
+            throw new NotFoundException("Product not found.");
+
         await _unitOfWork.Products.DeleteEntityById(id);
         await _unitOfWork.CompleteAsync();
     }
 
+    private async Task<bool> IsNameAlreadyUsed(string name) =>
+        await _unitOfWork.Products.GetCount(p => p.Name == name.Trim()) > 0;
+
+    private async Task<bool> IsNameAlreadyUsed(string name, Guid productId) =>
+        await _unitOfWork.Products.GetCount(p => p.Name == name.Trim() && p.Id != productId) > 0;
 }

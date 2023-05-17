@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using ECommerce.Core.Exceptions;
 using ECommerce.Web.Areas.Admin.Models.SubCategories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,7 +10,7 @@ public class SubCategoriesController : BaseController
 {
     private readonly ILogger<SubCategoriesController> _logger;
     public SubCategoriesController(
-        ILifetimeScope scope, 
+        ILifetimeScope scope,
         ILogger<SubCategoriesController> logger) : base(scope)
     {
         _logger = logger;
@@ -35,11 +36,26 @@ public class SubCategoriesController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(SubCategoryCreateModel model)
     {
+        var categories = await model.LoadCategories();
+        ViewData["Categories"] = new SelectList(categories, "Id", "Name");
+
         if (ModelState.IsValid)
         {
             model.ResolveDependency(_scope);
-            await model.Create();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await model.Create();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DuplicatePropertyException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                return Redirect(url: "/Errors/InternalServerError");
+            }
         }
         return View(model);
     }
@@ -48,27 +64,56 @@ public class SubCategoriesController : BaseController
     {
         var model = new SubCategoryEditModel();
         model.ResolveDependency(_scope);
-        var categories = await model.LoadCategories();
-        ViewData["Categories"] = new SelectList(categories, "Id", "Name");
-        await model.LoadData(id);
-        if (model.IsValidItem)
+        try
         {
-            return View(model);
+            var categories = await model.LoadCategories();
+            ViewData["Categories"] = new SelectList(categories, "Id", "Name");
+            await model.LoadData(id);
+            if (model.IsValidItem)
+            {
+                return View(model);
+            }
         }
-        else
+        catch (NotFoundException)
         {
-            return Redirect(url: "/Home/NotFound");
+            return Redirect(url: "/Errors/Notfound");
         }
+        catch (Exception)
+        {
+            return Redirect(url: "/Errors/InternalServerError");
+        }
+
+        return View(model);
+
     }
 
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(SubCategoryEditModel model)
     {
+        var categories = await model.LoadCategories();
+        ViewData["Categories"] = new SelectList(categories, "Id", "Name");
+
         if (ModelState.IsValid)
         {
             model.ResolveDependency(_scope);
-            await model.UpdateSubCategory();
-            return RedirectToAction(nameof(Index));
+            try
+            {
+                await model.UpdateSubCategory();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DuplicatePropertyException ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
+            catch (NotFoundException)
+            {
+                return Redirect(url: "/Errors/Notfound");
+            }
+            catch (Exception)
+            {
+                return Redirect(url: "/Errors/InternalServerError");
+            }
         }
         return View(model);
     }
@@ -78,7 +123,14 @@ public class SubCategoriesController : BaseController
     {
         var model = new SubCategoryListModel();
         model.ResolveDependency(_scope);
-        await model.DeleteSubCategory(id);
-        return new JsonResult("Deleted");
+        try
+        {
+            await model.DeleteSubCategory(id);
+            return new JsonResult("Deleted");
+        }
+        catch (Exception ex)
+        {
+            return new JsonResult(ex.Message);
+        }
     }
 }

@@ -117,13 +117,22 @@
                             id: id
                         },
                         success: function (result) {
-                            Swal.fire({
-                                title: '<strong>' + result + '</strong>',
-                                icon: 'success',
-                                html: '<strong>' + result + '</strong>',
-                            }).then((result) => {
-                                window.location.reload();
-                            });
+                            if (result == "Deleted") {
+                                Swal.fire({
+                                    title: '<strong>Success</strong>',
+                                    icon: 'success',
+                                    html: '<strong>' + result + '</strong>',
+                                }).then((result) => {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+                                Swal.fire({
+                                    title: '<strong>Error</strong>',
+                                    icon: 'error',
+                                    html: '<strong>' + result + '</strong>',
+                                })
+                            }
                         }
                     });
                 }
