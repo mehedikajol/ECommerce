@@ -2,6 +2,13 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+window.onload = function () {
+    updateCartProductCount();
+};
+
+window.addEventListener("focus", function () {
+    updateCartProductCount();
+});
 
 // Product add to cart
 function addThisProductToCart(id) {
@@ -16,6 +23,7 @@ function addThisProductToCart(id) {
         icon: 'success',
         html: '<strong>Product added to cart.</strong>',
     });
+    updateCartProductCount();
 }
 
 // Remove a product from cart
@@ -23,6 +31,7 @@ function removeThisProductFromCart(id) {
     var cookieValue = $.cookie('CartProducts');
     var newValue = cookieValue.replace(id, '');
     $.cookie('CartProducts', newValue);
+    updateCartProductCount();
 }
 
 // Cart icon hover 
@@ -43,7 +52,7 @@ function populateCartDropDown() {
             $.each(result, function (index, value) {
                 total += value.price;
                 html += '<div class="media">' +
-                    '<a class="pull-left" href="/Shop/ViewProduct/' + value.id + '">' +
+                    '<a class="pull-left" target="_blank" href="/Shop/ViewProduct/' + value.id + '">' +
                     '<img class="media-object object-cover" style="height: 80px; width: 60px;" src="' + value.imageUrl + '" alt="image" />' +
                     '</a>' +
                     '<div class="media-body">' +
@@ -60,4 +69,12 @@ function populateCartDropDown() {
             $("#cart-total-price").html('$' + total + '.0');
         }
     });
+}
+
+// Update cart count
+function updateCartProductCount() {
+    var cookieValue = $.cookie('CartProducts');
+    var products = cookieValue.split("---");
+    products = products.filter((element) => element !== "");
+    $('#cartProductCount').html(products.length);
 }

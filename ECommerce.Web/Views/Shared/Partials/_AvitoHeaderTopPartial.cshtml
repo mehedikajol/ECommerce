@@ -32,7 +32,7 @@
                 <ul class="top-menu text-right list-inline">
                     <li class="dropdown cart-nav dropdown-slide">
                         <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" onmouseover="populateCartDropDown()">
-                            <i class="tf-ion-android-cart"></i>Cart<span id="cartProductCount">(0)</span>
+                            <i class="tf-ion-android-cart"></i>Cart(<span id="cartProductCount">0</span>)
                         </a>
                         <div class="dropdown-menu cart-dropdown">
                             <div id="cart-dropdown" style="max-height: 300px; overflow-y: scroll;">
@@ -40,7 +40,7 @@
                             </div>
                             <div class="cart-summary">
                                 <span>Total</span>
-                                <span class="total-price" id="cart-total-price">$1799.00</span>
+                                <span class="total-price" id="cart-total-price"></span>
                             </div>
                             <ul class="text-center cart-buttons">
                                 <li>
@@ -67,6 +67,7 @@
                         </ul>
                     </li><!-- / Search -->
                     <!-- Languages -->
+                    <!--
                     <li class="commonSelect">
                         <select class="form-control">
                             <option>EN</option>
@@ -74,7 +75,9 @@
                             <option>FR</option>
                             <option>ES</option>
                         </select>
-                    </li><!-- / Languages -->
+                    </li>
+                    -->
+                    <!-- / Languages -->
                     <li>
                         <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="d-block" style="margin-left: 10px;">Admin</a>
                     </li><!-- / Languages -->
