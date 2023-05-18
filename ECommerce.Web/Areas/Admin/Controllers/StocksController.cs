@@ -18,7 +18,8 @@ namespace ECommerce.Web.Areas.Admin.Controllers
             ILifetimeScope scope,
             ILogger<StocksController> logger,
             IStockService stockService,
-            IProductService productService) : base(scope)
+            IProductService productService) 
+            : base(scope)
         {
             _logger = logger;
             _stockService = stockService;

@@ -8,7 +8,7 @@ internal static class ConfigureCookieExtension
         {
             // cookie settings
             options.Cookie.HttpOnly = true;
-            options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+            options.ExpireTimeSpan = TimeSpan.FromSeconds(100);
 
             options.LoginPath = "/Account/Signin";
             options.AccessDeniedPath = "/Account/AccessDenied";

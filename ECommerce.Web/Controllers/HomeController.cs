@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
+using ECommerce.Web.Helpers;
 using ECommerce.Web.Models;
 using ECommerce.Web.Models.Home;
 using Microsoft.AspNetCore.Mvc;
@@ -26,24 +27,22 @@ public class HomeController : Controller
 
     public async Task<IActionResult> Index()
     {
+        var test = Request.Cookies;
         var model = new HomeProductsListModel();
         model.LatestProducts = await _productService.GetAllProducts();
 
-        foreach(var product in model.LatestProducts)
-            product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-                + "/" + product.ImageUrl?.Replace('\\', '/');
+        foreach (var product in model.LatestProducts)
+            product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
         model.LatestProducts = model.LatestProducts.OrderBy(p => p.Name).ToList();
 
         model.PopularProducts = await _productService.GetAllProducts();
         foreach (var product in model.PopularProducts)
-            product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-                + "/" + product.ImageUrl?.Replace('\\', '/');
+            product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
         model.PopularProducts = model.PopularProducts.OrderBy(p => p.Price).ToList();
 
         model.TrendingProducts = await _productService.GetAllProducts();
         foreach (var product in model.TrendingProducts)
-            product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-                + "/" + product.ImageUrl?.Replace('\\', '/');
+            product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
         model.TrendingProducts = model.TrendingProducts.OrderByDescending(p => p.Name).ToList();
 
         return View(model);

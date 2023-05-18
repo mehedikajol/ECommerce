@@ -11,7 +11,8 @@ public class SubCategoriesController : BaseController
     private readonly ILogger<SubCategoriesController> _logger;
     public SubCategoriesController(
         ILifetimeScope scope,
-        ILogger<SubCategoriesController> logger) : base(scope)
+        ILogger<SubCategoriesController> logger) 
+        : base(scope)
     {
         _logger = logger;
     }

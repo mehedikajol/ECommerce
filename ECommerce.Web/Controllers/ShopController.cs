@@ -1,5 +1,6 @@
 ﻿using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
+using ECommerce.Web.Helpers;
 using ECommerce.Web.Models.Shop;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -25,8 +26,7 @@ namespace ECommerce.Web.Controllers
             model.Products = await _productService.GetAllProducts();
             foreach(var product in model.Products)
             {
-                product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-                                + "/" + product.ImageUrl?.Replace('\\', '/');
+                product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
             }
             return View(model);
         }
@@ -34,10 +34,10 @@ namespace ECommerce.Web.Controllers
         public async Task<IActionResult> ViewProduct(Guid id)
         {
             var product = await _productService.GetProductById(id);
-            product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-                                + "/" + product.ImageUrl?.Replace('\\', '/');
+            product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
             var model = new ProductViewModel
             {
+                Id = product.Id,
                 Name = product.Name,
                 Description = product.Description,
                 Price = product.Price,
@@ -51,8 +51,7 @@ namespace ECommerce.Web.Controllers
         public async Task<IActionResult> GetProductJson(Guid id)
         {
             var product = await _productService.GetProductById(id);
-            product.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-               + "/" + product.ImageUrl?.Replace('\\', '/');
+            product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
             return new JsonResult(product);
         }
     }

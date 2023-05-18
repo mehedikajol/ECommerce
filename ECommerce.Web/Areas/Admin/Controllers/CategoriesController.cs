@@ -13,7 +13,8 @@ public class CategoriesController : BaseController
 
     public CategoriesController(
         ILifetimeScope scope,
-        ILogger<CategoriesController> logger) : base(scope)
+        ILogger<CategoriesController> logger) 
+        : base(scope)
     {
         _logger = logger;
     }

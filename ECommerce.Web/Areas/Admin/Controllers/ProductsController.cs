@@ -27,7 +27,8 @@ public class ProductsController : BaseController
         IProductService productService,
         ISubCategoryService subCategoryService,
         IFileHandlerService fileHandlerService,
-        IOptions<FileStorageSettings> options) : base(scope)
+        IOptions<FileStorageSettings> options) 
+        : base(scope)
     {
         _logger = logger;
         _productService = productService;
@@ -41,9 +42,7 @@ public class ProductsController : BaseController
         var model = new ProductListModel();
         var entities = await _productService.GetAllProducts();
         foreach (var entity in entities)
-            entity.ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName
-                + "/" + entity.ImageUrl?.Replace('\\', '/');
-
+            entity.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, entity.ImageUrl);
         model.Products = entities;
         return View(model);
     }
@@ -109,7 +108,7 @@ public class ProductsController : BaseController
                 Description = product.Description,
                 SKU = product.SKU,
                 Category = product.SubCategoryName,
-                ImageUrl = Request.Scheme + "://" + Request.Host + _settings.DirectoryName + "/" + product.ImageUrl?.Replace('\\', '/'),
+                ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl),
                 Price = product.Price,
             };
             return View(model);

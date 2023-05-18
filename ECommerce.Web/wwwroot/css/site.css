@@ -51,3 +51,12 @@ html {
     -webkit-line-clamp: 5;
     -webkit-box-orient: vertical;
 }
+
+#cart-dropdown::-webkit-scrollbar {
+    width: 5px;
+    background-color: #dddddd;
+}
+#cart-dropdown::-webkit-scrollbar-thumb {
+    background-color: #999999;
+    border-radius: 3px;
+}

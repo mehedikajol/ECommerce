@@ -3,9 +3,9 @@ using Serilog;
 
 namespace ECommerce.Web.Helpers;
 
-public static class AdminDataSeeder
+internal static class AdminDataSeeder
 {
-    public static async Task LoadAdminDataAndRole(IServiceProvider serviceProvider)
+    internal static async Task LoadAdminDataAndRole(IServiceProvider serviceProvider)
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<IdentityUser>>();
