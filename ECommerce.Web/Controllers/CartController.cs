@@ -3,7 +3,6 @@ using ECommerce.Core.Common;
 using ECommerce.Web.Helpers;
 using ECommerce.Web.Models.Cart;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis;
 using Microsoft.Extensions.Options;
 
 namespace ECommerce.Web.Controllers;
@@ -24,7 +23,9 @@ public class CartController : Controller
     public async Task<IActionResult> Index()
     {
         var cartCookie = Request.Cookies["CartProducts"]?.ToString();
-        var cartProducts = cartCookie?.Split("---");
+        var cartProducts = cartCookie?.Split("---").ToList();
+        cartProducts?.RemoveAll(guid => !Guid.TryParse(guid, out _));
+
         var products = new List<CartProductModel>();
         if (cartProducts is not null)
         {

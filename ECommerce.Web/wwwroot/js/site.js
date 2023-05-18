@@ -17,3 +17,10 @@ function addThisProductToCart(id) {
         html: '<strong>Product added to cart.</strong>',
     });
 }
+
+// Remove a product from cart
+function removeThisProductFromCart(id) {
+    var cookieValue = $.cookie('CartProducts');
+    var newValue = cookieValue.replace(id, '');
+    $.cookie('CartProducts', newValue);
+}
