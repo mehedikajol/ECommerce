@@ -46,4 +46,29 @@ public class CartController : Controller
 
         return View(model);
     }
+
+    public async Task<IActionResult> GetCartProductJson(string cookie)
+    {
+        var cartProducts = cookie?.Split("---").ToList();
+        cartProducts?.RemoveAll(guid => !Guid.TryParse(guid, out _));
+
+        var products = new List<CartProductModel>();
+        if (cartProducts is not null)
+        {
+            foreach (var item in cartProducts)
+            {
+                var product = await _productService.GetProductById(new Guid(item));
+                products.Add(new CartProductModel
+                {
+                    Id = product.Id,
+                    Name = product.Name,
+                    Price = product.Price,
+                    ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl)
+                });
+            }
+        }
+        var model = new CartProductListModel();
+
+        return new JsonResult(products);
+    }
 }
