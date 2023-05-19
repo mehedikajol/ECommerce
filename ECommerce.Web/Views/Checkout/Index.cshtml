@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CheckoutModel
+@{
     ViewData["Title"] = "Checkout";
 }
 
@@ -31,6 +32,16 @@
                             <div class="form-group">
                                 <label for="full_name">Full Name</label>
                                 <input type="text" class="form-control" id="full_name" placeholder="">
+                            </div>
+                            <div class="checkout-country-code clearfix">
+                                <div class="form-group">
+                                    <label for="user_phone">Phone</label>
+                                    <input type="text" class="form-control" id="user_phone" name="city" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user_email">Email</label>
+                                    <input type="email" class="form-control" id="user_email" name="zipcode" value="">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="user_address">Address</label>
@@ -82,18 +93,21 @@
                     <div class="product-checkout-details">
                         <div class="block">
                             <h4 class="widget-title">Order Summary</h4>
-                            <div class="media product-card">
-                                <a class="pull-left" href="product-single.html">
-                                    <img class="media-object" src="~/avito/images/shop/cart/cart-1.jpg" alt="Image" />
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        <a href="product-single.html">Ambassador Heritage 1921</a>
-                                    </h4>
-                                    <p class="price">1 x $249</p>
-                                    <span class="remove">Remove</span>
+                            @foreach (var product in Model.Products)
+                            {
+                                <div class="media product-card">
+                                    <a class="pull-left" asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">
+                                        <img class="media-object object-cover" style=" width:70px; height: 100px;" src="@product.ImageUrl" alt="@product.Name" />
+                                    </a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">
+                                            <a asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
+                                        </h4>
+                                        <p class="price">1 x $@product.Price</p>
+                                        <button type="button" value="@product.Id" onclick="deleteProduct(this)" class="remove btn btn-danger btn-sm pull-right">Remove</button>
+                                    </div>
                                 </div>
-                            </div>
+                            }
                             <div class="discount-code">
                                 <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
                             </div>
@@ -137,3 +151,15 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        // Delete a product from cart list
+        function deleteProduct(productId) {
+            removeThisProductFromCart(productId.value);
+            var row = productId.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+            //calculateTotalPrice();
+        }
+    </script>
+}

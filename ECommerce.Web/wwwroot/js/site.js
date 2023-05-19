@@ -28,6 +28,7 @@ function addThisProductToCart(id) {
 
 // Remove a product from cart
 function removeThisProductFromCart(id) {
+    alert(id);
     var cookieValue = $.cookie('CartProducts');
     var newValue = cookieValue.replace(id, '');
     $.cookie('CartProducts', newValue);
@@ -56,12 +57,10 @@ function populateCartDropDown() {
                     '<img class="media-object object-cover" style="height: 80px; width: 60px;" src="' + value.imageUrl + '" alt="image" />' +
                     '</a>' +
                     '<div class="media-body">' +
-                    '<h4 class="media-heading">' + value.name +
+                    '<h4 class="media-heading" style="padding-bottom: 15px;">' +
+                    '<a class="pull-left" target="_blank" href="/Shop/ViewProduct/' + value.id + '">' + value.name + '</a>' +
                     '</h4>' +
-                    '<h5>' +
-                    '<strong>$' + value.price + '</strong>' +
-                    '</h5>' +
-                    '<button class="btn btn-sm btn-danger pull-right" style="margin-right: 5px;">Remove</button>' +
+                    '<h5><strong>$' + value.price + '</strong></h5>' +
                     '</div>' +
                     '</div>'
             });
