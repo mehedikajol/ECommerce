@@ -28,7 +28,6 @@ function addThisProductToCart(id) {
 
 // Remove a product from cart
 function removeThisProductFromCart(id) {
-    alert(id);
     var cookieValue = $.cookie('CartProducts');
     var newValue = cookieValue.replace(id, '');
     $.cookie('CartProducts', newValue);

@@ -93,28 +93,30 @@
                     <div class="product-checkout-details">
                         <div class="block">
                             <h4 class="widget-title">Order Summary</h4>
-                            @foreach (var product in Model.Products)
-                            {
-                                <div class="media product-card">
-                                    <a class="pull-left" asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">
-                                        <img class="media-object object-cover" style=" width:70px; height: 100px;" src="@product.ImageUrl" alt="@product.Name" />
-                                    </a>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">
-                                            <a asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
-                                        </h4>
-                                        <p class="price">1 x $@product.Price</p>
-                                        <button type="button" value="@product.Id" onclick="deleteProduct(this)" class="remove btn btn-danger btn-sm pull-right">Remove</button>
+                            <div id="cart-dropdown" style="max-height: 300px; overflow-y: scroll;">
+                                @foreach (var product in Model.Products)
+                                {
+                                    <div class="media product-card">
+                                        <a class="pull-left" asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">
+                                            <img class="media-object object-cover" style=" width:70px; height: 100px;" src="@product.ImageUrl" alt="@product.Name" />
+                                        </a>
+                                        <div class="media-body">
+                                            <h4 class="media-heading">
+                                                <a asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
+                                            </h4>
+                                            <p class="price cart-item-price">$@product.Price</p>
+                                            <button type="button" value="@product.Id" onclick="deleteProduct(this)" class="remove btn btn-danger btn-sm pull-right" style="margin-right: 5px;">Remove</button>
+                                        </div>
                                     </div>
-                                </div>
-                            }
+                                }
+                            </div>
                             <div class="discount-code">
                                 <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
                             </div>
                             <ul class="summary-prices">
                                 <li>
                                     <span>Subtotal:</span>
-                                    <span class="price">$190</span>
+                                    <span class="price" id="subtotalPrice"></span>
                                 </li>
                                 <li>
                                     <span>Shipping:</span>
@@ -123,7 +125,7 @@
                             </ul>
                             <div class="summary-total">
                                 <span>Total</span>
-                                <span>$250</span>
+                                <span id="totalPrice"></span>
                             </div>
                             <div class="verified-icon">
                                 <img src="~/avito/images/shop/verified.png">
@@ -154,12 +156,27 @@
 
 @section Scripts{
     <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            calculateTotalPrice();
+        });
+
         // Delete a product from cart list
         function deleteProduct(productId) {
             removeThisProductFromCart(productId.value);
             var row = productId.parentNode.parentNode;
             row.parentNode.removeChild(row);
-            //calculateTotalPrice();
+            calculateTotalPrice();
+        }
+
+        // Calculate products total price
+        function calculateTotalPrice() {
+            let total = 0;
+            Array.from(document.getElementsByClassName("cart-item-price")).forEach(function (element) {
+                total += Number(element.innerHTML.slice(1));
+            });
+            document.getElementById('totalPrice').innerText = '$' + total + '.0';
+            document.getElementById('subtotalPrice').innerText = '$' + total + '.0';
+
         }
     </script>
 }
