@@ -1,4 +1,5 @@
-﻿using ECommerce.Application.IServices;
+﻿using ECommerce.Application.BusinessEntities;
+using ECommerce.Application.IServices;
 using ECommerce.Web.Models.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -14,15 +15,18 @@ public class AccountController : Controller
 {
     private readonly SignInManager<IdentityUser> _signInManager;
     private readonly UserManager<IdentityUser> _userManager;
+    private readonly IUserProfileService _userService;
     private readonly IEmailService _emailService;
 
     public AccountController(
         SignInManager<IdentityUser> signInManager,
         UserManager<IdentityUser> userManager,
+        IUserProfileService userService,
         IEmailService emailService)
     {
         _signInManager = signInManager;
         _userManager = userManager;
+        _userService = userService;
         _emailService = emailService;
     }
 
@@ -80,6 +84,16 @@ public class AccountController : Controller
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
+                await _userService.CreateUserProfile(new UserProfile
+                {
+                    UserId = new Guid(user.Id),
+                    FirstName = "",
+                    LastName = "",
+                    Address = "",
+                    Gender = 1,
+                    ProfilePictureUrl = "",
+                    InsertedBy = user.Email
+                });
                 return LocalRedirect(model.ReturnUrl);
             }
             else

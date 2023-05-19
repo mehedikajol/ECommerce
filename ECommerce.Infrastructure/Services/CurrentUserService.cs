@@ -21,6 +21,6 @@ internal class CurrentUserService : ICurrentUserService
 
     public string GetCurrentUserEmail()
     {
-        return _httpContextAccessor.HttpContext.User.Identity.Name;
+        return _httpContextAccessor?.HttpContext?.User?.Identity?.Name;
     }
 }

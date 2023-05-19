@@ -62,7 +62,8 @@ internal class UserProfileService : IUserProfileService
             Gender = (Gender)profile.Gender,
             Address = profile.Address,
             ProfilePictureUrl = profile.ProfilePictureUrl,
-            UserId = profile.UserId
+            UserId = profile.UserId,
+            InsertedBy = profile.InsertedBy
         };
         await _unitOfWork.UserProfiles.AddEntity(userProfileEntity);
         await _unitOfWork.CompleteAsync();

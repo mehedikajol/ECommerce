@@ -10,4 +10,5 @@ public class UserProfile
     public string Address { get; set; } = string.Empty;
 
     public Guid UserId { get; set; }
+    public string InsertedBy { get; set; } = string.Empty;
 }

@@ -2,11 +2,13 @@
 using ECommerce.Core.Common;
 using ECommerce.Web.Helpers;
 using ECommerce.Web.Models.Checkout;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 
 namespace ECommerce.Web.Controllers;
 
+[Authorize]
 public class CheckoutController : Controller
 {
     private readonly IProductService _productService;
