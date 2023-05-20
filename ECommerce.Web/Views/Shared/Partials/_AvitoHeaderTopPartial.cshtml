@@ -40,7 +40,6 @@
                         </a>
                         <div class="dropdown-menu cart-dropdown">
                             <div id="cart-dropdown" class="styled-scrollbar" style="max-height: 300px; overflow-y: scroll;">
-                                
                             </div>
                             <div class="cart-summary">
                                 <span>Total</span>
@@ -82,12 +81,36 @@
                     </li>
                     -->
                     <!-- / Languages -->
-                    @*<li>
-                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="d-block" style="margin-left: 10px;">Admin</a>
-                    </li><!-- / Languages -->*@
-                    <li>
-                        <a asp-controller="Profile" asp-action="Index" class="d-block" style="margin-left: 10px;">Profile</a>
-                    </li><!-- / Languages -->
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <li class="dropdown cart-nav dropdown-slide">
+                            <a href="#!" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown">
+                                Profile
+                            </a>
+                            <div class="dropdown-menu cart-dropdown">
+                                <div>
+                                    <a asp-controller="Profile" asp-action="Index" class="btn btn-primary pull-right">View Profile</a>
+                                </div>
+                                @if (User.IsInRole("SuperAdmin"))
+                                {
+                                    <div>
+                                        <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" style="margin-top: 5px;" class="btn btn-info pull-right">Admin Panel</a>
+                                    </div>
+                                }
+                                <form method="post" asp-controller="Account" asp-action="SignOut">
+                                    <button type="submit" class="btn btn-danger pull-right" style="margin-top: 5px;">SignOut</button>
+                                </form>
+                            </div>
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            <a asp-controller="Account" asp-action="SignIn" class="d-block" style="margin-left: 10px;">
+                                SignIn
+                            </a>
+                        </li>
+                    }
 
                 </ul><!-- / .nav .navbar-nav .navbar-right -->
             </div>

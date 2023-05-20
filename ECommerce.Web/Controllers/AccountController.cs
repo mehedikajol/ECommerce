@@ -212,4 +212,18 @@ public class AccountController : Controller
     {
         return View();
     }
+
+    [HttpPost]
+    public async Task<IActionResult> SignOutAsync(string returnUrl = null)
+    {
+        await _signInManager.SignOutAsync();
+        if (returnUrl != null)
+        {
+            return LocalRedirect(returnUrl);
+        }
+        else
+        {
+            return RedirectToAction(nameof(SignIn));
+        }
+    }
 }
