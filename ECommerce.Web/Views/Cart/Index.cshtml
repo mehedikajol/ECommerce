@@ -75,6 +75,11 @@
             calculateTotalPrice();
         });
 
+        // Reload page to get current product value
+        window.addEventListener("focus", function () {
+            window.location.reload();
+        });
+
         // Calculate total price of all cart products
         function calculateTotalPrice() {
             let total = 0;

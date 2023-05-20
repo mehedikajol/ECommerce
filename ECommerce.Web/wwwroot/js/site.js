@@ -36,7 +36,34 @@ function removeThisProductFromCart(id) {
 
 // Cart icon hover 
 function populateCartDropDown() {
+    $("#cart-dropdown").empty();
+    var html = "";
+    var total = 0;
+
+    getProductJsonData(function (result) {
+        $.each(result, function (index, value) {
+            total += value.price;
+            html += '<div class="media">' +
+                '<a class="pull-left" target="_blank" href="/Shop/ViewProduct/' + value.id + '">' +
+                '<img class="media-object object-cover" style="height: 80px; width: 60px;" src="' + value.imageUrl + '" alt="' + value.name + '" />' +
+                '</a>' +
+                '<div class="media-body">' +
+                '<h4 class="media-heading" style="padding-bottom: 15px;">' +
+                '<a class="pull-left" target="_blank" href="/Shop/ViewProduct/' + value.id + '">' + value.name + '</a>' +
+                '</h4>' +
+                '<h5><strong>$' + value.price + '</strong></h5>' +
+                '</div>' +
+                '</div>'
+        });
+        $("#cart-dropdown").append($.parseHTML(html));
+        $("#cart-total-price").html('$' + total + '.0');
+    });
+}
+
+// GetProductsJson data
+function getProductJsonData(callback) {
     var cookieValue = $.cookie('CartProducts');
+    var result;
     $.ajax({
         type: "GET",
         dataType: 'json',
@@ -45,26 +72,9 @@ function populateCartDropDown() {
         data: {
             cookie: cookieValue
         },
-        success: function (result) {
-            $("#cart-dropdown").empty();
-            var html = "";
-            var total = 0;
-            $.each(result, function (index, value) {
-                total += value.price;
-                html += '<div class="media">' +
-                    '<a class="pull-left" target="_blank" href="/Shop/ViewProduct/' + value.id + '">' +
-                    '<img class="media-object object-cover" style="height: 80px; width: 60px;" src="' + value.imageUrl + '" alt="image" />' +
-                    '</a>' +
-                    '<div class="media-body">' +
-                    '<h4 class="media-heading" style="padding-bottom: 15px;">' +
-                    '<a class="pull-left" target="_blank" href="/Shop/ViewProduct/' + value.id + '">' + value.name + '</a>' +
-                    '</h4>' +
-                    '<h5><strong>$' + value.price + '</strong></h5>' +
-                    '</div>' +
-                    '</div>'
-            });
-            $("#cart-dropdown").append($.parseHTML(html));
-            $("#cart-total-price").html('$' + total + '.0');
+        success: function (value) {
+            result = value;
+            callback(result);
         }
     });
 }

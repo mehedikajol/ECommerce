@@ -93,22 +93,8 @@
                     <div class="product-checkout-details">
                         <div class="block">
                             <h4 class="widget-title">Order Summary</h4>
-                            <div id="cart-dropdown" style="max-height: 300px; overflow-y: scroll;">
-                                @foreach (var product in Model.Products)
-                                {
-                                    <div class="media product-card">
-                                        <a class="pull-left" asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">
-                                            <img class="media-object object-cover" style=" width:70px; height: 100px;" src="@product.ImageUrl" alt="@product.Name" />
-                                        </a>
-                                        <div class="media-body">
-                                            <h4 class="media-heading">
-                                                <a asp-controller="Shop" asp-action="ViewProduct" asp-route-id="@product.Id">@product.Name</a>
-                                            </h4>
-                                            <p class="price cart-item-price">$@product.Price</p>
-                                            <button type="button" value="@product.Id" onclick="deleteProduct(this)" class="remove btn btn-danger btn-sm pull-right" style="margin-right: 5px;">Remove</button>
-                                        </div>
-                                    </div>
-                                }
+                            <div id="checkout-product-list" class="styled-scrollbar" style="max-height: 300px; overflow-y: scroll;">
+                                
                             </div>
                             <div class="discount-code">
                                 <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
@@ -157,8 +143,41 @@
 @section Scripts{
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
-            calculateTotalPrice();
+            populateCheckoutProductList()
         });
+
+        window.addEventListener("focus", function () {
+            populateCheckoutProductList();
+        });
+
+        // Populate checkout product list
+        function populateCheckoutProductList() {
+            $("#checkout-product-list").empty();
+            var html = "";
+            var total = 0;
+
+            getProductJsonData(function (result) {
+                $.each(result, function (index, value) {
+                    total += value.price;
+                    html += '<div class="media product-card">' +
+                        '<a class="pull-left" href="/Shop/ViewProduct/' + value.id + '">' +
+                        '<img class="media-object object-cover" style="width:70px; height: 100px;" src="' + value.imageUrl + '" alt="' + value.name + '"  />' +
+                        '</a>' +
+                        '<div class="media-body">' +
+                        '<h4 class="media-heading">' +
+                        '<a href="/Shop/ViewProduct/' + value.id + '">' + value.name + ' </a>' +
+                        '</h4>' +
+                        '<p class="price cart-item-price">$' + value.price + '</p>' +
+                        '<button type="button" value="' + value.id + '" onclick = "deleteProduct(this)" class="remove btn btn-danger btn-sm pull-right" style="margin-right: 5px;"> Remove</button>' +
+                        '</div>' +
+                        '</div>'
+                });
+                $("#checkout-product-list").append($.parseHTML(html));
+                calculateTotalPrice();
+            });
+            
+            
+        }
 
         // Delete a product from cart list
         function deleteProduct(productId) {
