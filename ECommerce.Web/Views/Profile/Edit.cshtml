@@ -28,8 +28,9 @@
                 <div class="col-md-12">
                     <div class="block billing-details">
                         <h4 class="widget-title">update Profile Information</h4>
-                        <form class="checkout-form" method="post" asp-controller="Profile" asp-action="EditProfile" asp-antiforgery="true">
+                        <form class="checkout-form" enctype="multipart/form-data" method="post" asp-controller="Profile" asp-action="Edit" asp-antiforgery="true">
                             <div asp-validation-summary="All" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
                             <div class="form-group">
                                 <label asp-for="FirstName"></label>
                                 <input class="form-control" asp-for="FirstName" placeholder="First Name" />
@@ -38,9 +39,15 @@
                                 <label asp-for="LastName"></label>
                                 <input class="form-control" asp-for="LastName" placeholder="Last name" />
                             </div>
-                            <div class="form-group">
-                                <label asp-for="Email"></label>
-                                <input class="form-control" asp-for="Email" readonly placeholder="Email address" />
+                            <div class="checkout-country-code clearfix">
+                                <div class="form-group">
+                                    <label asp-for="Email"></label>
+                                    <input class="form-control" asp-for="Email" readonly placeholder="Email address" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ImageFile">Image</label>
+                                    <input class="form-control" asp-for="ImageFile" accept=".jpg, .jpeg, .png" style="padding-top: 12px" />
+                                </div>
                             </div>
                             <div class="checkout-country-code clearfix">
                                 <div class="form-group">

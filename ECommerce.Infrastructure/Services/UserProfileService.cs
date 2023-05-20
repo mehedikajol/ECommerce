@@ -2,6 +2,7 @@
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Core.Enums;
+using ECommerce.Core.Exceptions;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -19,7 +20,7 @@ internal class UserProfileService : IUserProfileService
     {
         var entities = await _unitOfWork.UserProfiles.GetAllEntities();
         var profiles = new List<UserProfile>();
-        
+
         foreach (var entity in entities)
         {
             profiles.Add(new UserProfile
@@ -94,12 +95,16 @@ internal class UserProfileService : IUserProfileService
     public async Task UpdateUserProfile(UserProfile profile)
     {
         var profileEntity = await _unitOfWork.UserProfiles.GetEntityById(profile.Id);
+        if(profileEntity is null)
+                throw new NotFoundException("Profile not found.");
 
         profileEntity.FirstName = profile.FirstName;
         profileEntity.LastName = profile.LastName;
         profileEntity.Gender = (Gender)profile.Gender;
+        profileEntity.Email = profile.Email;
+        profileEntity.Phone = profile.Phone;
         profileEntity.Address = profile.Address;
-        profileEntity.ProfilePictureUrl = profile.ProfilePictureUrl;
+        profileEntity.ProfilePictureUrl = profile.ProfilePictureUrl ?? profileEntity.ProfilePictureUrl;
 
         await _unitOfWork.UserProfiles.UpdateEntity(profileEntity);
         await _unitOfWork.CompleteAsync();

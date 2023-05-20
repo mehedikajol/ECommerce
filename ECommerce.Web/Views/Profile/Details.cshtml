@@ -38,9 +38,9 @@
                 </ul>
                 <div class="dashboard-wrapper dashboard-user-profile">
                     <div class="media">
-                        <div class="pull-left text-center" href="#!">
-                            <img class="media-object user-img" src="~/avito/images/avater.jpg" alt="Image">
-                            <a href="#x" class="btn btn-transparent mt-20">Change Image</a>
+                        <div class="pull-left text-center" href="#!" style="margin-top: 15px;">
+                            <img class="media-object user-img object-cover" style="width: 200px; height: 200px; border-radius: 50%;" src="@Model.ProfilePictureUrl" alt="Image">
+                           @* <a href="#x" class="btn btn-transparent mt-20">Change Image</a>*@
                         </div>
                         <div class="media-body">
                             <ul class="user-profile-list">
@@ -59,16 +59,16 @@
                                 <li>
                                     <span>Gender:</span>@(Model.Gender == "RatherNotToSay" ? "Not to say" : Model.Gender)
                                 </li>
-                                <li>
+                                @*<li>
                                     <span>Date of Birth:</span>Dec , 22 ,1991
-                                </li>
+                                </li>*@
                                 <li>
                                     <span>Address:</span>@Model.Address
                                 </li>
                             </ul>
                         </div>
                         <div class="pull-right">
-                            <a asp-controller="Profile" asp-action="EditProfile" class="btn btn-primary">Edit Profile</a>
+                            <a asp-controller="Profile" asp-action="Edit" class="btn btn-primary">Edit Profile</a>
                         </div>
                     </div>
                     
