@@ -89,6 +89,7 @@ public class AccountController : Controller
                     UserId = new Guid(user.Id),
                     FirstName = "",
                     LastName = "",
+                    Email = user.Email,
                     Address = "",
                     Gender = 1,
                     ProfilePictureUrl = "",

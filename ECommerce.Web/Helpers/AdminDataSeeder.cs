@@ -37,6 +37,7 @@ internal static class AdminDataSeeder
                 LastName = "Admin",
                 Address = "",
                 Gender = 1,
+                Email = user.Email,
                 InsertedBy = user.Email,
                 ProfilePictureUrl = ""
             });

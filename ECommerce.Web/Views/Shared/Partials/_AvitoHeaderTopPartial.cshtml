@@ -1,4 +1,8 @@
-﻿<!-- Start Top Header Bar -->
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!-- Start Top Header Bar -->
 <section class="top-header">
     <div class="container">
         <div class="row">
@@ -78,8 +82,11 @@
                     </li>
                     -->
                     <!-- / Languages -->
-                    <li>
+                    @*<li>
                         <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="d-block" style="margin-left: 10px;">Admin</a>
+                    </li><!-- / Languages -->*@
+                    <li>
+                        <a asp-controller="Profile" asp-action="Index" class="d-block" style="margin-left: 10px;">Profile</a>
                     </li><!-- / Languages -->
 
                 </ul><!-- / .nav .navbar-nav .navbar-right -->
