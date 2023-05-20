@@ -37,12 +37,12 @@ public class SubCategoriesController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Create(SubCategoryCreateModel model)
     {
+        model.ResolveDependency(_scope);
         var categories = await model.LoadCategories();
         ViewData["Categories"] = new SelectList(categories, "Id", "Name");
 
         if (ModelState.IsValid)
         {
-            model.ResolveDependency(_scope);
             try
             {
                 await model.Create();
@@ -91,12 +91,12 @@ public class SubCategoriesController : BaseController
     [HttpPost, ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(SubCategoryEditModel model)
     {
+        model.ResolveDependency(_scope);
         var categories = await model.LoadCategories();
         ViewData["Categories"] = new SelectList(categories, "Id", "Name");
 
         if (ModelState.IsValid)
         {
-            model.ResolveDependency(_scope);
             try
             {
                 await model.UpdateSubCategory();

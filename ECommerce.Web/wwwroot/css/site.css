@@ -66,3 +66,23 @@ html {
     background-color: #999999;
     border-radius: 3px;
 }
+
+.checkout-form .form-group select,
+.checkout-form .form-group textarea {
+    border-radius: 0;
+    display: block;
+    font-weight: 200;
+    font-size: 12px;
+}
+.checkout-form .form-group select {
+    height: 50px;
+    padding: 6px 10px 5px 100px;
+}
+.checkout-form .form-group textarea {
+    padding: 15px 10px 5px 100px;
+    resize: vertical;
+    min-height: 100px;
+    max-height: 300px;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+}

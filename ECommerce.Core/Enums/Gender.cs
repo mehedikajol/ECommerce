@@ -2,8 +2,7 @@
 
 public enum Gender
 {
-    RatherNotToSay = 1,
+    Other = 1,
     Male,
     Female,
-    Other
 }
