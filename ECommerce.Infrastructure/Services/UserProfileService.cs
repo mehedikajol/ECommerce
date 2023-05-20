@@ -45,6 +45,26 @@ internal class UserProfileService : IUserProfileService
             Id = entity.Id,
             FirstName = entity.FirstName,
             LastName = entity.LastName,
+            Email = entity.Email,
+            Phone = entity.Phone,
+            Gender = (int)entity.Gender,
+            ProfilePictureUrl = entity.ProfilePictureUrl,
+            UserId = entity.UserId,
+            Address = entity.Address,
+        };
+        return userProfile;
+    }
+
+    public async Task<UserProfile> GetUserProfileByIdentityId(Guid id)
+    {
+        var entity = await _unitOfWork.UserProfiles.GetProfileByIdentityId(id);
+        var userProfile = new UserProfile
+        {
+            Id = entity.Id,
+            FirstName = entity.FirstName,
+            LastName = entity.LastName,
+            Email = entity.Email,
+            Phone = entity.Phone,
             Gender = (int)entity.Gender,
             ProfilePictureUrl = entity.ProfilePictureUrl,
             UserId = entity.UserId,
@@ -61,8 +81,11 @@ internal class UserProfileService : IUserProfileService
             LastName = profile.LastName,
             Gender = (Gender)profile.Gender,
             Address = profile.Address,
+            Email = profile.Email,
+            Phone = profile.Phone,
             ProfilePictureUrl = profile.ProfilePictureUrl,
-            UserId = profile.UserId
+            UserId = profile.UserId,
+            InsertedBy = profile.InsertedBy
         };
         await _unitOfWork.UserProfiles.AddEntity(userProfileEntity);
         await _unitOfWork.CompleteAsync();

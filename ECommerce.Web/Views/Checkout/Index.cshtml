@@ -1,4 +1,5 @@
-﻿@{
+﻿@model CheckoutModel
+@{
     ViewData["Title"] = "Checkout";
 }
 
@@ -31,6 +32,16 @@
                             <div class="form-group">
                                 <label for="full_name">Full Name</label>
                                 <input type="text" class="form-control" id="full_name" placeholder="">
+                            </div>
+                            <div class="checkout-country-code clearfix">
+                                <div class="form-group">
+                                    <label for="user_phone">Phone</label>
+                                    <input type="text" class="form-control" id="user_phone" name="city" value="">
+                                </div>
+                                <div class="form-group">
+                                    <label for="user_email">Email</label>
+                                    <input type="email" class="form-control" id="user_email" name="zipcode" value="">
+                                </div>
                             </div>
                             <div class="form-group">
                                 <label for="user_address">Address</label>
@@ -82,17 +93,8 @@
                     <div class="product-checkout-details">
                         <div class="block">
                             <h4 class="widget-title">Order Summary</h4>
-                            <div class="media product-card">
-                                <a class="pull-left" href="product-single.html">
-                                    <img class="media-object" src="~/avito/images/shop/cart/cart-1.jpg" alt="Image" />
-                                </a>
-                                <div class="media-body">
-                                    <h4 class="media-heading">
-                                        <a href="product-single.html">Ambassador Heritage 1921</a>
-                                    </h4>
-                                    <p class="price">1 x $249</p>
-                                    <span class="remove">Remove</span>
-                                </div>
+                            <div id="checkout-product-list" class="styled-scrollbar" style="max-height: 300px; overflow-y: scroll;">
+                                
                             </div>
                             <div class="discount-code">
                                 <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
@@ -100,7 +102,7 @@
                             <ul class="summary-prices">
                                 <li>
                                     <span>Subtotal:</span>
-                                    <span class="price">$190</span>
+                                    <span class="price" id="subtotalPrice"></span>
                                 </li>
                                 <li>
                                     <span>Shipping:</span>
@@ -109,7 +111,7 @@
                             </ul>
                             <div class="summary-total">
                                 <span>Total</span>
-                                <span>$250</span>
+                                <span id="totalPrice"></span>
                             </div>
                             <div class="verified-icon">
                                 <img src="~/avito/images/shop/verified.png">
@@ -137,3 +139,63 @@
         </div>
     </div>
 </div>
+
+@section Scripts{
+    <script>
+        document.addEventListener("DOMContentLoaded", function (event) {
+            populateCheckoutProductList()
+        });
+
+        window.addEventListener("focus", function () {
+            populateCheckoutProductList();
+        });
+
+        // Populate checkout product list
+        function populateCheckoutProductList() {
+            $("#checkout-product-list").empty();
+            var html = "";
+            var total = 0;
+
+            getProductJsonData(function (result) {
+                $.each(result, function (index, value) {
+                    total += value.price;
+                    html += '<div class="media product-card">' +
+                        '<a class="pull-left" href="/Shop/ViewProduct/' + value.id + '">' +
+                        '<img class="media-object object-cover" style="width:70px; height: 100px;" src="' + value.imageUrl + '" alt="' + value.name + '"  />' +
+                        '</a>' +
+                        '<div class="media-body">' +
+                        '<h4 class="media-heading">' +
+                        '<a href="/Shop/ViewProduct/' + value.id + '">' + value.name + ' </a>' +
+                        '</h4>' +
+                        '<p class="price cart-item-price">$' + value.price + '</p>' +
+                        '<button type="button" value="' + value.id + '" onclick = "deleteProduct(this)" class="remove btn btn-danger btn-sm pull-right" style="margin-right: 5px;"> Remove</button>' +
+                        '</div>' +
+                        '</div>'
+                });
+                $("#checkout-product-list").append($.parseHTML(html));
+                calculateTotalPrice();
+            });
+            
+            
+        }
+
+        // Delete a product from cart list
+        function deleteProduct(productId) {
+            removeThisProductFromCart(productId.value);
+            var row = productId.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+            calculateTotalPrice();
+        }
+
+        // Calculate products total price
+        function calculateTotalPrice() {
+            let total = 0;
+            Array.from(document.getElementsByClassName("cart-item-price")).forEach(function (element) {
+                total += Number(element.innerHTML.slice(1));
+            });
+            document.getElementById('totalPrice').innerText = '$' + total + '.0';
+            document.getElementById('subtotalPrice').innerText = '$' + total + '.0';
+
+        }
+    </script>
+}

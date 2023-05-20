@@ -1,0 +1,75 @@
+﻿@model ProfileDetailsModel
+@{
+    ViewData["Title"] = "Details";
+}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Dashboard</h1>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="active">Profile</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="user-dashboard page-wrapper">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="list-inline dashboard-menu text-center">
+                    <li>
+                        <a asp-controller="Profile" asp-action="Index">Dashboard</a>
+                    </li>
+                    <li>
+                        <a asp-controller="Profile" asp-action="Orders">Orders</a>
+                    </li>
+                    <li>
+                        <a class="active" asp-controller="Profile" asp-action="Details">Profile Details</a>
+                    </li>
+                </ul>
+                <div class="dashboard-wrapper dashboard-user-profile">
+                    <div class="media">
+                        <div class="pull-left text-center" href="#!">
+                            <img class="media-object user-img" src="~/avito/images/avater.jpg" alt="Image">
+                            <a href="#x" class="btn btn-transparent mt-20">Change Image</a>
+                        </div>
+                        <div class="media-body">
+                            <ul class="user-profile-list">
+                                <li>
+                                    <span>Full Name:</span>@Model.FirstName @Model.LastName
+                                </li>
+                                <li>
+                                    <span>Country:</span>USA
+                                </li>
+                                <li>
+                                    <span>Email:</span>@Model.Email
+                                </li>
+                                <li>
+                                    <span>Phone:</span>@Model.Phone
+                                </li>
+                                <li>
+                                    <span>Gender:</span>@(Model.Gender == "RatherNotToSay" ? "Not to say" : Model.Gender)
+                                </li>
+                                <li>
+                                    <span>Date of Birth:</span>Dec , 22 ,1991
+                                </li>
+                                <li>
+                                    <span>Address:</span>@Model.Address
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>

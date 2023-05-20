@@ -1,25 +1,27 @@
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
-  html {
-    font-size: 16px;
-  }
+    html {
+        font-size: 16px;
+    }
 }
 
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
 
-.object-cover{
+.object-cover {
     object-fit: cover;
 }
-.object-top{
+
+.object-top {
     object-position: top;
 }
-.object-center{
+
+.object-center {
     object-position: center;
 }
 
@@ -30,6 +32,7 @@ html {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
 }
+
 .only-3-lines {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -37,6 +40,7 @@ html {
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
 }
+
 .only-4-lines {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -44,6 +48,7 @@ html {
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
 }
+
 .only-5-lines {
     overflow: hidden;
     text-overflow: ellipsis;
@@ -52,11 +57,12 @@ html {
     -webkit-box-orient: vertical;
 }
 
-#cart-dropdown::-webkit-scrollbar {
+.styled-scrollbar::-webkit-scrollbar {
     width: 5px;
     background-color: #dddddd;
 }
-#cart-dropdown::-webkit-scrollbar-thumb {
+
+.styled-scrollbar::-webkit-scrollbar-thumb {
     background-color: #999999;
     border-radius: 3px;
 }

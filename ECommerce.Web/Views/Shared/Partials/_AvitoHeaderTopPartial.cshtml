@@ -1,4 +1,8 @@
-﻿<!-- Start Top Header Bar -->
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+<!-- Start Top Header Bar -->
 <section class="top-header">
     <div class="container">
         <div class="row">
@@ -35,7 +39,7 @@
                             <i class="tf-ion-android-cart"></i>Cart(<span id="cartProductCount">0</span>)
                         </a>
                         <div class="dropdown-menu cart-dropdown">
-                            <div id="cart-dropdown" style="max-height: 300px; overflow-y: scroll;">
+                            <div id="cart-dropdown" class="styled-scrollbar" style="max-height: 300px; overflow-y: scroll;">
                                 
                             </div>
                             <div class="cart-summary">
@@ -78,8 +82,11 @@
                     </li>
                     -->
                     <!-- / Languages -->
-                    <li>
+                    @*<li>
                         <a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="d-block" style="margin-left: 10px;">Admin</a>
+                    </li><!-- / Languages -->*@
+                    <li>
+                        <a asp-controller="Profile" asp-action="Index" class="d-block" style="margin-left: 10px;">Profile</a>
                     </li><!-- / Languages -->
 
                 </ul><!-- / .nav .navbar-nav .navbar-right -->

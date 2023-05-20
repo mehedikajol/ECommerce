@@ -34,12 +34,12 @@ public class AppDbContext : IdentityDbContext
             {
                 case EntityState.Added:
                     entry.Entity.InsertedDate = _dateTimeService.UTCDateTime();
-                    entry.Entity.InsertedBy = _currentUserService.GetCurrentUserEmail();
+                    entry.Entity.InsertedBy = _currentUserService.GetCurrentUserEmail() ?? entry.Entity.InsertedBy;
                     entry.Entity.ModifiedBy = "";
                     break;
                 case EntityState.Modified:
                     entry.Entity.ModifiedDate = _dateTimeService.UTCDateTime();
-                    entry.Entity.ModifiedBy = _currentUserService.GetCurrentUserEmail();
+                    entry.Entity.ModifiedBy = _currentUserService.GetCurrentUserEmail() ?? entry.Entity.ModifiedBy;
                     break;
                 case EntityState.Detached:
                     break;
