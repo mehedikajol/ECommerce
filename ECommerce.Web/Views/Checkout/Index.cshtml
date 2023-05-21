@@ -30,60 +30,39 @@
                         <h4 class="widget-title">Billing Details</h4>
                         <form class="checkout-form">
                             <div class="form-group">
-                                <label for="full_name">Full Name</label>
-                                <input type="text" class="form-control" id="full_name" placeholder="">
+                                <label asp-for="User.Name">Full Name</label>
+                                <input asp-for="User.Name" class="form-control" placeholder="Name" readonly>
                             </div>
                             <div class="checkout-country-code clearfix">
                                 <div class="form-group">
-                                    <label for="user_phone">Phone</label>
-                                    <input type="text" class="form-control" id="user_phone" name="city" value="">
+                                    <label asp-for="User.Email"></label>
+                                    <input asp-for="User.Email" class="form-control" placeholder="Email" readonly>
                                 </div>
                                 <div class="form-group">
-                                    <label for="user_email">Email</label>
-                                    <input type="email" class="form-control" id="user_email" name="zipcode" value="">
+                                    <label asp-for="User.Phone"></label>
+                                    <input asp-for="User.Phone" class="form-control" placeholder="Phone" readonly>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label for="user_address">Address</label>
-                                <input type="text" class="form-control" id="user_address" placeholder="">
+                                <label asp-for="User.Address"></label>
+                                <input asp-for="User.Address" class="form-control" placeholder="Address" readonly>
                             </div>
-                            <div class="checkout-country-code clearfix">
-                                <div class="form-group">
-                                    <label for="user_post_code">Zip Code</label>
-                                    <input type="text" class="form-control" id="user_post_code" name="zipcode" value="">
-                                </div>
-                                <div class="form-group">
-                                    <label for="user_city">City</label>
-                                    <input type="text" class="form-control" id="user_city" name="city" value="">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="user_country">Country</label>
-                                <input type="text" class="form-control" id="user_country" placeholder="">
-                            </div>
+                            <span class="text-info">To change any value, please visit profile page</span>
                         </form>
                     </div>
+
                     <div class="block">
                         <h4 class="widget-title">Payment Method</h4>
-                        <p>Credit Cart Details (Secure payment)</p>
+                        <p>Please selece your preferable payment method</p>
                         <div class="checkout-product-details">
                             <div class="payment">
                                 <div class="card-details">
-                                    <form class="checkout-form">
-                                        <div class="form-group">
-                                            <label for="card-number">Card Number <span class="required">*</span></label>
-                                            <input id="card-number" class="form-control" type="tel" placeholder="•••• •••• •••• ••••">
-                                        </div>
-                                        <div class="form-group half-width padding-right">
-                                            <label for="card-expiry">Expiry (MM/YY) <span class="required">*</span></label>
-                                            <input id="card-expiry" class="form-control" type="tel" placeholder="MM / YY">
-                                        </div>
-                                        <div class="form-group half-width padding-left">
-                                            <label for="card-cvc">Card Code <span class="required">*</span></label>
-                                            <input id="card-cvc" class="form-control" type="tel" maxlength="4" placeholder="CVC">
-                                        </div>
-                                        <a href="confirmation.html" class="btn btn-main mt-20">Place Order</a>
-                                    </form>
+                                    <div class="checkout-form">
+                                        <select class="form-control" asp-for="PaymentMethod" asp-items="@ViewBag.PaymentMethods" required>
+                                            <option value="0">--Select Payment Method--</option>
+                                        </select>
+                                        <a onclick="return checkPaymentMethod(this)" class="btn btn-main mt-20">Place Order</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -94,11 +73,11 @@
                         <div class="block">
                             <h4 class="widget-title">Order Summary</h4>
                             <div id="checkout-product-list" class="styled-scrollbar" style="max-height: 300px; overflow-y: scroll;">
-                                
                             </div>
-                            <div class="discount-code">
-                                <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
-                            </div>
+                            @*<div class="discount-code">
+                            <p>Have a discount ? <a data-toggle="modal" data-target="#coupon-modal" href="#!">enter it here</a></p>
+                            </div>*@
+                            <div class="summary-prices"></div>
                             <ul class="summary-prices">
                                 <li>
                                     <span>Subtotal:</span>
@@ -140,7 +119,12 @@
     </div>
 </div>
 
+@section Styles{
+    <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+}
+
 @section Scripts{
+    <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script>
         document.addEventListener("DOMContentLoaded", function (event) {
             populateCheckoutProductList()
@@ -175,8 +159,8 @@
                 $("#checkout-product-list").append($.parseHTML(html));
                 calculateTotalPrice();
             });
-            
-            
+
+
         }
 
         // Delete a product from cart list
@@ -196,6 +180,20 @@
             document.getElementById('totalPrice').innerText = '$' + total + '.0';
             document.getElementById('subtotalPrice').innerText = '$' + total + '.0';
 
+        }
+
+        // Check payment method value is populated or not
+        function checkPaymentMethod(button) {
+            if ($('#PaymentMethod').val() == 0) {
+                Swal.fire({
+                    title: '<strong>Error</strong>',
+                    icon: 'error',
+                    html: '<strong>Please select a payment method.</strong>',
+                });
+                return false;
+            }
+            $(button).attr("href", window.location.origin + "/Checkout/ConfirmOrder?option=" + $('#PaymentMethod').val());
+            return true;
         }
     </script>
 }
