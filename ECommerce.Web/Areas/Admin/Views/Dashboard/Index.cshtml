@@ -1,4 +1,5 @@
-﻿@{
+﻿@model DashboardModel
+@{
     ViewData["Title"] = "Dashboard";
 }
 
@@ -28,9 +29,9 @@
                 <!-- small box -->
                 <div class="small-box bg-info">
                     <div class="inner">
-                        <h3>1500</h3>
+                        <h3>@Model.Products</h3>
 
-                        <p>Products</p>
+                        <p>Products uploaded</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-puzzle-piece"></i>
@@ -43,7 +44,7 @@
                 <!-- small box -->
                 <div class="small-box bg-success">
                     <div class="inner">
-                        <h3>53</h3>
+                        <h3>@Model.CompletedOrders</h3>
 
                         <p>Orders completed</p>
                     </div>
@@ -58,9 +59,9 @@
                 <!-- small box -->
                 <div class="small-box bg-warning">
                     <div class="inner">
-                        <h3>44</h3>
+                        <h3>@Model.Users</h3>
 
-                        <p>User Registrations</p>
+                        <p>Users registered</p>
                     </div>
                     <div class="icon">
                         <i class="fas fa-user"></i>
@@ -73,7 +74,7 @@
                 <!-- small box -->
                 <div class="small-box bg-danger">
                     <div class="inner">
-                        <h3>88</h3>
+                        <h3>@Model.ProcessingOrders</h3>
 
                         <p>Orders processing</p>
                     </div>

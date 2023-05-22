@@ -9,4 +9,6 @@ public interface IProductService
     Task CreateProduct(Product product);
     Task UpdateProduct(Product product);
     Task DeleteProduct(Guid id);
+
+    Task<int> GetProductsCount();
 }

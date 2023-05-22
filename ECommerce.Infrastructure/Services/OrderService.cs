@@ -110,4 +110,16 @@ internal class OrderService : IOrderService
     {
         throw new NotImplementedException();
     }
+
+    public async Task<int> GetCompletedOrdersCount()
+    {
+        return await _unitOfWork.Orders
+            .GetCount(o => o.OrderStatus == OrderStatus.Completed);
+    }
+
+    public async Task<int> GetProcessingOrdersCount()
+    {
+        return await _unitOfWork.Orders
+            .GetCount(o => o.OrderStatus == OrderStatus.Shipping || o.OrderStatus == OrderStatus.Processing);
+    }
 }

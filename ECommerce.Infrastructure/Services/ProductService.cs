@@ -104,6 +104,11 @@ internal class ProductService : IProductService
         await _unitOfWork.CompleteAsync();
     }
 
+    public async Task<int> GetProductsCount()
+    {
+        return await _unitOfWork.Products.GetCount();
+    }
+
     private async Task<bool> IsNameAlreadyUsed(string name) =>
         await _unitOfWork.Products.GetCount(p => p.Name == name.Trim()) > 0;
 
