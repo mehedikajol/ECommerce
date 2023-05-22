@@ -10,8 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
-using System;
-using System.Runtime.Serialization.Formatters;
 using System.Security.Claims;
 
 namespace ECommerce.Web.Controllers;

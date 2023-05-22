@@ -47,7 +47,7 @@
                                 <label asp-for="User.Address"></label>
                                 <input asp-for="User.Address" class="form-control" placeholder="Address" readonly>
                             </div>
-                            <span class="text-info">To change any value, please visit profile page</span>
+                            <span class="text-info">To change any detail, please visit <a asp-controller="Profile" asp-action="Details"><u>profile</u></a> page</span>
                         </form>
                     </div>
 
@@ -184,6 +184,14 @@
 
         // Check payment method value is populated or not
         function checkPaymentMethod(button) {
+            if ($('#totalPrice').val() == 0){
+                Swal.fire({
+                    title: '<strong>Error</strong>',
+                    icon: 'error',
+                    html: '<strong>Can\'t create empty order.</strong>',
+                });
+                return false;
+            }
             if ($('#PaymentMethod').val() == 0) {
                 Swal.fire({
                     title: '<strong>Error</strong>',

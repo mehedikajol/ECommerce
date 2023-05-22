@@ -87,6 +87,7 @@ internal class OrderService : IOrderService
         {
             UserId = order.UserId,
             OrderStatus = OrderStatus.Processing,
+            PaymentMethod = (PaymentMethod)order.PaymentMethod,
             TotalCost = order.TotalCost,
             OrderDetails = orderDetails
         };

@@ -24,6 +24,7 @@ public class InfrastructureModule : Module
         builder.RegisterType<ProductRepository>().As<IProductRepository>().InstancePerLifetimeScope();
         builder.RegisterType<StockRepository>().As<IStockRepository>().InstancePerLifetimeScope();
         builder.RegisterType<UserProfileRepository>().As<IUserProfileRepository>().InstancePerLifetimeScope();
+        builder.RegisterType<OrderRepository>().As<IOrderRepository>().InstancePerLifetimeScope();
 
         // Repository services
         builder.RegisterType<CategoryService>().As<ICategoryService>().InstancePerLifetimeScope();
@@ -31,6 +32,7 @@ public class InfrastructureModule : Module
         builder.RegisterType<ProductService>().As<IProductService>().InstancePerLifetimeScope();
         builder.RegisterType<StockService>().As<IStockService>().InstancePerLifetimeScope();
         builder.RegisterType<UserProfileService>().As<IUserProfileService>().InstancePerLifetimeScope();
+        builder.RegisterType<OrderService>().As<IOrderService>().InstancePerLifetimeScope();
 
         // Other services
         builder.RegisterType<CurrentUserService>().As<ICurrentUserService>().InstancePerLifetimeScope();
