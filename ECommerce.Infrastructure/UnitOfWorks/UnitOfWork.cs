@@ -18,6 +18,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
         Products = new ProductRepository(_context);
         Stocks = new StockRepository(_context);
         UserProfiles = new UserProfileRepository(_context);
+        Orders = new OrderRepository(_context);
     }
 
     public ICategoryRepository Categories { get; private set; }
@@ -25,6 +26,7 @@ public class UnitOfWork : IUnitOfWork, IDisposable
     public IProductRepository Products { get; private set; }
     public IStockRepository Stocks { get; private set; }
     public IUserProfileRepository UserProfiles { get; private set; }
+    public IOrderRepository Orders { get; private set; }
 
     public async Task CompleteAsync()
     {

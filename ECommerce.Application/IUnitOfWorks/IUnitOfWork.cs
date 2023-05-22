@@ -9,6 +9,7 @@ public interface IUnitOfWork
     IProductRepository Products { get; }
     IStockRepository Stocks { get; }
     IUserProfileRepository UserProfiles { get; }
+    IOrderRepository Orders { get; }
 
     Task CompleteAsync();
 }

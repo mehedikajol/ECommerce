@@ -1,0 +1,75 @@
+﻿@model ProfileEditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<section class="page-header">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="content">
+                    <h1 class="page-name">Edit Profile</h1>
+                    <ol class="breadcrumb">
+                        <li>
+                            <a asp-controller="Home" asp-action="Index">Home</a>
+                        </li>
+                        <li class="active">Profile</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="page-wrapper">
+    <div class="checkout shopping">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="block billing-details">
+                        <h4 class="widget-title">update Profile Information</h4>
+                        <form class="checkout-form" enctype="multipart/form-data" method="post" asp-controller="Profile" asp-action="Edit" asp-antiforgery="true">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <input type="hidden" asp-for="Id" />
+                            <div class="form-group">
+                                <label asp-for="FirstName"></label>
+                                <input class="form-control" asp-for="FirstName" placeholder="First Name" />
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="LastName"></label>
+                                <input class="form-control" asp-for="LastName" placeholder="Last name" />
+                            </div>
+                            <div class="checkout-country-code clearfix">
+                                <div class="form-group">
+                                    <label asp-for="Email"></label>
+                                    <input class="form-control" asp-for="Email" readonly placeholder="Email address" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ImageFile">Image</label>
+                                    <input class="form-control" asp-for="ImageFile" accept=".jpg, .jpeg, .png" style="padding-top: 12px" />
+                                </div>
+                            </div>
+                            <div class="checkout-country-code clearfix">
+                                <div class="form-group">
+                                    <label asp-for="Phone"></label>
+                                    <input class="form-control" asp-for="Phone" placeholder="Phone number" />
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Gender"></label>
+                                    <select class="form-control" asp-for="Gender" asp-items="ViewBag.Genders">
+                                        <option>--Select gender--</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Address"></label>
+                                <textarea class="form-control" rows="6" asp-for="Address" placeholder="Full address"></textarea>
+                            </div>
+                            <button class="btn btn-success" type="submit">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

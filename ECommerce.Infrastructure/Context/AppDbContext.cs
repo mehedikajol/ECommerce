@@ -59,4 +59,5 @@ public class AppDbContext : IdentityDbContext
     public DbSet<Product> Products { get; set; }
     public DbSet<Stock> Stocks { get; set; }
     public DbSet<UserProfile> UserProfiles { get; set; }
+    public DbSet<Order> Orders { get; set; }
 }
