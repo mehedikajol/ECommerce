@@ -50,6 +50,10 @@ public class CheckoutController : Controller
 
     public async Task<IActionResult> ConfirmOrder(int option)
     {
+        var cartCookie = Request.Cookies["CartProducts"]?.ToString();
+        var cartProducts = cartCookie?.Split("---").ToList();
+        cartProducts?.RemoveAll(guid => !Guid.TryParse(guid, out _));
+
         return RedirectToAction(nameof(Success));
     }
 
