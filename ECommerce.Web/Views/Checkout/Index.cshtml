@@ -184,7 +184,8 @@
 
         // Check payment method value is populated or not
         function checkPaymentMethod(button) {
-            if ($('#totalPrice').val() == 0){
+            var totalPrice =parseInt(document.getElementById('totalPrice').innerText.slice(1));
+            if (totalPrice == 0) {
                 Swal.fire({
                     title: '<strong>Error</strong>',
                     icon: 'error',

@@ -10,5 +10,6 @@ internal class OrderConfiguration : IEntityTypeConfiguration<Order>
     {
         builder.Property(o => o.ReviewedBy).HasMaxLength(50).HasDefaultValue("");
         builder.Property(o => o.UserId).IsRequired().HasMaxLength(50);
+        builder.Property(o => o.ShippingAddress).HasMaxLength(250).HasDefaultValue("");
     }
 }

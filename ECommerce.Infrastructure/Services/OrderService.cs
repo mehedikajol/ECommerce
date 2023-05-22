@@ -37,6 +37,8 @@ internal class OrderService : IOrderService
                 ReviewedBy = order.ReviewedBy,
                 UserId = order.UserId,
                 TotalCost = order.TotalCost,
+                ShippingAddress = order.ShippingAddress,
+                PaymentMethod = (int)order.PaymentMethod,
                 OrderStatus = (int)order.OrderStatus,
                 OrderDetails = orderDetails
             });
@@ -65,6 +67,8 @@ internal class OrderService : IOrderService
             ReviewedBy = orderEntitiy.ReviewedBy,
             UserId = orderEntitiy.UserId,
             TotalCost = orderEntitiy.TotalCost,
+            ShippingAddress = orderEntitiy.ShippingAddress,
+            PaymentMethod = (int)orderEntitiy.PaymentMethod,
             OrderStatus = (int)orderEntitiy.OrderStatus,
             OrderDetails = orderDetails
         };
@@ -87,6 +91,7 @@ internal class OrderService : IOrderService
         {
             UserId = order.UserId,
             OrderStatus = OrderStatus.Processing,
+            ShippingAddress = order.ShippingAddress,
             PaymentMethod = (PaymentMethod)order.PaymentMethod,
             TotalCost = order.TotalCost,
             OrderDetails = orderDetails

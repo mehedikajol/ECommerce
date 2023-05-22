@@ -85,6 +85,7 @@ public class CheckoutController : Controller
             UserId = new Guid(userId),
             PaymentMethod  = option,
             TotalCost = totalCost,
+            ShippingAddress = userInfo.Address,
             OrderDetails = orderDetails
         };
 
