@@ -34,13 +34,15 @@ internal class OrderService : IOrderService
 
             orders.Add(new Order
             {
+                Id = order.Id,
                 ReviewedBy = order.ReviewedBy,
                 UserId = order.UserId,
                 TotalCost = order.TotalCost,
                 ShippingAddress = order.ShippingAddress,
                 PaymentMethod = (int)order.PaymentMethod,
                 OrderStatus = (int)order.OrderStatus,
-                OrderDetails = orderDetails
+                OrderDetails = orderDetails,
+                OrderDate = order.InsertedDate
             });
         }
 

@@ -35,32 +35,33 @@
                                 <tr>
                                     <th>User</th>
                                     <th>Email</th>
-                                    <th>Total Cost</th>
+                                    <th>Total Price</th>
+                                    <th>Order Date</th>
                                     <th>Payment Method</th>
                                     <th>Order Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @foreach (var category in Model.Orders)
+                                @foreach (var order in Model.Orders)
                                 {
                                     <tr>
-                                        <td>@category.UserName</td>
-                                        <td>@category.UserEmail</td>
-                                        <td>@category.TotalCost</td>
-                                        <td>@category.PaymentMethod</td>
-                                        <td>@category.OrderStatus</td>
-                                        @*<td>@category.Description</td>
-                                        <td>@category.MainCategoryName</td>
+                                        <td>@order.UserName</td>
+                                        <td>@order.UserEmail</td>
+                                        <td>$@order.TotalCost</td>
+                                        <td>@order.OrderDate.ToLocalTime().ToString("dd/MMM/yyyy hh:mm tt")</td>
+                                        <td>@order.PaymentMethod</td>
+                                        <td>@order.OrderStatus</td>
                                         <td>
-                                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Categories" asp-action="Edit" asp-route-id="@category.Id">
+                                            <a class="btn btn-primary btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="View" asp-route-id="@order.Id">
+                                                <i class="far fa-eye"></i>
+                                                View
+                                            </a>
+                                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="Edit" asp-route-id="@order.Id">
                                                 <i class="fas fa-pencil-alt"></i>
                                                 Edit
                                             </a>
-                                            <a class="btn btn-danger btn-sm" onclick="deleteCategory('@category.Id')">
-                                                <i class="fas fa-trash"></i>
-                                                Delete
-                                            </a>
-                                        </td>*@
+                                        </td>
                                     </tr>
                                 }
                             </tbody>
@@ -68,9 +69,11 @@
                                 <tr>
                                     <th>User</th>
                                     <th>Email</th>
-                                    <th>Total Cost</th>
+                                    <th>Total Price</th>
+                                    <th>Order Date</th>
                                     <th>Payment Method</th>
                                     <th>Order Status</th>
+                                    <th>Actions</th>
                                 </tr>
                             </tfoot>
                         </table>
