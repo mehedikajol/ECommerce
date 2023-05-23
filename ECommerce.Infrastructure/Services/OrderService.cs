@@ -66,13 +66,15 @@ internal class OrderService : IOrderService
 
         var order = new Order
         {
+            Id = orderEntitiy.Id,
             ReviewedBy = orderEntitiy.ReviewedBy,
             UserId = orderEntitiy.UserId,
             TotalCost = orderEntitiy.TotalCost,
             ShippingAddress = orderEntitiy.ShippingAddress,
             PaymentMethod = (int)orderEntitiy.PaymentMethod,
             OrderStatus = (int)orderEntitiy.OrderStatus,
-            OrderDetails = orderDetails
+            OrderDetails = orderDetails,
+            OrderDate = orderEntitiy.InsertedDate
         };
 
         return order;

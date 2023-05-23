@@ -14,6 +14,16 @@ internal class OrderRepository : GenericRepository<Order, Guid>, IOrderRepositor
 
     public override async Task<IEnumerable<Order>> GetAllEntities()
     {
-        return await _dbSet.Include(o => o.OrderDetails).ToListAsync();
+        return await _dbSet
+            .Include(o => o.OrderDetails)
+            .ToListAsync();
+    }
+
+    public override async Task<Order> GetEntityById(Guid id)
+    {
+        return await _dbSet
+            .Include(o => o.OrderDetails)
+            .Where(o => o.Id == id)
+            .FirstOrDefaultAsync();
     }
 }
