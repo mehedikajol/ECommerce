@@ -2,6 +2,7 @@
 using ECommerce.Core.Entities;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Infrastructure.GenericRepositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ECommerce.Infrastructure.Repositories;
 
@@ -9,5 +10,10 @@ internal class OrderRepository : GenericRepository<Order, Guid>, IOrderRepositor
 {
     public OrderRepository(AppDbContext context) : base(context)
     {
+    }
+
+    public override async Task<IEnumerable<Order>> GetAllEntities()
+    {
+        return await _dbSet.Include(o => o.OrderDetails).ToListAsync();
     }
 }
