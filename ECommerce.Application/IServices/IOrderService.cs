@@ -9,4 +9,7 @@ public interface IOrderService
     Task CreateOrder(Order order);
     Task UpdateOrder(Order order);
     Task DeleteOrder(Guid id);
+
+    Task<int> GetCompletedOrdersCount();
+    Task<int> GetProcessingOrdersCount();
 }

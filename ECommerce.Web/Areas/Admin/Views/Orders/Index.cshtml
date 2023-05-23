@@ -1,0 +1,90 @@
+﻿@model OrderListModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Orders</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a></li>
+                    <li class="breadcrumb-item active">Orders</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">All Orders</h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="ordersTable" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Total Price</th>
+                                    <th>Order Date</th>
+                                    <th>Payment Method</th>
+                                    <th>Order Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var order in Model.Orders)
+                                {
+                                    <tr>
+                                        <td>@order.UserName</td>
+                                        <td>@order.UserEmail</td>
+                                        <td>$@order.TotalCost</td>
+                                        <td>@order.OrderDate.ToLocalTime().ToString("dd/MMM/yyyy hh:mm tt")</td>
+                                        <td>@order.PaymentMethod</td>
+                                        <td>@order.OrderStatus</td>
+                                        <td>
+                                            <a class="btn btn-primary btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="View" asp-route-id="@order.Id">
+                                                <i class="far fa-eye"></i>
+                                                View
+                                            </a>
+                                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="Edit" asp-route-id="@order.Id">
+                                                <i class="fas fa-pencil-alt"></i>
+                                                Edit
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th>User</th>
+                                    <th>Email</th>
+                                    <th>Total Price</th>
+                                    <th>Order Date</th>
+                                    <th>Payment Method</th>
+                                    <th>Order Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>

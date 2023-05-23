@@ -34,13 +34,15 @@ internal class OrderService : IOrderService
 
             orders.Add(new Order
             {
+                Id = order.Id,
                 ReviewedBy = order.ReviewedBy,
                 UserId = order.UserId,
                 TotalCost = order.TotalCost,
                 ShippingAddress = order.ShippingAddress,
                 PaymentMethod = (int)order.PaymentMethod,
                 OrderStatus = (int)order.OrderStatus,
-                OrderDetails = orderDetails
+                OrderDetails = orderDetails,
+                OrderDate = order.InsertedDate
             });
         }
 
@@ -64,13 +66,15 @@ internal class OrderService : IOrderService
 
         var order = new Order
         {
+            Id = orderEntitiy.Id,
             ReviewedBy = orderEntitiy.ReviewedBy,
             UserId = orderEntitiy.UserId,
             TotalCost = orderEntitiy.TotalCost,
             ShippingAddress = orderEntitiy.ShippingAddress,
             PaymentMethod = (int)orderEntitiy.PaymentMethod,
             OrderStatus = (int)orderEntitiy.OrderStatus,
-            OrderDetails = orderDetails
+            OrderDetails = orderDetails,
+            OrderDate = orderEntitiy.InsertedDate
         };
 
         return order;
@@ -109,5 +113,17 @@ internal class OrderService : IOrderService
     public Task DeleteOrder(Guid id)
     {
         throw new NotImplementedException();
+    }
+
+    public async Task<int> GetCompletedOrdersCount()
+    {
+        return await _unitOfWork.Orders
+            .GetCount(o => o.OrderStatus == OrderStatus.Completed);
+    }
+
+    public async Task<int> GetProcessingOrdersCount()
+    {
+        return await _unitOfWork.Orders
+            .GetCount(o => o.OrderStatus == OrderStatus.Shipping || o.OrderStatus == OrderStatus.Processing);
     }
 }

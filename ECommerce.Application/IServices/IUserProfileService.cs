@@ -10,4 +10,6 @@ public interface IUserProfileService
     Task CreateUserProfile(UserProfile profile);
     Task UpdateUserProfile(UserProfile profile);
     Task DeleteUserProfile(Guid id);
+
+    Task<int> GetUsersCount();
 }

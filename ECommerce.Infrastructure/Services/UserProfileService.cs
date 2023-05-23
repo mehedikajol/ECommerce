@@ -115,4 +115,9 @@ internal class UserProfileService : IUserProfileService
         await _unitOfWork.UserProfiles.DeleteEntityById(id);
         await _unitOfWork.CompleteAsync();
     }
+
+    public async Task<int> GetUsersCount()
+    {
+        return await _unitOfWork.UserProfiles.GetCount();
+    }
 }
