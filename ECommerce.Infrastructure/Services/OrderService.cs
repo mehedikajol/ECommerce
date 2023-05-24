@@ -105,9 +105,14 @@ internal class OrderService : IOrderService
         await _unitOfWork.CompleteAsync();
     }
 
-    public Task UpdateOrder(Order order)
+    public async Task UpdateOrder(Order order)
     {
-        throw new NotImplementedException();
+        var orderEntity = await _unitOfWork.Orders.GetEntityById(order.Id);
+        orderEntity.OrderStatus = (OrderStatus)order.OrderStatus;
+        orderEntity.ReviewedBy = order.ReviewedBy ?? orderEntity.ReviewedBy;
+
+        await _unitOfWork.Orders.UpdateEntity(orderEntity);
+        await _unitOfWork.CompleteAsync();
     }
 
     public Task DeleteOrder(Guid id)

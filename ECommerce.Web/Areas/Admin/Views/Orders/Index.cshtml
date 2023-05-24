@@ -12,7 +12,8 @@
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     <li class="breadcrumb-item">
-                        <a href="/">Home</a></li>
+                        <a href="/">Home</a>
+                    </li>
                     <li class="breadcrumb-item active">Orders</li>
                 </ol>
             </div>
@@ -57,34 +58,36 @@
                                                 <i class="far fa-eye"></i>
                                                 View
                                             </a>
-                                            <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="Edit" asp-route-id="@order.Id">
-                                                <i class="fas fa-pencil-alt"></i>
-                                                Edit
-                                            </a>
-                                        </td>
+                                            @if (order.CurrentOrderStatus < 3){
+                                                <a class="btn btn-info btn-sm" asp-area="Admin" asp-controller="Orders" asp-action="Edit" asp-route-id="@order.Id">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                    Edit
+                                                </a>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Total Price</th>
+                                        <th>Order Date</th>
+                                        <th>Payment Method</th>
+                                        <th>Order Status</th>
+                                        <th>Actions</th>
                                     </tr>
-                                }
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th>User</th>
-                                    <th>Email</th>
-                                    <th>Total Price</th>
-                                    <th>Order Date</th>
-                                    <th>Payment Method</th>
-                                    <th>Order Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </tfoot>
-                        </table>
+                                </tfoot>
+                            </table>
+                        </div>
+                        <!-- /.card-body -->
                     </div>
-                    <!-- /.card-body -->
+                    <!-- /.card -->
                 </div>
-                <!-- /.card -->
+                <!-- /.col -->
             </div>
-            <!-- /.col -->
+            <!-- /.row -->
         </div>
-        <!-- /.row -->
-    </div>
-    <!-- /.container-fluid -->
-</section>
+        <!-- /.container-fluid -->
+    </section>

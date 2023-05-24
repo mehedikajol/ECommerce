@@ -9,6 +9,9 @@ public class OrderViewModel
     public decimal TotalCost { get; set; }
     public string PaymentMethod { get; set; }
     public string OrderStatus { get; set; }
+    public int CurrentOrderStatus { get; set; }
+    public int UpdatedStatus { get; set; }
+    public string ReviewedBy { get; set; }
     public DateTime OrderDate { get; set; }
     public string ShippingAddress { get; set; }
 
