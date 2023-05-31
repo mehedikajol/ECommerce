@@ -36,6 +36,27 @@ internal class ProductService : IProductService
         return products;
     }
 
+    public async Task<IEnumerable<Product>> GetFilteredProducts(string searchTerm = null)
+    {
+        var productEntities = await _unitOfWork.Products.GetFilteredProductsAsync(searchTerm);
+        var products = new List<Product>();
+        foreach (var product in productEntities)
+        {
+            products.Add(new Product
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Description = product.Description,
+                SKU = product.SKU,
+                Price = product.Price,
+                ImageUrl = product.ImageUrl,
+                SubCategoryId = product.SubCategoryId,
+                SubCategoryName = product.SubCategory.Name
+            });
+        }
+        return products;
+    }
+
     public async Task<Product> GetProductById(Guid id)
     {
         var productEntity = await _unitOfWork.Products.GetEntityById(id);
@@ -114,4 +135,6 @@ internal class ProductService : IProductService
 
     private async Task<bool> IsNameAlreadyUsed(string name, Guid productId) =>
         await _unitOfWork.Products.GetCount(p => p.Name == name.Trim() && p.Id != productId) > 0;
+
+
 }

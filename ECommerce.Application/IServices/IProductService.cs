@@ -5,6 +5,7 @@ namespace ECommerce.Application.IServices;
 public interface IProductService
 {
     Task<IEnumerable<Product>> GetAllProducts();
+    Task<IEnumerable<Product>> GetFilteredProducts(string searchTerm = null);
     Task<Product> GetProductById(Guid id);
     Task CreateProduct(Product product);
     Task UpdateProduct(Product product);

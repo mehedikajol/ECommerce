@@ -82,7 +82,9 @@ function getProductJsonData(callback) {
 // Update cart count
 function updateCartProductCount() {
     var cookieValue = $.cookie('CartProducts');
-    var products = cookieValue.split("---");
-    products = products.filter((element) => element !== "");
-    $('#cartProductCount').html(products.length);
+    if (cookieValue) {
+        var products = cookieValue?.split("---");
+        products = products.filter((element) => element !== "");
+        $('#cartProductCount').html(products.length);
+    }
 }

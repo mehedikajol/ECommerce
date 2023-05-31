@@ -27,6 +27,12 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="widget">
+                    <h4 class="widget-title">Search Product</h4>
+                    <form method="post" action="#">
+                        <input class="form-control" placeholder="Search..." id="shop-search" />
+                    </form>
+                </div>
+                <div class="widget">
                     <h4 class="widget-title">Short By</h4>
                     <form method="post" action="#">
                         <select class="form-control">
@@ -116,25 +122,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
             <div class="col-md-9">
-                <div class="row">
-                    @foreach (var product in Model.Products)
-                    {
-                        <div class="col-md-4">
-                            @{
-                                await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
-                            }
-                        </div>
-                    }
-
+                <div class="row" id="shop-products">
                     <partial name="Partials/Products/_ProductPopupModal" />
-
                 </div>
             </div>
-
         </div>
     </div>
 </section>
@@ -145,4 +139,67 @@
 @section Scripts{
     <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script src="~/avito/js/productpopupmodalpopulate.js"></script>
+    <script>
+        $(document).ready(function () {
+            getProducts();
+        });
+
+        $("#shop-search").keyup(function () {
+            getProducts();
+        });
+
+        function getProducts() {
+
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "Shop/GetProductsJson",
+                traditional: true,
+                data: {
+                    searchString: $("#shop-search").val()
+                },
+                success: function (result) {
+                    var html = "";
+                    $.each(result, function (index, value) {
+                        html += '<div class="col-md-4 remove-class">' +
+                            '<div class="product-item">' +
+                            '<div class="product-thumb">' +
+                            '<span class="bage">New</span>' +
+                            '<img class="img-responsive object-cover" src="' + value.imageUrl + '" style="height: 315px;" alt="product-img" />' +
+                            '<div class="preview-meta">' +
+                            '<ul>' +
+                            '<li>' +
+                            '<span data-toggle="modal" data-target="#product-popup-modal" onclick="populateProductPopupModal(' + `'${value.id}'` + ')">' +
+                            '<i class="tf-ion-ios-search-strong"></i>' +
+                            '</span>' +
+                            '</li>' +
+                            '<li>' +
+                            '<a href="#!">' +
+                            '<i class="tf-ion-ios-heart"></i>' +
+                            '</a>' +
+                            '</li>' +
+                            '<li>' +
+                            '<a href="#!" onclick = "addThisProductToCart(' + `'${value.id}'` + ')" >' +
+                            '<i class="tf-ion-android-cart"></i>' +
+                            '</a>' +
+                            '</li>' +
+                            '</ul>' +
+                            '</div>' +
+                            '</div>' +
+                            '<div class="product-content">' +
+                            '<h4>' +
+                            '<a href="/Shop/ViewProduct/' + value.id + '">' + value.name + '</a>' +
+                            '</h4>' +
+                            '<p class="price">$' + value.price + '</p>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>'
+                    });
+                    $(".remove-class").remove();
+                    $("#shop-products").append($.parseHTML(html));
+                }
+            });
+        }
+
+    </script>
 }

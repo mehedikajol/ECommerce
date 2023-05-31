@@ -24,7 +24,7 @@ namespace ECommerce.Web.Controllers
         {
             var model = new ProductListModel();
             model.Products = await _productService.GetAllProducts();
-            foreach(var product in model.Products)
+            foreach (var product in model.Products)
             {
                 product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
             }
@@ -46,6 +46,16 @@ namespace ECommerce.Web.Controllers
             };
 
             return View(model);
+        }
+
+        public async Task<IActionResult> GetProductsJson(string searchString = null)
+        {
+            var products = await _productService.GetFilteredProducts(searchString);
+            foreach (var product in products)
+            {
+                product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
+            }
+            return new JsonResult(products);
         }
 
         public async Task<IActionResult> GetProductJson(Guid id)

@@ -21,4 +21,19 @@ internal class ProductRepository : GenericRepository<Product, Guid>, IProductRep
     {
         return await _dbSet.Include(p => p.SubCategory).FirstOrDefaultAsync(p => p.Id == id);
     }
+
+    public async Task<IEnumerable<Product>> GetFilteredProductsAsync(string searchTerm = null)
+    {
+        if (searchTerm != null)
+        {
+            return await _dbSet
+                .Where(p => p.Name.ToLower().Contains(searchTerm.ToLower()))
+                .Include(p => p.SubCategory)
+                .ToListAsync();
+        }
+        else
+        {
+            return await GetAllEntities();
+        }
+    }
 }
