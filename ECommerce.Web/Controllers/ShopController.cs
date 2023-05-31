@@ -1,8 +1,11 @@
 ﻿using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
+using ECommerce.Core.Enums;
+using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
 using ECommerce.Web.Models.Shop;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 
 namespace ECommerce.Web.Controllers
@@ -22,13 +25,10 @@ namespace ECommerce.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = new ProductListModel();
-            model.Products = await _productService.GetAllProducts();
-            foreach (var product in model.Products)
-            {
-                product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
-            }
-            return View(model);
+            var sortValues = from ProductSortValue s in Enum.GetValues(typeof(ProductSortValue))
+                                 select new { Id = s.GetHashCode(), Name = s.GetDisplayName() };
+            ViewData["ProductSortValues"] = new SelectList(sortValues, "Id", dataTextField: "Name");
+            return View();
         }
 
         public async Task<IActionResult> ViewProduct(Guid id)

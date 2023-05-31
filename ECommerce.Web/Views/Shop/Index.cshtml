@@ -33,7 +33,15 @@
                     </form>
                 </div>
                 <div class="widget">
-                    <h4 class="widget-title">Short By</h4>
+                    <h4 class="widget-title">Sort By</h4>
+                    <form method="post" action="#">
+                        <select class="form-control" asp-items="ViewBag.ProductSortValues" id="shop-product-sort">
+                            <option value="">None</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="widget">
+                    <h4 class="widget-title">Filter By</h4>
                     <form method="post" action="#">
                         <select class="form-control">
                             <option>Man</option>
@@ -126,8 +134,8 @@
             </div>
             <div class="col-md-9">
                 <div class="row" id="shop-products">
-                    <partial name="Partials/Products/_ProductPopupModal" />
                 </div>
+                <partial name="Partials/Products/_ProductPopupModal" />
             </div>
         </div>
     </div>
@@ -135,6 +143,11 @@
 
 @section Styles{
     <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+    <style>
+        .widget{
+            margin-bottom: 10px;
+        }
+    </style>
 }
 @section Scripts{
     <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
@@ -146,6 +159,10 @@
 
         $("#shop-search").keyup(function () {
             getProducts();
+        });
+
+        $("#shop-product-sort").change(function(){
+            console.log($(this).val());
         });
 
         function getProducts() {
@@ -195,7 +212,7 @@
                             '</div>' +
                             '</div>'
                     });
-                    $(".remove-class").remove();
+                    $("#shop-products").empty();
                     $("#shop-products").append($.parseHTML(html));
                 }
             });
