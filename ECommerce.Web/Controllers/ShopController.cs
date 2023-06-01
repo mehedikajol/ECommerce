@@ -3,6 +3,7 @@ using ECommerce.Core.Common;
 using ECommerce.Core.Enums;
 using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
+using ECommerce.Web.Helpers.RequestModels;
 using ECommerce.Web.Models.Shop;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -48,9 +49,9 @@ namespace ECommerce.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> GetProductsJson(string searchString = null)
+        public async Task<IActionResult> GetProductsJson(ProductFilterRequestModel model)
         {
-            var products = await _productService.GetFilteredProducts(searchString);
+            var products = await _productService.GetFilteredProducts(model.SearchString, model.SortValue);
             foreach (var product in products)
             {
                 product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);

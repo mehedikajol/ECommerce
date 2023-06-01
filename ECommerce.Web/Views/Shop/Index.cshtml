@@ -36,7 +36,7 @@
                     <h4 class="widget-title">Sort By</h4>
                     <form method="post" action="#">
                         <select class="form-control" asp-items="ViewBag.ProductSortValues" id="shop-product-sort">
-                            <option value="">None</option>
+                            <option value="0">None</option>
                         </select>
                     </form>
                 </div>
@@ -154,6 +154,9 @@
     <script src="~/avito/js/productpopupmodalpopulate.js"></script>
     <script>
         $(document).ready(function () {
+
+            console.log($("#shop-search").val(), $("#shop-product-sort").val());
+
             getProducts();
         });
 
@@ -162,7 +165,7 @@
         });
 
         $("#shop-product-sort").change(function(){
-            console.log($(this).val());
+            getProducts();
         });
 
         function getProducts() {
@@ -173,7 +176,8 @@
                 url: "Shop/GetProductsJson",
                 traditional: true,
                 data: {
-                    searchString: $("#shop-search").val()
+                    searchString: $("#shop-search").val(),
+                    sortValue: $("#shop-product-sort").val()
                 },
                 success: function (result) {
                     var html = "";
