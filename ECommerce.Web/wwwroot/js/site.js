@@ -127,41 +127,35 @@ function generateProductThumbnail(value) {
 }
 
 // generate pagination
-function generatePagination() {
-    return '<div class="col-xs-12 text-center">' +
+function generatePagination(pages, current) {
+    let result = "";
+    result += '<div class="col-xs-12 text-center">' +
         '<nav aria-label="Page navigation">' +
         '<ul class="pagination">' +
-        '<li>' +
+        '<li onclick="updateCurrentPageNumber(1)">' +
         '<a href="#!" aria-label="First">' +
         '<span aria-hidden="true">&#8920;</span>' +
         '</a>' +
         '</li>' +
-        '<li>' +
+        '<li onclick="updateCurrentPageNumber(' + (current - 1) + ')">' +
         '<a href="#!" aria-label="Previous">' +
         '<span aria-hidden="true">&#8810;</span>' +
         '</a>' +
-        '</li>' +
-        '<li class="active">' +
-        '<a href="#!">1</a>' +
-        '</li>' +
-        '<li>' +
-        '<a href="#!">2</a>' +
-        '</li>' +
-        '<li>' +
-        '<a href="#!">3</a>' +
-        '</li>' +
-        '<li>' +
-        '<a href="#!">4</a>' +
-        '</li>' +
-        '<li>' +
-        '<a href="#!">5</a>' +
-        '</li>' +
-        '<li>' +
+        '</li>';
+
+    for (let i = 1; i <= pages; i++) {
+        result += '<li class="' + `${current == i ? "active" : ""}` + '" onclick="updateCurrentPageNumber(' + i + ')">' +
+            '<a href="#!">' + i + '</a>' +
+            '</li>' +
+            '<li>';
+    }
+
+    result += '<li onclick="updateCurrentPageNumber(' + (current + 1) + ')">' +
         '<a href="#!" aria-label="Next">' +
         '<span aria-hidden="true">&#8811;</span>' +
         '</a>' +
         '</li>' +
-        '<li>' +
+        '<li onclick="updateCurrentPageNumber(' + pages + ')">' +
         '<a href="#!" aria-label="Last">' +
         '<span aria-hidden="true">&#8921;</span>' +
         '</a>' +
@@ -169,4 +163,11 @@ function generatePagination() {
         '</ul>' +
         '</nav>' +
         '</div>';
+    return result;
+}
+
+// current page number
+function updateCurrentPageNumber(number) {
+    $("#current-page-number").val(number);
+    paginationValueChange();
 }

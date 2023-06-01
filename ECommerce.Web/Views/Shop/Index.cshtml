@@ -147,6 +147,9 @@
             <div class="col-md-9" id="shop-main-container">
                 <div class="row" id="shop-products">
                 </div>
+
+                <input type="hidden" value="" id="current-page-number" />
+
                 <partial name="Partials/Products/_ProductPopupModal" />
                 @*<div class="text-center">
                 <nav aria-label="Page navigation">
@@ -208,47 +211,58 @@
     <script>
         $(document).ready(function () {
 
-            console.log($("#shop-search").val());
-            console.log($("#shop-product-sort").val());
-            console.log($("#shop-product-page-size").val());
-
+            //console.log($("#shop-search").val());
+            //console.log($("#shop-product-sort").val());
+            //console.log($("#shop-product-page-size").val());
+            $("#current-page-number").val(1);
             getProducts();
         });
 
         $("#shop-search").keyup(function () {
+            $("#current-page-number").val(1);
             getProducts();
         });
 
         $("#shop-product-sort").change(function () {
+            $("#current-page-number").val(1);
             getProducts();
         });
 
-        $("#shop-product-page-size").change(function(){
+        $("#shop-product-page-size").change(function () {
+            $("#current-page-number").val(1);
             getProducts();
         });
 
         function getProducts() {
-            $.ajax({
-                type: "GET",
-                dataType: 'json',
-                url: "Shop/GetProductsJson",
-                traditional: true,
-                data: {
-                    searchString: $("#shop-search").val(),
-                    sortValue: $("#shop-product-sort").val(),
-                    pageSize: $("#shop-product-page-size").val()
-                },
-                success: function (result) {
-                    var html = "";
-                    var pagination = generatePagination();
-                    $.each(result, function (index, value) {
-                        html += generateProductThumbnail(value);
-                    });
-                    $("#shop-products").empty();
-                    $("#shop-products").append($.parseHTML(html));
-                    $("#shop-products").append($.parseHTML(pagination));
-                }
-            });
+            var currentPage =
+                $.ajax({
+                    type: "GET",
+                    dataType: 'json',
+                    url: "Shop/GetProductsJson",
+                    traditional: true,
+                    data: {
+                        searchString: $("#shop-search").val(),
+                        sortValue: $("#shop-product-sort").val(),
+                        pageSize: $("#shop-product-page-size").val(),
+                        currentPage: $("#current-page-number").val()
+                    },
+                    success: function (result) {
+                        var html = "";
+                        var pagination = generatePagination(5, $("#current-page-number").val());
+                        $.each(result, function (index, value) {
+                            html += generateProductThumbnail(value);
+                        });
+                        $("#shop-products").empty();
+                        $("#shop-products").append($.parseHTML(html));
+                        $("#shop-products").append($.parseHTML(pagination));
+                    }
+                });
         }
+
+        // handle pagination value change event
+        function paginationValueChange() {
+            getProducts();
+        }
+
     </script>
 }
