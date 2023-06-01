@@ -51,7 +51,7 @@ namespace ECommerce.Web.Controllers
 
         public async Task<IActionResult> GetProductsJson(ProductFilterRequestModel model)
         {
-            var products = await _productService.GetFilteredProducts(model.SearchString, model.SortValue);
+            var products = await _productService.GetFilteredProducts(model.SearchString, model.SortValue, model.PageSize);
             foreach (var product in products)
             {
                 product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);

@@ -24,7 +24,7 @@ internal class ProductRepository : GenericRepository<Product, Guid>, IProductRep
         return await _dbSet.Include(p => p.SubCategory).FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<IEnumerable<Product>> GetFilteredProductsAsync(string searchTerm = null, int sortValue = 0)
+    public async Task<IEnumerable<Product>> GetFilteredProductsAsync(string searchTerm = null, int sortValue = 0, int pageSize = 12)
     {
         var query = _dbSet.AsQueryable();
 
@@ -44,6 +44,6 @@ internal class ProductRepository : GenericRepository<Product, Guid>, IProductRep
             query = query.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
         
 
-        return await query.Include(p => p.SubCategory).ToListAsync();
+        return await query.Include(p => p.SubCategory).Take(pageSize).ToListAsync();
     }
 }

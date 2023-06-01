@@ -36,9 +36,9 @@ internal class ProductService : IProductService
         return products;
     }
 
-    public async Task<IEnumerable<Product>> GetFilteredProducts(string searchTerm = null, int sortValue = 0)
+    public async Task<IEnumerable<Product>> GetFilteredProducts(string searchTerm = null, int sortValue = 0, int pageSize = 12)
     {
-        var productEntities = await _unitOfWork.Products.GetFilteredProductsAsync(searchTerm, sortValue);
+        var productEntities = await _unitOfWork.Products.GetFilteredProductsAsync(searchTerm, sortValue, pageSize);
         var products = new List<Product>();
         foreach (var product in productEntities)
         {

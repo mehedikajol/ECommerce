@@ -88,3 +88,85 @@ function updateCartProductCount() {
         $('#cartProductCount').html(products.length);
     }
 }
+
+// Generate product thumbnails
+function generateProductThumbnail(value) {
+    return '<div class="col-md-4 remove-class">' +
+        '<div class="product-item">' +
+        '<div class="product-thumb">' +
+        '<span class="bage">New</span>' +
+        '<img class="img-responsive object-cover" src="' + value.imageUrl + '" style="height: 315px;" alt="product-img" />' +
+        '<div class="preview-meta">' +
+        '<ul>' +
+        '<li>' +
+        '<span data-toggle="modal" data-target="#product-popup-modal" onclick="populateProductPopupModal(' + `'${value.id}'` + ')">' +
+        '<i class="tf-ion-ios-search-strong"></i>' +
+        '</span>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!">' +
+        '<i class="tf-ion-ios-heart"></i>' +
+        '</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!" onclick = "addThisProductToCart(' + `'${value.id}'` + ')" >' +
+        '<i class="tf-ion-android-cart"></i>' +
+        '</a>' +
+        '</li>' +
+        '</ul>' +
+        '</div>' +
+        '</div>' +
+        '<div class="product-content">' +
+        '<h4>' +
+        '<a href="/Shop/ViewProduct/' + value.id + '">' + value.name + '</a>' +
+        '</h4>' +
+        '<p class="price">$' + value.price + '</p>' +
+        '</div>' +
+        '</div>' +
+        '</div>';
+}
+
+// generate pagination
+function generatePagination() {
+    return '<div class="col-xs-12 text-center">' +
+        '<nav aria-label="Page navigation">' +
+        '<ul class="pagination">' +
+        '<li>' +
+        '<a href="#!" aria-label="First">' +
+        '<span aria-hidden="true">&#8920;</span>' +
+        '</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!" aria-label="Previous">' +
+        '<span aria-hidden="true">&#8810;</span>' +
+        '</a>' +
+        '</li>' +
+        '<li class="active">' +
+        '<a href="#!">1</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!">2</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!">3</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!">4</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!">5</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!" aria-label="Next">' +
+        '<span aria-hidden="true">&#8811;</span>' +
+        '</a>' +
+        '</li>' +
+        '<li>' +
+        '<a href="#!" aria-label="Last">' +
+        '<span aria-hidden="true">&#8921;</span>' +
+        '</a>' +
+        '</li>' +
+        '</ul>' +
+        '</nav>' +
+        '</div>';
+}
