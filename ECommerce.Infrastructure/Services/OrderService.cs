@@ -164,4 +164,24 @@ internal class OrderService : IOrderService
 
         return orders;
     }
+
+    public async Task<int> GetTotalOrderCountByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders.GetTotalOrderCountByUserIdAsync(userId);
+    }
+
+    public async Task<decimal> GetTotalSpendByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders.GetTotalSpendByUserIdAsync(userId);
+    }
+
+    public async Task<int> getTotalProductBoughtByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders.getTotalProductBoughtByUserIdAsync(userId);
+    }
+
+    public async Task<int> GetTotalPendingOrdersCountByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders.GetTotalPendingOrdersCountByUserIdAsync(userId);
+    }
 }

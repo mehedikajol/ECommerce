@@ -39,9 +39,17 @@ public class ProfileController : Controller
         _settings = options.Value;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var model = new ProfileIndexModel();
+
+        model.TotalOrders = await _orderService.GetTotalOrderCountByUserIdAsync(currentUserId);
+        model.PendingOrders = await _orderService.GetTotalPendingOrdersCountByUserIdAsync(currentUserId);
+        model.TotalSpend = await _orderService.GetTotalSpendByUserIdAsync(currentUserId);
+        model.TotalProducts = await _orderService.getTotalProductBoughtByUserIdAsync(currentUserId);
+
+        return View(model);
     }
 
     public async Task<IActionResult> Orders()
@@ -55,7 +63,6 @@ public class ProfileController : Controller
         {
             var orderModel = order.Adapt<ProfileOrderModel>();
             orderModel.OrderStatusInWord = ((OrderStatus)orderModel.OrderStatus).ToString();
-            // OrderStatusInWord
 
             model.Orders.Add(orderModel);
         }
@@ -65,35 +72,29 @@ public class ProfileController : Controller
 
     public async Task<IActionResult> Details()
     {
-        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var profile = await _profileService.GetUserProfileByIdentityId(new Guid(userId));
-        var model = new ProfileDetailsModel
-        {
-            FirstName = profile.FirstName,
-            LastName = profile.LastName,
-            Email = profile.Email,
-            Phone = profile.Phone,
-            Gender = Enum.GetName(typeof(Gender), profile.Gender),
-            Address = profile.Address,
-            ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl)
-        };
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
+        var model = profile.Adapt<ProfileDetailsModel>();
+        model.Gender = Enum.GetName(typeof(Gender), profile.Gender);
+        model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);        
+
         return View(model);
     }
 
     public async Task<IActionResult> Edit()
     {
-        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var entity = await _profileService.GetUserProfileByIdentityId(new Guid(userId));
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
         var model = new ProfileEditModel
         {
-            Id = entity.Id,
-            FirstName = entity.FirstName,
-            LastName = entity.LastName,
-            Email = entity.Email,
-            Phone = entity.Phone,
-            ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, entity.ProfilePictureUrl),
-            Address = entity.Address,
-            Gender = entity.Gender
+            Id = profile.Id,
+            FirstName = profile.FirstName,
+            LastName = profile.LastName,
+            Email = profile.Email,
+            Phone = profile.Phone,
+            ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl),
+            Address = profile.Address,
+            Gender = profile.Gender
         };
 
         var genders = from Gender s in Enum.GetValues(typeof(Gender))
