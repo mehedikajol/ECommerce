@@ -4,7 +4,6 @@ using ECommerce.Core.Enums;
 using ECommerce.Infrastructure.Context;
 using ECommerce.Infrastructure.GenericRepositories;
 using Microsoft.EntityFrameworkCore;
-using System.Resources;
 
 namespace ECommerce.Infrastructure.Repositories;
 
@@ -45,14 +44,13 @@ internal class ProductRepository : GenericRepository<Product, Guid>, IProductRep
 
         var totalCount = await query.CountAsync();
 
-        // Skip and take items based on currentPage and pageSize
-        query = query.Skip((currentPage - 1) * pageSize).Take(pageSize);
-
-        var currentCount = await query.CountAsync();
-
         var prodcuts =  await query
             .Include(p => p.SubCategory)
+            .Skip((currentPage - 1) * pageSize)
+            .Take(pageSize)
             .ToListAsync();
+
+        var currentCount = prodcuts.Count();
 
         return (prodcuts, totalCount, currentCount);
     }

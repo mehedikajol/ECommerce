@@ -2,6 +2,7 @@
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Core.Exceptions;
+using Mapster;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -21,17 +22,10 @@ internal class ProductService : IProductService
         var products = new List<Product>();
         foreach (var product in productEntities)
         {
-            products.Add(new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                SKU = product.SKU,
-                Price = product.Price,
-                ImageUrl = product.ImageUrl,
-                SubCategoryId = product.SubCategoryId,
-                SubCategoryName = product.SubCategory.Name
-            });
+            var item = product.Adapt<Product>();
+            item.SubCategoryName = product.SubCategory.Name;
+
+            products.Add(item);
         }
         return products;
     }
@@ -42,17 +36,10 @@ internal class ProductService : IProductService
         var products = new List<Product>();
         foreach (var product in result.products)
         {
-            products.Add(new Product
-            {
-                Id = product.Id,
-                Name = product.Name,
-                Description = product.Description,
-                SKU = product.SKU,
-                Price = product.Price,
-                ImageUrl = product.ImageUrl,
-                SubCategoryId = product.SubCategoryId,
-                SubCategoryName = product.SubCategory.Name
-            });
+            var item = product.Adapt<Product>();
+            item.SubCategoryName = product.SubCategory.Name;
+
+            products.Add(item);
         }
 
         return (products, result.totalCount, result.currentCount);
@@ -64,17 +51,9 @@ internal class ProductService : IProductService
         if (productEntity is null)
             throw new NotFoundException("Product not found.");
 
-        var product = new Product
-        {
-            Id = productEntity.Id,
-            Name = productEntity.Name,
-            Description = productEntity.Description,
-            SKU = productEntity.SKU,
-            Price = productEntity.Price,
-            ImageUrl = productEntity.ImageUrl,
-            SubCategoryId = productEntity.SubCategoryId,
-            SubCategoryName = productEntity.SubCategory.Name
-        };
+        var product = productEntity.Adapt<Product>();
+        product.SubCategoryName = productEntity.SubCategory.Name;
+
         return product;
     }
 
@@ -84,15 +63,8 @@ internal class ProductService : IProductService
         if (alreadyUsedName)
             throw new DuplicatePropertyException("Product name is already in use.");
 
-        var productEntity = new EO.Product
-        {
-            Name = product.Name,
-            Description = product.Description,
-            ImageUrl = product.ImageUrl,
-            SKU = product.SKU,
-            Price = product.Price,
-            SubCategoryId = product.SubCategoryId
-        };
+        var productEntity = product.Adapt<EO.Product>();
+
         await _unitOfWork.Products.AddEntity(productEntity);
         await _unitOfWork.CompleteAsync();
     }

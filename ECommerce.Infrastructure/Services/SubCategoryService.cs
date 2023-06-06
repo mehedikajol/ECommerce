@@ -1,7 +1,9 @@
 ﻿using ECommerce.Application.BusinessEntities;
 using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
+using ECommerce.Core.Entities.Base;
 using ECommerce.Core.Exceptions;
+using Mapster;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -22,15 +24,11 @@ internal class SubCategoryService : ISubCategoryService
 
         foreach (var entity in subCategoryEntities)
         {
-            subCategories.Add(new SubCategory
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                Description = entity.Description,
-                CategoryId = entity.CategoryId,
-                CategoryName = entity.Category.Name,
-                MainCategoryName = entity.Category.MainCategory.ToString(),
-            });
+            var subCategory = entity.Adapt<SubCategory>();
+            subCategory.CategoryName = entity.Category.Name;
+            subCategory.MainCategoryName = entity.Category.MainCategory.ToString();
+
+            subCategories.Add(subCategory);
         }
 
         return subCategories;
@@ -42,13 +40,9 @@ internal class SubCategoryService : ISubCategoryService
         if (subCategoryEntity is null) 
                 throw new NotFoundException("SUbCategory not found.");
 
-        var subCategory = new SubCategory
-        {
-            Id = subCategoryEntity.Id,
-            Name = subCategoryEntity.Name,
-            Description = subCategoryEntity.Description,
-            CategoryId = subCategoryEntity.CategoryId
-        };
+        var subCategory = subCategoryEntity.Adapt<SubCategory>();
+        subCategory.CategoryId = subCategoryEntity.CategoryId;
+
         return subCategory;
     }
 
@@ -58,12 +52,7 @@ internal class SubCategoryService : ISubCategoryService
         if (alreadyUsedName)
             throw new DuplicatePropertyException("SubCategory name is already in use.");
 
-        var subCategoryEntity = new EO.SubCategory
-        {
-            Name = subCategory.Name,
-            Description = subCategory.Description,
-            CategoryId = subCategory.CategoryId
-        };
+        var subCategoryEntity = subCategory.Adapt<EO.SubCategory>();
 
         await _unitOfWork.SubCategories.AddEntity(subCategoryEntity);
         await _unitOfWork.CompleteAsync();

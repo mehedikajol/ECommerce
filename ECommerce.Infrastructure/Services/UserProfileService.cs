@@ -3,6 +3,7 @@ using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Core.Enums;
 using ECommerce.Core.Exceptions;
+using Mapster;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -23,16 +24,9 @@ internal class UserProfileService : IUserProfileService
 
         foreach (var entity in entities)
         {
-            profiles.Add(new UserProfile
-            {
-                Id = entity.Id,
-                FirstName = entity.FirstName,
-                LastName = entity.LastName,
-                Gender = (int)entity.Gender,
-                ProfilePictureUrl = entity.ProfilePictureUrl,
-                UserId = entity.UserId,
-                Address = entity.Address,
-            });
+            var profile = entity.Adapt<UserProfile>();
+            profile.Gender = (int)entity.Gender;
+            profiles.Add(profile);
         }
 
         return profiles;
@@ -41,53 +35,26 @@ internal class UserProfileService : IUserProfileService
     public async Task<UserProfile> GetUserProfileById(Guid id)
     {
         var entity = await _unitOfWork.UserProfiles.GetEntityById(id);
-        var userProfile = new UserProfile
-        {
-            Id = entity.Id,
-            FirstName = entity.FirstName,
-            LastName = entity.LastName,
-            Email = entity.Email,
-            Phone = entity.Phone,
-            Gender = (int)entity.Gender,
-            ProfilePictureUrl = entity.ProfilePictureUrl,
-            UserId = entity.UserId,
-            Address = entity.Address,
-        };
-        return userProfile;
+        var profile = entity.Adapt<UserProfile>();
+        profile.Gender = (int)entity.Gender;
+
+        return profile;
     }
 
     public async Task<UserProfile> GetUserProfileByIdentityId(Guid id)
     {
         var entity = await _unitOfWork.UserProfiles.GetProfileByIdentityId(id);
-        var userProfile = new UserProfile
-        {
-            Id = entity.Id,
-            FirstName = entity.FirstName,
-            LastName = entity.LastName,
-            Email = entity.Email,
-            Phone = entity.Phone,
-            Gender = (int)entity.Gender,
-            ProfilePictureUrl = entity.ProfilePictureUrl,
-            UserId = entity.UserId,
-            Address = entity.Address,
-        };
-        return userProfile;
+        var profile = entity.Adapt<UserProfile>();
+        profile.Gender = (int)entity.Gender;
+
+        return profile;
     }
 
     public async Task CreateUserProfile(UserProfile profile)
     {
-        var userProfileEntity = new EO.UserProfile
-        {
-            FirstName = profile.FirstName,
-            LastName = profile.LastName,
-            Gender = (Gender)profile.Gender,
-            Address = profile.Address,
-            Email = profile.Email,
-            Phone = profile.Phone,
-            ProfilePictureUrl = profile.ProfilePictureUrl,
-            UserId = profile.UserId,
-            InsertedBy = profile.InsertedBy
-        };
+        var userProfileEntity = profile.Adapt<EO.UserProfile>();
+        userProfileEntity.Gender = (Gender)profile.Gender;
+
         await _unitOfWork.UserProfiles.AddEntity(userProfileEntity);
         await _unitOfWork.CompleteAsync();
     }
