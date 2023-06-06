@@ -3,6 +3,7 @@ using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Core.Enums;
 using ECommerce.Core.Exceptions;
+using Mapster;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -32,18 +33,12 @@ internal class OrderService : IOrderService
                 });
             }
 
-            orders.Add(new Order
-            {
-                Id = order.Id,
-                ReviewedBy = order.ReviewedBy,
-                UserId = order.UserId,
-                TotalCost = order.TotalCost,
-                ShippingAddress = order.ShippingAddress,
-                PaymentMethod = (int)order.PaymentMethod,
-                OrderStatus = (int)order.OrderStatus,
-                OrderDetails = orderDetails,
-                OrderDate = order.InsertedDate
-            });
+            var item = order.Adapt<Order>();
+            item.PaymentMethod = (int)order.PaymentMethod;
+            item.OrderStatus = (int)order.OrderStatus;
+            item.OrderDate = order.InsertedDate;
+
+            orders.Add(item);
         }
 
         return orders;
@@ -64,18 +59,10 @@ internal class OrderService : IOrderService
             });
         }
 
-        var order = new Order
-        {
-            Id = orderEntitiy.Id,
-            ReviewedBy = orderEntitiy.ReviewedBy,
-            UserId = orderEntitiy.UserId,
-            TotalCost = orderEntitiy.TotalCost,
-            ShippingAddress = orderEntitiy.ShippingAddress,
-            PaymentMethod = (int)orderEntitiy.PaymentMethod,
-            OrderStatus = (int)orderEntitiy.OrderStatus,
-            OrderDetails = orderDetails,
-            OrderDate = orderEntitiy.InsertedDate
-        };
+        var order = orderEntitiy.Adapt<Order>();
+        order.PaymentMethod = (int)orderEntitiy.PaymentMethod;
+        order.OrderStatus = (int)orderEntitiy.OrderStatus;
+        order.OrderDate = orderEntitiy.InsertedDate;
 
         return order;
     }
@@ -91,15 +78,9 @@ internal class OrderService : IOrderService
             });
         }
 
-        var orderEntity = new EO.Order
-        {
-            UserId = order.UserId,
-            OrderStatus = OrderStatus.Processing,
-            ShippingAddress = order.ShippingAddress,
-            PaymentMethod = (PaymentMethod)order.PaymentMethod,
-            TotalCost = order.TotalCost,
-            OrderDetails = orderDetails
-        };
+        var orderEntity = order.Adapt<EO.Order>();
+        orderEntity.OrderStatus = OrderStatus.Processing;
+        orderEntity.PaymentMethod = (PaymentMethod)order.PaymentMethod;
 
         await _unitOfWork.Orders.AddEntity(orderEntity);
         await _unitOfWork.CompleteAsync();
@@ -148,18 +129,12 @@ internal class OrderService : IOrderService
                 });
             }
 
-            orders.Add(new Order
-            {
-                Id = order.Id,
-                ReviewedBy = order.ReviewedBy,
-                UserId = order.UserId,
-                TotalCost = order.TotalCost,
-                ShippingAddress = order.ShippingAddress,
-                PaymentMethod = (int)order.PaymentMethod,
-                OrderStatus = (int)order.OrderStatus,
-                OrderDetails = orderDetails,
-                OrderDate = order.InsertedDate
-            });
+            var item = order.Adapt<Order>();
+            item.PaymentMethod = (int)order.PaymentMethod;
+            item.OrderStatus = (int)order.OrderStatus;
+            item.OrderDate = order.InsertedDate;
+
+            orders.Add(item);
         }
 
         return orders;

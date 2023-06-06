@@ -12,12 +12,15 @@ window.addEventListener("focus", function () {
 
 // Product add to cart
 function addThisProductToCart(id) {
-    if ($.cookie('CartProducts') == undefined) {
+    var cookie = $.cookie('CartProducts');
+
+    if (cookie == undefined) {
         $.cookie('CartProducts', id);
     } else {
-        $.cookie('CartProducts', $.cookie('CartProducts') + "---" + id);
+        if (cookie.includes(id) == false) {
+            $.cookie('CartProducts', $.cookie('CartProducts') + "---" + id);
+        }
     }
-    var myCookie = $.cookie('CartProducts');
     Swal.fire({
         title: '<strong>Succes</strong>',
         icon: 'success',
