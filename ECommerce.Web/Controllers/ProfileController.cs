@@ -3,7 +3,6 @@ using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
 using ECommerce.Core.Enums;
 using ECommerce.Core.Exceptions;
-using ECommerce.Web.Areas.Admin.Models.Products;
 using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
 using ECommerce.Web.Models.Profile;
@@ -12,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
-using System.Security.Claims;
 
 namespace ECommerce.Web.Controllers;
 
@@ -42,7 +40,11 @@ public class ProfileController : Controller
     public async Task<IActionResult> Index()
     {
         var currentUserId = _currentUserService.GetCurrentUserId();
+        var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
         var model = new ProfileIndexModel();
+
+        model.FullName = profile.FirstName + " " + profile.LastName;
+        model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);
 
         model.TotalOrders = await _orderService.GetTotalOrderCountByUserIdAsync(currentUserId);
         model.PendingOrders = await _orderService.GetTotalPendingOrdersCountByUserIdAsync(currentUserId);
@@ -74,8 +76,9 @@ public class ProfileController : Controller
     {
         var currentUserId = _currentUserService.GetCurrentUserId();
         var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
+
         var model = profile.Adapt<ProfileDetailsModel>();
-        model.Gender = Enum.GetName(typeof(Gender), profile.Gender);
+        model.Gender = ((Gender)profile.Gender).ToString();
         model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);        
 
         return View(model);
@@ -85,17 +88,9 @@ public class ProfileController : Controller
     {
         var currentUserId = _currentUserService.GetCurrentUserId();
         var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
-        var model = new ProfileEditModel
-        {
-            Id = profile.Id,
-            FirstName = profile.FirstName,
-            LastName = profile.LastName,
-            Email = profile.Email,
-            Phone = profile.Phone,
-            ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl),
-            Address = profile.Address,
-            Gender = profile.Gender
-        };
+
+        var model = profile.Adapt<ProfileEditModel>();
+        model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);
 
         var genders = from Gender s in Enum.GetValues(typeof(Gender))
                       select new { Id = s.GetHashCode(), Name = s.ToString() };
@@ -124,17 +119,7 @@ public class ProfileController : Controller
                     await _fileHandlerService.DeleteFileAsync(oldEntity.ProfilePictureUrl);
                 }
 
-                var profile = new UserProfile
-                {
-                    Id = model.Id,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Gender = model.Gender,
-                    Address = model.Address,
-                    ProfilePictureUrl = model.ProfilePictureUrl
-                };
+                var profile = model.Adapt<UserProfile>();
 
                 await _profileService.UpdateUserProfile(profile);
                 return RedirectToAction(nameof(Details));
