@@ -37,27 +37,6 @@ internal class OrderRepository : GenericRepository<Order, Guid>, IOrderRepositor
             .ToListAsync();
     }
 
-    public async Task<int> GetTotalOrderCountByUserIdAsync(Guid userId)
-    {
-        return await _dbSet
-            .Where(o => o.UserId == userId)
-            .CountAsync();
-    }
-
-    public async Task<int> GetTotalCompletedOrderCountByUserIdAsync(Guid userId)
-    {
-        return await _dbSet
-            .Where(o => o.UserId == userId && o.OrderStatus == OrderStatus.Completed)
-            .CountAsync();
-    }
-
-    public async Task<int> GetTotalPendingOrdersCountByUserIdAsync(Guid userId)
-    {
-        return await _dbSet
-            .Where(o => o.UserId == userId && (o.OrderStatus == OrderStatus.Processing || o.OrderStatus == OrderStatus.Shipping))
-            .CountAsync();
-    }
-
     public async Task<int> getTotalProductBoughtByUserIdAsync(Guid userId)
     {
         var orders = await _dbSet

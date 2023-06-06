@@ -167,12 +167,14 @@ internal class OrderService : IOrderService
 
     public async Task<int> GetTotalOrderCountByUserIdAsync(Guid userId)
     {
-        return await _unitOfWork.Orders.GetTotalOrderCountByUserIdAsync(userId);
+        return await _unitOfWork.Orders
+            .GetCount(o => o.UserId == userId);
     }
 
     public async Task<int> GetTotalCompletedOrderCountByUserIdAsync(Guid userId)
     {
-        return await _unitOfWork.Orders.GetTotalCompletedOrderCountByUserIdAsync(userId);
+        return await _unitOfWork.Orders
+            .GetCount(o => o.UserId == userId && o.OrderStatus == OrderStatus.Completed);
     }
 
     public async Task<decimal> GetTotalSpendByUserIdAsync(Guid userId)
@@ -187,6 +189,7 @@ internal class OrderService : IOrderService
 
     public async Task<int> GetTotalPendingOrdersCountByUserIdAsync(Guid userId)
     {
-        return await _unitOfWork.Orders.GetTotalPendingOrdersCountByUserIdAsync(userId);
+        return await _unitOfWork.Orders
+            .GetCount(o => o.UserId == userId && (o.OrderStatus == OrderStatus.Processing || o.OrderStatus == OrderStatus.Shipping));
     }
 }
