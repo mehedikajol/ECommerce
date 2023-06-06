@@ -27,7 +27,7 @@ namespace ECommerce.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var sortValues = from ProductSortValue s in Enum.GetValues(typeof(ProductSortValue))
-                                 select new { Id = s.GetHashCode(), Name = s.GetDisplayName() };
+                             select new { Id = s.GetHashCode(), Name = s.GetDisplayName() };
             ViewData["ProductSortValues"] = new SelectList(sortValues, "Id", dataTextField: "Name");
             return View();
         }
@@ -51,12 +51,21 @@ namespace ECommerce.Web.Controllers
 
         public async Task<IActionResult> GetProductsJson(ProductFilterRequestModel model)
         {
-            var products = await _productService.GetFilteredProducts(model.SearchString, model.SortValue, model.PageSize, model.CurrentPage);
-            foreach (var product in products)
+            var result = await _productService.GetFilteredProducts(model.SearchString, model.SortValue, model.PageSize, model.CurrentPage);
+            foreach (var product in result.products)
             {
                 product.ImageUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, product.ImageUrl);
             }
-            return new JsonResult(products);
+
+            var output = new
+            {
+                products = result.products,
+                totalCount = result.totalCount,
+                currentCount = result.currentCount
+            };
+
+
+            return new JsonResult(output);
         }
 
         public async Task<IActionResult> GetProductJson(Guid id)

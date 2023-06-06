@@ -127,35 +127,51 @@ function generateProductThumbnail(value) {
 }
 
 // generate pagination
-function generatePagination(pages, current) {
+function generatePagination(totalItems, currentPage, pageSize) {
+    let startPage = currentPage - 3;
+    let endPage = currentPage + 3;
+    let totalPages = Math.ceil(totalItems / pageSize);
+
+    if (startPage <= 0) {
+        endPage = endPage - startPage + 1;
+        startPage = 1;
+    }
+
+    if (endPage > totalPages) {
+        endPage = totalPages;
+        startPage = 1;
+        if (endPage > 7) {
+            startPage = endPage - 6;
+        }
+    }
+
     let result = "";
     result += '<div class="col-xs-12 text-center">' +
         '<nav aria-label="Page navigation">' +
         '<ul class="pagination">' +
-        '<li onclick="updateCurrentPageNumber(1)">' +
+        '<li onclick="updateCurrentPageNumber(1)" style="' + `${currentPage == 1 ? "pointer-events: none" : ""}` + '">' +
         '<a href="#!" aria-label="First">' +
         '<span aria-hidden="true">&#8920;</span>' +
         '</a>' +
         '</li>' +
-        '<li onclick="updateCurrentPageNumber(' + (current - 1) + ')">' +
+        '<li onclick="updateCurrentPageNumber(' + (currentPage - 1) + ')" style="' + `${currentPage == 1 ? "pointer-events: none" : ""}` + '">' +
         '<a href="#!" aria-label="Previous">' +
         '<span aria-hidden="true">&#8810;</span>' +
         '</a>' +
         '</li>';
 
-    for (let i = 1; i <= pages; i++) {
-        result += '<li class="' + `${current == i ? "active" : ""}` + '" onclick="updateCurrentPageNumber(' + i + ')">' +
+    for (let i = startPage; i <= endPage; i++) {
+        result += '<li class="' + `${currentPage == i ? "active" : ""}` + '" onclick="updateCurrentPageNumber(' + i + ')">' +
             '<a href="#!">' + i + '</a>' +
-            '</li>' +
-            '<li>';
+            '</li>';
     }
 
-    result += '<li onclick="updateCurrentPageNumber(' + (current + 1) + ')">' +
+    result += '<li onclick="updateCurrentPageNumber(' + (currentPage + 1) + ')" style="' + `${currentPage == totalPages ? "pointer-events: none" : ""}` + '">' +
         '<a href="#!" aria-label="Next">' +
         '<span aria-hidden="true">&#8811;</span>' +
         '</a>' +
         '</li>' +
-        '<li onclick="updateCurrentPageNumber(' + pages + ')">' +
+        '<li onclick="updateCurrentPageNumber(' + totalPages + ')" style="' + `${currentPage == totalPages ? "pointer-events: none" : ""}` + '">' +
         '<a href="#!" aria-label="Last">' +
         '<span aria-hidden="true">&#8921;</span>' +
         '</a>' +

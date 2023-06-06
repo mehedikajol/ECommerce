@@ -24,7 +24,7 @@ internal class ProductRepository : GenericRepository<Product, Guid>, IProductRep
         return await _dbSet.Include(p => p.SubCategory).FirstOrDefaultAsync(p => p.Id == id);
     }
 
-    public async Task<IEnumerable<Product>> GetFilteredProductsAsync(string searchTerm = null, int sortValue = 0, int pageSize = 12, int currentPage = 1)
+    public async Task<(IEnumerable<Product> products, int totalCount, int currentCount)> GetFilteredProductsAsync(string searchTerm = null, int sortValue = 0, int pageSize = 12, int currentPage = 1)
     {
         var query = _dbSet.AsQueryable();
 
@@ -43,11 +43,17 @@ internal class ProductRepository : GenericRepository<Product, Guid>, IProductRep
         if (!string.IsNullOrWhiteSpace(searchTerm))
             query = query.Where(x => x.Name.ToLower().Contains(searchTerm.ToLower()));
 
+        var totalCount = await query.CountAsync();
+
         // Skip and take items based on currentPage and pageSize
         query = query.Skip((currentPage - 1) * pageSize).Take(pageSize);
 
-        return await query
+        var currentCount = await query.CountAsync();
+
+        var prodcuts =  await query
             .Include(p => p.SubCategory)
             .ToListAsync();
+
+        return (prodcuts, totalCount, currentCount);
     }
 }

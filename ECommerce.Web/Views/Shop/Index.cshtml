@@ -35,6 +35,7 @@
                 <div class="widget">
                     <h4 class="widget-title">Sort By</h4>
                     <form method="post" action="#">
+                        <input type="hidden" value="1" id="current-page-number"/>
                         <select class="form-control" asp-items="ViewBag.ProductSortValues" id="shop-product-sort">
                             <option value="0">None</option>
                         </select>
@@ -44,11 +45,10 @@
                     <h4 class="widget-title">View</h4>
                     <form method="post" action="#">
                         <select class="form-control" id="shop-product-page-size">
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                            <option value="36">36</option>
+                            <option value="48">48</option>
                         </select>
                     </form>
                 </div>
@@ -148,7 +148,7 @@
                 <div class="row" id="shop-products">
                 </div>
 
-                <input type="hidden" value="" id="current-page-number" />
+
 
                 <partial name="Partials/Products/_ProductPopupModal" />
                 @*<div class="text-center">
@@ -234,29 +234,37 @@
         });
 
         function getProducts() {
-            var currentPage =
-                $.ajax({
-                    type: "GET",
-                    dataType: 'json',
-                    url: "Shop/GetProductsJson",
-                    traditional: true,
-                    data: {
-                        searchString: $("#shop-search").val(),
-                        sortValue: $("#shop-product-sort").val(),
-                        pageSize: $("#shop-product-page-size").val(),
-                        currentPage: $("#current-page-number").val()
-                    },
-                    success: function (result) {
-                        var html = "";
-                        var pagination = generatePagination(5, $("#current-page-number").val());
-                        $.each(result, function (index, value) {
-                            html += generateProductThumbnail(value);
-                        });
-                        $("#shop-products").empty();
-                        $("#shop-products").append($.parseHTML(html));
+
+            var searchString = $("#shop-search").val();
+            var sortValue = $("#shop-product-sort").val();
+            var pageSize = $("#shop-product-page-size").val();
+            var currentPage = $("#current-page-number").val();
+
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "Shop/GetProductsJson",
+                traditional: true,
+                data: {
+                    searchString: searchString,
+                    sortValue: sortValue,
+                    pageSize: pageSize,
+                    currentPage: currentPage
+                },
+                success: function (result) {
+                    var html = "";
+                    var pagination = generatePagination(result.totalCount, parseInt(currentPage), parseInt(pageSize));
+                    $.each(result.products, function (index, value) {
+                        html += generateProductThumbnail(value);
+                    });
+                    $("#shop-products").empty();
+                    $("#shop-products").append($.parseHTML(html));
+
+                    if (result.totalCount > 0) {
                         $("#shop-products").append($.parseHTML(pagination));
                     }
-                });
+                }
+            });
         }
 
         // handle pagination value change event
