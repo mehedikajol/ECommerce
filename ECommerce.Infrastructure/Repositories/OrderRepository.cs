@@ -26,4 +26,13 @@ internal class OrderRepository : GenericRepository<Order, Guid>, IOrderRepositor
             .Where(o => o.Id == id)
             .FirstOrDefaultAsync();
     }
+
+    public async Task<IEnumerable<Order>> GetOrdersByUserIdAsync(Guid userId)
+    {
+        return await _dbSet
+            .Where(o => o.UserId == userId)
+            .Include(o => o.OrderDetails)
+            .OrderByDescending(o => o.InsertedDate)
+            .ToListAsync();
+    }
 }

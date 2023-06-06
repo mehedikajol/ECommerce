@@ -3,9 +3,11 @@ using ECommerce.Application.IServices;
 using ECommerce.Core.Common;
 using ECommerce.Core.Enums;
 using ECommerce.Core.Exceptions;
+using ECommerce.Web.Areas.Admin.Models.Products;
 using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
 using ECommerce.Web.Models.Profile;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -18,15 +20,21 @@ namespace ECommerce.Web.Controllers;
 public class ProfileController : Controller
 {
     private readonly IUserProfileService _profileService;
+    private readonly IOrderService _orderService;
+    private readonly ICurrentUserService _currentUserService;
     private readonly IFileHandlerService _fileHandlerService;
     private readonly FileStorageSettings _settings;
 
     public ProfileController(
         IUserProfileService profileService,
+        IOrderService orderService,
+        ICurrentUserService currentUserService,
         IFileHandlerService fileHandlerService,
         IOptions<FileStorageSettings> options)
     {
         _profileService = profileService;
+        _orderService = orderService;
+        _currentUserService = currentUserService;
         _fileHandlerService = fileHandlerService;
         _settings = options.Value;
     }
@@ -36,9 +44,23 @@ public class ProfileController : Controller
         return View();
     }
 
-    public IActionResult Orders()
+    public async Task<IActionResult> Orders()
     {
-        return View();
+        //var orders = await 
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var orders = await _orderService.GetAllOrdersByUserId(currentUserId);
+        var model = new ProfileOrdersListModel();
+
+        foreach(var  order in orders)
+        {
+            var orderModel = order.Adapt<ProfileOrderModel>();
+            orderModel.OrderStatusInWord = ((OrderStatus)orderModel.OrderStatus).ToString();
+            // OrderStatusInWord
+
+            model.Orders.Add(orderModel);
+        }
+        
+        return View(model);
     }
 
     public async Task<IActionResult> Details()

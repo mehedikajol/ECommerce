@@ -131,4 +131,37 @@ internal class OrderService : IOrderService
         return await _unitOfWork.Orders
             .GetCount(o => o.OrderStatus == OrderStatus.Shipping || o.OrderStatus == OrderStatus.Processing);
     }
+
+    public async Task<IEnumerable<Order>> GetAllOrdersByUserId(Guid userId)
+    {
+        var orderEntities = await _unitOfWork.Orders.GetOrdersByUserIdAsync(userId);
+        var orders = new List<Order>();
+
+        foreach (var order in orderEntities)
+        {
+            var orderDetails = new List<OrderDetail>();
+            foreach (var detail in order.OrderDetails)
+            {
+                orderDetails.Add(new OrderDetail
+                {
+                    ProductId = detail.ProductId,
+                });
+            }
+
+            orders.Add(new Order
+            {
+                Id = order.Id,
+                ReviewedBy = order.ReviewedBy,
+                UserId = order.UserId,
+                TotalCost = order.TotalCost,
+                ShippingAddress = order.ShippingAddress,
+                PaymentMethod = (int)order.PaymentMethod,
+                OrderStatus = (int)order.OrderStatus,
+                OrderDetails = orderDetails,
+                OrderDate = order.InsertedDate
+            });
+        }
+
+        return orders;
+    }
 }

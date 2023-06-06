@@ -12,4 +12,5 @@ public interface IOrderService
 
     Task<int> GetCompletedOrdersCount();
     Task<int> GetProcessingOrdersCount();
+    Task<IEnumerable<Order>> GetAllOrdersByUserId(Guid userId);
 }
