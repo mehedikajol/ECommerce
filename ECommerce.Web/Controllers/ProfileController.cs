@@ -47,6 +47,7 @@ public class ProfileController : Controller
         model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);
 
         model.TotalOrders = await _orderService.GetTotalOrderCountByUserIdAsync(currentUserId);
+        model.CompletedOrders = await _orderService.GetTotalCompletedOrderCountByUserIdAsync(currentUserId);
         model.PendingOrders = await _orderService.GetTotalPendingOrdersCountByUserIdAsync(currentUserId);
         model.TotalSpend = await _orderService.GetTotalSpendByUserIdAsync(currentUserId);
         model.TotalProducts = await _orderService.getTotalProductBoughtByUserIdAsync(currentUserId);

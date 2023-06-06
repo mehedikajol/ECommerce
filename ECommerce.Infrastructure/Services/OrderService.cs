@@ -170,6 +170,11 @@ internal class OrderService : IOrderService
         return await _unitOfWork.Orders.GetTotalOrderCountByUserIdAsync(userId);
     }
 
+    public async Task<int> GetTotalCompletedOrderCountByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders.GetTotalCompletedOrderCountByUserIdAsync(userId);
+    }
+
     public async Task<decimal> GetTotalSpendByUserIdAsync(Guid userId)
     {
         return await _unitOfWork.Orders.GetTotalSpendByUserIdAsync(userId);

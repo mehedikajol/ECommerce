@@ -44,6 +44,13 @@ internal class OrderRepository : GenericRepository<Order, Guid>, IOrderRepositor
             .CountAsync();
     }
 
+    public async Task<int> GetTotalCompletedOrderCountByUserIdAsync(Guid userId)
+    {
+        return await _dbSet
+            .Where(o => o.UserId == userId && o.OrderStatus == OrderStatus.Completed)
+            .CountAsync();
+    }
+
     public async Task<int> GetTotalPendingOrdersCountByUserIdAsync(Guid userId)
     {
         return await _dbSet
@@ -54,7 +61,7 @@ internal class OrderRepository : GenericRepository<Order, Guid>, IOrderRepositor
     public async Task<int> getTotalProductBoughtByUserIdAsync(Guid userId)
     {
         var orders = await _dbSet
-            .Where(o => o.UserId == userId)
+            .Where(o => o.UserId == userId && o.OrderStatus == OrderStatus.Completed)
             .Include(o => o.OrderDetails)
             .ToListAsync();
         var totalCount = 0;
@@ -68,7 +75,7 @@ internal class OrderRepository : GenericRepository<Order, Guid>, IOrderRepositor
     public async Task<decimal> GetTotalSpendByUserIdAsync(Guid userId)
     {
         var orders = await _dbSet
-            .Where(o => o.UserId == userId)
+            .Where(o => o.UserId == userId && o.OrderStatus == OrderStatus.Completed)
             .ToListAsync();
         decimal totalCost = 0;
         foreach(var order in orders)
