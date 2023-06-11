@@ -3,6 +3,7 @@ using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Core.Enums;
 using ECommerce.Core.Exceptions;
+using Mapster;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -32,18 +33,12 @@ internal class OrderService : IOrderService
                 });
             }
 
-            orders.Add(new Order
-            {
-                Id = order.Id,
-                ReviewedBy = order.ReviewedBy,
-                UserId = order.UserId,
-                TotalCost = order.TotalCost,
-                ShippingAddress = order.ShippingAddress,
-                PaymentMethod = (int)order.PaymentMethod,
-                OrderStatus = (int)order.OrderStatus,
-                OrderDetails = orderDetails,
-                OrderDate = order.InsertedDate
-            });
+            var item = order.Adapt<Order>();
+            item.PaymentMethod = (int)order.PaymentMethod;
+            item.OrderStatus = (int)order.OrderStatus;
+            item.OrderDate = order.InsertedDate;
+
+            orders.Add(item);
         }
 
         return orders;
@@ -64,18 +59,10 @@ internal class OrderService : IOrderService
             });
         }
 
-        var order = new Order
-        {
-            Id = orderEntitiy.Id,
-            ReviewedBy = orderEntitiy.ReviewedBy,
-            UserId = orderEntitiy.UserId,
-            TotalCost = orderEntitiy.TotalCost,
-            ShippingAddress = orderEntitiy.ShippingAddress,
-            PaymentMethod = (int)orderEntitiy.PaymentMethod,
-            OrderStatus = (int)orderEntitiy.OrderStatus,
-            OrderDetails = orderDetails,
-            OrderDate = orderEntitiy.InsertedDate
-        };
+        var order = orderEntitiy.Adapt<Order>();
+        order.PaymentMethod = (int)orderEntitiy.PaymentMethod;
+        order.OrderStatus = (int)orderEntitiy.OrderStatus;
+        order.OrderDate = orderEntitiy.InsertedDate;
 
         return order;
     }
@@ -91,23 +78,22 @@ internal class OrderService : IOrderService
             });
         }
 
-        var orderEntity = new EO.Order
-        {
-            UserId = order.UserId,
-            OrderStatus = OrderStatus.Processing,
-            ShippingAddress = order.ShippingAddress,
-            PaymentMethod = (PaymentMethod)order.PaymentMethod,
-            TotalCost = order.TotalCost,
-            OrderDetails = orderDetails
-        };
+        var orderEntity = order.Adapt<EO.Order>();
+        orderEntity.OrderStatus = OrderStatus.Processing;
+        orderEntity.PaymentMethod = (PaymentMethod)order.PaymentMethod;
 
         await _unitOfWork.Orders.AddEntity(orderEntity);
         await _unitOfWork.CompleteAsync();
     }
 
-    public Task UpdateOrder(Order order)
+    public async Task UpdateOrder(Order order)
     {
-        throw new NotImplementedException();
+        var orderEntity = await _unitOfWork.Orders.GetEntityById(order.Id);
+        orderEntity.OrderStatus = (OrderStatus)order.OrderStatus;
+        orderEntity.ReviewedBy = order.ReviewedBy ?? orderEntity.ReviewedBy;
+
+        await _unitOfWork.Orders.UpdateEntity(orderEntity);
+        await _unitOfWork.CompleteAsync();
     }
 
     public Task DeleteOrder(Guid id)
@@ -125,5 +111,60 @@ internal class OrderService : IOrderService
     {
         return await _unitOfWork.Orders
             .GetCount(o => o.OrderStatus == OrderStatus.Shipping || o.OrderStatus == OrderStatus.Processing);
+    }
+
+    public async Task<IEnumerable<Order>> GetAllOrdersByUserId(Guid userId)
+    {
+        var orderEntities = await _unitOfWork.Orders.GetOrdersByUserIdAsync(userId);
+        var orders = new List<Order>();
+
+        foreach (var order in orderEntities)
+        {
+            var orderDetails = new List<OrderDetail>();
+            foreach (var detail in order.OrderDetails)
+            {
+                orderDetails.Add(new OrderDetail
+                {
+                    ProductId = detail.ProductId,
+                });
+            }
+
+            var item = order.Adapt<Order>();
+            item.PaymentMethod = (int)order.PaymentMethod;
+            item.OrderStatus = (int)order.OrderStatus;
+            item.OrderDate = order.InsertedDate;
+
+            orders.Add(item);
+        }
+
+        return orders;
+    }
+
+    public async Task<int> GetTotalOrderCountByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders
+            .GetCount(o => o.UserId == userId);
+    }
+
+    public async Task<int> GetTotalCompletedOrderCountByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders
+            .GetCount(o => o.UserId == userId && o.OrderStatus == OrderStatus.Completed);
+    }
+
+    public async Task<decimal> GetTotalSpendByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders.GetTotalSpendByUserIdAsync(userId);
+    }
+
+    public async Task<int> getTotalProductBoughtByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders.getTotalProductBoughtByUserIdAsync(userId);
+    }
+
+    public async Task<int> GetTotalPendingOrdersCountByUserIdAsync(Guid userId)
+    {
+        return await _unitOfWork.Orders
+            .GetCount(o => o.UserId == userId && (o.OrderStatus == OrderStatus.Processing || o.OrderStatus == OrderStatus.Shipping));
     }
 }

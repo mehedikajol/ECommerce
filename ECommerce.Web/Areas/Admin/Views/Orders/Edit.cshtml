@@ -1,1 +1,180 @@
-﻿<h1>Hello from order edit page</h1>
+﻿@model OrderViewModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@Html.AntiForgeryToken()
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1>Edit an order</h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="/">Home</a>
+                    </li>
+                    <li class="breadcrumb-item active">Orders</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-primary">
+                    <div class="card-header">
+                        <h3 class="card-title">Order update</h3>
+                    </div>
+                    <input asp-for="Id" id="orderId" type="hidden" />
+                    <div class="card-body p-0">
+                        <!-- Main content -->
+                        <div class="invoice p-3">
+                            <h4>Customer Name: @Model.UserName</h4>
+                            <div class="row invoice-info">
+                                <div class="col-sm-6 invoice-col">
+                                    <address>
+                                        <b>Phone:</b> @Model.Phone<br>
+                                        <b>Email:</b> @Model.UserEmail<br>
+                                        <b>Shipping Address:</b> @Model.ShippingAddress<br />
+                                        <b>Total Amout: </b> @Model.TotalCost
+                                    </address>
+                                </div>
+                                <!-- /.col -->
+                                <div class="col-sm-6 invoice-col">
+                                    <b>Order ID:</b> @Model.Id<br>
+                                    <b>Order Date:</b> @Model.OrderDate.ToString("dd/MMM/yyyy")<br>
+                                    <b>Payment Method:</b> @Model.PaymentMethod<br />
+                                    <b>Current Order Status:</b> @Model.OrderStatus
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+                            <!-- Table row -->
+                            <div class="row">
+                                <div class="col-12 table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Qty</th>
+                                                <th>Product</th>
+                                                @*<th>Serial #</th>*@
+                                                <th>Category</th>
+                                                <th>Subtotal</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach (var item in Model.Products)
+                                            {
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>@item.Name</td>
+                                                    @*<td>455-981-221</td>*@
+                                                    <td>@item.Category</td>
+                                                    <td>$@item.Price</td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                            <!-- /.row -->
+
+                            <div class="row">
+                                <!-- accepted payments column -->
+                                <div class="col-6">
+                                    <p class="lead"><strong>Order Status: @Model.OrderStatus</strong></p>
+
+                                    @if (Model.CurrentOrderStatus < 3)
+                                    {
+                                        <p class="lead">Update order status</p>
+                                        <select asp-for="UpdatedStatus" asp-items="ViewBag.OrderStatuses" class="form-control select2" required>
+                                            <option value="">-- Select Order Status --</option>
+                                        </select>
+                                    }
+
+                                </div>
+                                <!-- /.col -->
+                            </div>
+
+                            <!-- /.row -->
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        @if (Model.CurrentOrderStatus < 3)
+                        {
+                            <button type="button" onclick="updateOrder()" class="btn btn-primary">Update</button>
+                        }
+                        <a asp-area="Admin" asp-controller="Orders" asp-action="Index" class="btn btn-default">Cancel</a>
+                    </div>
+                    <!-- /.invoice -->
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+</section>
+<!-- /.content -->
+<!-- /.content -->
+@section Styles
+    {
+    <link href="~/adminlte/plugins/select2/css/select2.min.css" rel="stylesheet" />
+    <link href="~/adminlte/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css" rel="stylesheet" />
+    <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="~/adminlte/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
+    <script>
+        $('.select2').select2();
+
+        // updateOrder onclick method
+        function updateOrder() {
+            var orderId = $("#orderId").val();
+            var updatedStatus = $("#UpdatedStatus").val();
+            if (updatedStatus == "") {
+                Swal.fire({
+                    title: '<strong>Error</strong>',
+                    icon: 'error',
+                    html: '<strong>Can\'t update empty value.</strong>',
+                });
+            }
+            else {
+                //console.log(orderId, updatedStatus);
+                $.ajax({
+                    type: "POST",
+                    dataType: 'json',
+                    url: "@Url.Action("UpdateOrderStatus", "Orders")",
+                    headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                    traditional: true,
+                    data: {
+                        orderId: orderId,
+                        updatedStatus: updatedStatus
+                    },
+                    success: function (result) {
+                        if (result.success == true) {
+                            Swal.fire({
+                                title: '<strong>Success</strong>',
+                                icon: 'success',
+                                html: '<strong>' + result.message + '</strong>',
+                            }).then((result) => {
+                                window.location.href = "/Admin/Orders/";
+                            });
+                        } else {
+                            Swal.fire({
+                                title: '<strong>Error</strong>',
+                                icon: 'error',
+                                html: '<strong>' + result.message + '</strong>',
+                            });
+                        }
+                    }
+                });
+            }
+        }
+
+    </script>
+}

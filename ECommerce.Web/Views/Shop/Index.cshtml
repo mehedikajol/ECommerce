@@ -3,7 +3,6 @@
     ViewData["Title"] = "Shop";
 }
 
-
 <section class="page-header">
     <div class="container">
         <div class="row">
@@ -27,7 +26,33 @@
         <div class="row">
             <div class="col-md-3">
                 <div class="widget">
-                    <h4 class="widget-title">Short By</h4>
+                    <h4 class="widget-title">Search Product</h4>
+                    <form method="post" action="#">
+                        <input class="form-control" placeholder="Search product..." id="shop-search" />
+                    </form>
+                </div>
+                <div class="widget">
+                    <h4 class="widget-title">Sort By</h4>
+                    <form method="post" action="#">
+                        <input type="hidden" value="1" id="current-page-number"/>
+                        <select class="form-control" asp-items="ViewBag.ProductSortValues" id="shop-product-sort">
+                            <option value="0">None</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="widget">
+                    <h4 class="widget-title">View</h4>
+                    <form method="post" action="#">
+                        <select class="form-control" id="shop-product-page-size">
+                            <option value="12">12</option>
+                            <option value="24">24</option>
+                            <option value="36">36</option>
+                            <option value="48">48</option>
+                        </select>
+                    </form>
+                </div>
+                <div class="widget">
+                    <h4 class="widget-title">Filter By</h4>
                     <form method="post" action="#">
                         <select class="form-control">
                             <option>Man</option>
@@ -116,33 +141,135 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
-            <div class="col-md-9">
-                <div class="row">
-                    @foreach (var product in Model.Products)
-                    {
-                        <div class="col-md-4">
-                            @{
-                                await Html.RenderPartialAsync("Partials/Products/_ProductThumbnailPartial", product);
-                            }
-                        </div>
-                    }
-
-                    <partial name="Partials/Products/_ProductPopupModal" />
-
+            <div class="col-md-9" id="shop-main-container">
+                <div class="row" id="shop-products">
                 </div>
-            </div>
 
+
+
+                <partial name="Partials/Products/_ProductPopupModal" />
+                @*<div class="text-center">
+                <nav aria-label="Page navigation">
+                <ul class="pagination">
+                <li>
+                <a href="#!" aria-label="First">
+                <span aria-hidden="true">&#8920;</span>
+                </a>
+                </li>
+                <li>
+                <a href="#!" aria-label="Previous">
+                <span aria-hidden="true">&#8810;</span>
+                </a>
+                </li>
+                <li class="active">
+                <a href="#!">1</a>
+                </li>
+                <li>
+                <a href="#!">2</a>
+                </li>
+                <li>
+                <a href="#!">3</a>
+                </li>
+                <li>
+                <a href="#!">4</a>
+                </li>
+                <li>
+                <a href="#!">5</a>
+                </li>
+                <li>
+                <a href="#!" aria-label="Next">
+                <span aria-hidden="true">&#8811;</span>
+                </a>
+                </li>
+                <li>
+                <a href="#!" aria-label="Last">
+                <span aria-hidden="true">&#8921;</span>
+                </a>
+                </li>
+                </ul>
+                </nav>
+                </div>*@
+            </div>
         </div>
     </div>
 </section>
 
 @section Styles{
     <link href="~/lib/sweetalert2/css/sweetalert2.min.css" rel="stylesheet" />
+    <style>
+        .widget {
+            margin-bottom: 10px;
+        }
+    </style>
 }
 @section Scripts{
     <script src="~/lib/sweetalert2/js/sweetalert2.all.min.js"></script>
     <script src="~/avito/js/productpopupmodalpopulate.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            //console.log($("#shop-search").val());
+            //console.log($("#shop-product-sort").val());
+            //console.log($("#shop-product-page-size").val());
+            $("#current-page-number").val(1);
+            getProducts();
+        });
+
+        $("#shop-search").keyup(function () {
+            $("#current-page-number").val(1);
+            getProducts();
+        });
+
+        $("#shop-product-sort").change(function () {
+            $("#current-page-number").val(1);
+            getProducts();
+        });
+
+        $("#shop-product-page-size").change(function () {
+            $("#current-page-number").val(1);
+            getProducts();
+        });
+
+        function getProducts() {
+
+            var searchString = $("#shop-search").val();
+            var sortValue = $("#shop-product-sort").val();
+            var pageSize = $("#shop-product-page-size").val();
+            var currentPage = $("#current-page-number").val();
+
+            $.ajax({
+                type: "GET",
+                dataType: 'json',
+                url: "Shop/GetProductsJson",
+                traditional: true,
+                data: {
+                    searchString: searchString,
+                    sortValue: sortValue,
+                    pageSize: pageSize,
+                    currentPage: currentPage
+                },
+                success: function (result) {
+                    var html = "";
+                    var pagination = generatePagination(result.totalCount, parseInt(currentPage), parseInt(pageSize));
+                    $.each(result.products, function (index, value) {
+                        html += generateProductThumbnail(value);
+                    });
+                    $("#shop-products").empty();
+                    $("#shop-products").append($.parseHTML(html));
+
+                    if (result.totalCount > 0) {
+                        $("#shop-products").append($.parseHTML(pagination));
+                    }
+                }
+            });
+        }
+
+        // handle pagination value change event
+        function paginationValueChange() {
+            getProducts();
+        }
+
+    </script>
 }

@@ -3,6 +3,7 @@ using ECommerce.Application.IServices;
 using ECommerce.Application.IUnitOfWorks;
 using ECommerce.Core.Enums;
 using ECommerce.Core.Exceptions;
+using Mapster;
 using EO = ECommerce.Core.Entities;
 
 namespace ECommerce.Infrastructure.Services;
@@ -23,15 +24,11 @@ internal class CategoryService : ICategoryService
 
         foreach (var entity in categoryEntities)
         {
-            categories.Add(new Category
-            {
-                Id = entity.Id,
-                Name = entity.Name,
-                Description = entity.Description,
-                MainCategory = (int)entity.MainCategory,
-                MainCategoryName = Enum.GetName(typeof(MainCategory), entity.MainCategory)
-                //MainCategory = Enum.GetName(typeof(MainCategory), entity.MainCategoryId)
-            });
+            var category = entity.Adapt<Category>();
+            category.MainCategory = (int)entity.MainCategory;
+            category.MainCategoryName = entity.MainCategory.ToString();
+
+            categories.Add(category);
         }
         return categories;
     }
@@ -42,13 +39,10 @@ internal class CategoryService : ICategoryService
         if (categoryEntity is null) 
             throw new NotFoundException("Category not found.");
 
-        var category = new Category
-        {
-            Id = categoryEntity.Id,
-            Name = categoryEntity.Name,
-            Description = categoryEntity.Description,
-            MainCategory = (int)categoryEntity.MainCategory
-        };
+
+        var category = categoryEntity.Adapt<Category>();
+        category.MainCategory = (int)categoryEntity.MainCategory;
+
         return category;
     }
 

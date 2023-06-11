@@ -6,11 +6,11 @@ using ECommerce.Core.Exceptions;
 using ECommerce.Web.Extensions;
 using ECommerce.Web.Helpers;
 using ECommerce.Web.Models.Profile;
+using Mapster;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
-using System.Security.Claims;
 
 namespace ECommerce.Web.Controllers;
 
@@ -18,61 +18,80 @@ namespace ECommerce.Web.Controllers;
 public class ProfileController : Controller
 {
     private readonly IUserProfileService _profileService;
+    private readonly IOrderService _orderService;
+    private readonly ICurrentUserService _currentUserService;
     private readonly IFileHandlerService _fileHandlerService;
     private readonly FileStorageSettings _settings;
 
     public ProfileController(
         IUserProfileService profileService,
+        IOrderService orderService,
+        ICurrentUserService currentUserService,
         IFileHandlerService fileHandlerService,
         IOptions<FileStorageSettings> options)
     {
         _profileService = profileService;
+        _orderService = orderService;
+        _currentUserService = currentUserService;
         _fileHandlerService = fileHandlerService;
         _settings = options.Value;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
-        return View();
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
+        var model = new ProfileIndexModel();
+
+        model.FullName = profile.FirstName + " " + profile.LastName;
+        model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);
+
+        model.TotalOrders = await _orderService.GetTotalOrderCountByUserIdAsync(currentUserId);
+        model.CompletedOrders = await _orderService.GetTotalCompletedOrderCountByUserIdAsync(currentUserId);
+        model.PendingOrders = await _orderService.GetTotalPendingOrdersCountByUserIdAsync(currentUserId);
+        model.TotalSpend = await _orderService.GetTotalSpendByUserIdAsync(currentUserId);
+        model.TotalProducts = await _orderService.getTotalProductBoughtByUserIdAsync(currentUserId);
+
+        return View(model);
     }
 
-    public IActionResult Orders()
+    public async Task<IActionResult> Orders()
     {
-        return View();
+        //var orders = await 
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var orders = await _orderService.GetAllOrdersByUserId(currentUserId);
+        var model = new ProfileOrdersListModel();
+
+        foreach(var  order in orders)
+        {
+            var orderModel = order.Adapt<ProfileOrderModel>();
+            orderModel.OrderStatusInWord = ((OrderStatus)orderModel.OrderStatus).ToString();
+
+            model.Orders.Add(orderModel);
+        }
+        
+        return View(model);
     }
 
     public async Task<IActionResult> Details()
     {
-        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var profile = await _profileService.GetUserProfileByIdentityId(new Guid(userId));
-        var model = new ProfileDetailsModel
-        {
-            FirstName = profile.FirstName,
-            LastName = profile.LastName,
-            Email = profile.Email,
-            Phone = profile.Phone,
-            Gender = Enum.GetName(typeof(Gender), profile.Gender),
-            Address = profile.Address,
-            ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl)
-        };
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
+
+        var model = profile.Adapt<ProfileDetailsModel>();
+        model.Gender = ((Gender)profile.Gender).ToString();
+        model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);        
+
         return View(model);
     }
 
     public async Task<IActionResult> Edit()
     {
-        var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var entity = await _profileService.GetUserProfileByIdentityId(new Guid(userId));
-        var model = new ProfileEditModel
-        {
-            Id = entity.Id,
-            FirstName = entity.FirstName,
-            LastName = entity.LastName,
-            Email = entity.Email,
-            Phone = entity.Phone,
-            ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, entity.ProfilePictureUrl),
-            Address = entity.Address,
-            Gender = entity.Gender
-        };
+        var currentUserId = _currentUserService.GetCurrentUserId();
+        var profile = await _profileService.GetUserProfileByIdentityId(currentUserId);
+
+        var model = profile.Adapt<ProfileEditModel>();
+        model.ProfilePictureUrl = FileLinkModifier.GenerateImageLink(Request, _settings.DirectoryName, profile.ProfilePictureUrl);
 
         var genders = from Gender s in Enum.GetValues(typeof(Gender))
                       select new { Id = s.GetHashCode(), Name = s.ToString() };
@@ -101,17 +120,7 @@ public class ProfileController : Controller
                     await _fileHandlerService.DeleteFileAsync(oldEntity.ProfilePictureUrl);
                 }
 
-                var profile = new UserProfile
-                {
-                    Id = model.Id,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Email = model.Email,
-                    Phone = model.Phone,
-                    Gender = model.Gender,
-                    Address = model.Address,
-                    ProfilePictureUrl = model.ProfilePictureUrl
-                };
+                var profile = model.Adapt<UserProfile>();
 
                 await _profileService.UpdateUserProfile(profile);
                 return RedirectToAction(nameof(Details));

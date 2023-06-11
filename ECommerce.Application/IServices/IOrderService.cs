@@ -12,4 +12,11 @@ public interface IOrderService
 
     Task<int> GetCompletedOrdersCount();
     Task<int> GetProcessingOrdersCount();
+    Task<IEnumerable<Order>> GetAllOrdersByUserId(Guid userId);
+
+    Task<int> GetTotalOrderCountByUserIdAsync(Guid userId);
+    Task<int> GetTotalCompletedOrderCountByUserIdAsync(Guid userId);
+    Task<decimal> GetTotalSpendByUserIdAsync(Guid userId);
+    Task<int> getTotalProductBoughtByUserIdAsync(Guid userId);
+    Task<int> GetTotalPendingOrdersCountByUserIdAsync(Guid userId);
 }

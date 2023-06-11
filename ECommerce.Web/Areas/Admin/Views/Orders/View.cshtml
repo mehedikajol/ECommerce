@@ -7,7 +7,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1>Orders</h1>
+                <h1>View Order</h1>
             </div>
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -32,9 +32,11 @@
                 This page has been enhanced for printing. Click the print button at the bottom of the invoice to test.
                 </div>*@
 
-
+                
+                
                 <!-- Main content -->
                 <div class="invoice p-3 mb-3">
+                    <h4>Customer Name: @Model.UserName</h4>
                     <div class="row invoice-info">
                         @*<div class="col-sm-4 invoice-col">
                             From
@@ -50,7 +52,6 @@
                         
                         <div class="col-sm-6 invoice-col">
                             <address>
-                                <strong>@Model.UserName</strong><br>
                                 <b>Phone:</b> @Model.Phone<br>
                                 <b>Email:</b> @Model.UserEmail<br>
                                 <b>Shipping Address:</b> @Model.ShippingAddress
@@ -58,7 +59,6 @@
                         </div>
                         <!-- /.col -->
                         <div class="col-sm-6 invoice-col">
-                            <br />
                             <b>Order ID:</b> @Model.Id<br>
                             <b>Order Date:</b> @Model.OrderDate.ToString("dd/MMM/yyyy")<br>
                             <b>Payment Method:</b> @Model.PaymentMethod
@@ -100,8 +100,9 @@
                     <div class="row">
                         <!-- accepted payments column -->
                         <div class="col-6">
-                            <p class="lead">Payment Methods:</p>
-                            <ul class="text-muted">
+                            <p class="lead"><strong>Payment Methods: @Model.PaymentMethod</strong></p>
+                            <p class="lead"><strong>Order Status: @Model.OrderStatus</strong></p>
+                            @*<ul class="text-muted">
                                 <li>Cash On Delivery</li>
                                 <li>Bank Transfer</li>
                                 <li>Mobile Banking</li>
@@ -111,7 +112,7 @@
                                 Etsy doostang zoodles disqus groupon greplin oooj voxy zoodles, weebly ning heekya handango imeem
                                 plugg
                                 dopplr jibjab, movity jajah plickers sifteo edmodo ifttt zimbra.
-                            </p>
+                            </p>*@
                         </div>
                         <!-- /.col -->
                         <div class="col-6">
@@ -132,7 +133,7 @@
                                         <td>Free ($0.00)</td>
                                     </tr>
                                     <tr>
-                                        <th>Total:</th>
+                                        <th>Payable Amout:</th>
                                         <td>$@Model.TotalCost</td>
                                     </tr>
                                 </table>
@@ -142,7 +143,7 @@
                     </div>
                     <!-- /.row -->
                     <!-- this row will not appear when printing -->
-                    <div class="row no-print">
+                   @* <div class="row no-print">
                         <div class="col-12">
                             <a href="invoice-print.html" rel="noopener" target="_blank" class="btn btn-default">
                                 <i class="fas fa-print"></i> Print
@@ -155,7 +156,7 @@
                                 <i class="fas fa-download"></i> Generate PDF
                             </button>
                         </div>
-                    </div>
+                    </div>*@
                 </div>
                 <!-- /.invoice -->
             </div><!-- /.col -->

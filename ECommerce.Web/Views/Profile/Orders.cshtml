@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ProfileOrdersListModel
+@{
     ViewData["Title"] = "Orders";
 }
 
@@ -49,46 +50,51 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>#451231</td>
-                                    <td>Mar 25, 2016</td>
-                                    <td>2</td>
-                                    <td>$99.00</td>
-                                    <td><span class="label label-primary">Processing</span></td>
-                                    <td><a href="order.html" class="btn btn-default">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td>#451231</td>
-                                    <td>Mar 25, 2016</td>
-                                    <td>3</td>
-                                    <td>$150.00</td>
-                                    <td><span class="label label-success">Completed</span></td>
-                                    <td><a href="order.html" class="btn btn-default">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td>#451231</td>
-                                    <td>Mar 25, 2016</td>
-                                    <td>3</td>
-                                    <td>$150.00</td>
-                                    <td><span class="label label-danger">Canceled</span></td>
-                                    <td><a href="order.html" class="btn btn-default">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td>#451231</td>
-                                    <td>Mar 25, 2016</td>
-                                    <td>2</td>
-                                    <td>$99.00</td>
-                                    <td><span class="label label-info">On Hold</span></td>
-                                    <td><a href="order.html" class="btn btn-default">View</a></td>
-                                </tr>
-                                <tr>
-                                    <td>#451231</td>
-                                    <td>Mar 25, 2016</td>
-                                    <td>3</td>
-                                    <td>$150.00</td>
-                                    <td><span class="label label-warning">Pending</span></td>
-                                    <td><a href="order.html" class="btn btn-default">View</a></td>
-                                </tr>
+                                @{
+                                    foreach (var order in Model.Orders)
+                                    {
+                                        <tr>
+                                            <td>#@order.Id</td>
+                                            <td>@order.OrderDate.ToLocalTime()</td>
+                                            <td>@order.OrderDetails.Count()</td>
+                                            <td>$@order.TotalCost</td>
+                                            @if(order.OrderStatus == (int)OrderStatus.Processing)
+                                            {
+                                                <td>
+                                                    <span class="label label-info">@order.OrderStatusInWord</span>
+                                                </td>
+                                            }
+                                            else if (order.OrderStatus == (int)OrderStatus.Shipping)
+                                            {
+                                                <td>
+                                                    <span class="label label-primary">@order.OrderStatusInWord</span>
+                                                </td>
+                                            }
+                                            else if (order.OrderStatus == (int)OrderStatus.Completed)
+                                            {
+                                                <td>
+                                                    <span class="label label-success">@order.OrderStatusInWord</span>
+                                                </td>
+                                            }
+                                            else if (order.OrderStatus == (int)OrderStatus.Declined)
+                                            {
+                                                <td>
+                                                    <span class="label label-danger">@order.OrderStatusInWord</span>
+                                                </td>
+                                            }
+                                            else if (order.OrderStatus == (int)OrderStatus.Canceled)
+                                            {
+                                                <td>
+                                                    <span class="label label-warning">@order.OrderStatusInWord</span>
+                                                </td>
+                                            }
+
+                                            <td>
+                                                <a asp-controller="Orders" asp-action="Details" asp-route-id="@order.Id" class="btn btn-default">View</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
                             </tbody>
                         </table>
                     </div>

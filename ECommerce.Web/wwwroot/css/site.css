@@ -74,10 +74,12 @@ html {
     font-weight: 200;
     font-size: 12px;
 }
+
 .checkout-form .form-group select {
     height: 50px;
     padding: 6px 10px 5px 100px;
 }
+
 .checkout-form .form-group textarea {
     padding: 15px 10px 5px 100px;
     resize: vertical;
